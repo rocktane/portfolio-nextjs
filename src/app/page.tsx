@@ -36,7 +36,7 @@ function ExternalLink({
 
 export default function Home() {
   return (
-    <div className="min-h-screen pt-16">
+    <div className="min-h-screen pt-16 px-32">
       {/* Intro */}
       <section className="px-8 md:px-14 py-8 md:py-10" aria-labelledby="intro-heading">
         <h1
@@ -141,7 +141,10 @@ export default function Home() {
       </section>
 
       {/* Skills Marquee */}
-      <section className="overflow-hidden w-full py-8 mt-8" aria-label="Compétences techniques">
+      <section
+        className="overflow-hidden w-screen py-8 mt-8 relative left-1/2 -translate-x-1/2"
+        aria-label="Compétences techniques"
+      >
         <div className="flex whitespace-nowrap w-fit animate-[scroll_60s_linear_infinite] max-md:flex-col max-md:animate-none">
           {technologiesDoubled.map((tech, index) => (
             <span

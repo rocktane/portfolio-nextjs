@@ -16,10 +16,6 @@ export default function Map() {
     const map = L.map(mapRef.current, {
       zoomControl: false,
       attributionControl: false,
-      dragging: false,
-      scrollWheelZoom: false,
-      doubleClickZoom: false,
-      touchZoom: false,
     }).setView(MAP_CONFIG.center, MAP_CONFIG.zoom);
 
     L.tileLayer(

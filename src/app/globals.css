@@ -48,10 +48,29 @@ body {
   background-image: url("/images/topography.svg");
   background-blend-mode: lighten;
   background-repeat: repeat;
+  overflow-x: hidden;
 }
 
-/* Stabilo highlight effect */
-.stabilo {
+/* Stabilo highlight effect - Hero text animation */
+span.stabilo {
+  background-position: left bottom 0.35em;
+  background-size: 0% 0.4em;
+  background-repeat: no-repeat;
+  background-image: linear-gradient(var(--yellow) 0 0);
+  animation-name: underlineNameJob;
+  animation-duration: 1.8s;
+  animation-delay: 1.5s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes underlineNameJob {
+  to {
+    background-size: 100% 0.4em;
+  }
+}
+
+/* Stabilo highlight effect - Links */
+a.stabilo {
   text-decoration: none;
   background-image: linear-gradient(var(--background-solid), var(--background-solid));
   background-position: left bottom;
@@ -60,7 +79,7 @@ body {
   transition: background-size 0.5s ease;
 }
 
-.stabilo:hover {
+a.stabilo:hover {
   background-size: 100% 2.5rem;
 }
 
