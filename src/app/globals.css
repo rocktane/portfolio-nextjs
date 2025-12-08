@@ -38,20 +38,10 @@
   --font-bright: "Bright", sans-serif;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
-  background-color: var(--background);
   background-image: url("/images/topography.svg");
   background-blend-mode: lighten;
   background-repeat: repeat;
-  color: var(--foreground);
-  font-family: var(--font-sans);
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
 }
 
 /* Stabilo highlight effect */
@@ -82,35 +72,6 @@ body {
   border-radius: 4px;
 }
 
-/* Skills/Technologies marquee */
-.ctn-skills {
-  overflow: hidden;
-  width: 100%;
-}
-
-.list-skills {
-  display: flex;
-  white-space: nowrap;
-  animation: scroll 60s linear infinite;
-  width: fit-content;
-}
-
-.techno {
-  margin: 0;
-  padding: 0;
-  font-family: var(--font-alata), "Alata", system-ui, -apple-system, sans-serif;
-  font-weight: 900;
-  letter-spacing: -0.05em;
-  font-size: clamp(3rem, 8vw, 4.5rem);
-  line-height: 0.9em;
-  color: var(--text-dark);
-}
-
-.dot {
-  color: var(--yellow);
-  margin: 0 0.3em;
-}
-
 @keyframes scroll {
   0% {
     transform: translateX(0);
@@ -120,41 +81,73 @@ body {
   }
 }
 
-/* Leaflet map styles */
-.leaflet-container {
-  height: 100%;
-  width: 100%;
+/* Navbar sliding indicator - CSS :has() technique */
+.navbar-sliding {
+  position: relative;
+  color: var(--text-dark);
+  font-family: "Alexandria", sans-serif;
+  font-size: clamp(1rem, 3vw, 1.4rem);
 }
 
-/* Footer styles */
-.footer {
-  background: linear-gradient(0deg, var(--background-solid) 35%, transparent 100%);
-  padding: 10em 10em 1em 10em;
+.navbar-sliding .nav-item {
+  position: relative;
+  z-index: 1;
 }
 
-.footer .logos img {
-  width: 60px;
-  filter: grayscale(100%);
-  transition: filter 0.3s;
+/* L'indicateur (pseudo-élément) */
+.navbar-sliding::before {
+  content: "";
+  position: absolute;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  left: 0;
+  width: var(--item-0-width, 100px);
+  height: calc(100% - 1rem);
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 9999px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 0;
+  pointer-events: none;
+  transform: translateX(var(--item-0-left, 0));
 }
 
-.footer .logos a:hover img {
-  filter: none;
+/* ===== ÉTAT PAR DÉFAUT (pas de hover) - selon data-active ===== */
+
+/* Active = 0 (yohan) - défaut */
+.navbar-sliding[data-active="0"]:not(:has(.nav-item:hover))::before {
+  width: var(--item-0-width, 100px);
+  transform: translateX(var(--item-0-left, 0));
 }
 
-@media screen and (max-width: 900px) {
-  .footer {
-    padding: 2em 1em 1em 1em;
-  }
-  .footer .logos img {
-    width: 40px;
-    filter: none;
-  }
-  .list-skills {
-    flex-direction: column;
-    animation: none;
-  }
-  .dot {
-    display: none;
-  }
+/* Active = 1 (projets) */
+.navbar-sliding[data-active="1"]:not(:has(.nav-item:hover))::before {
+  width: var(--item-1-width, 100px);
+  transform: translateX(var(--item-1-left, 0));
+}
+
+/* Active = 2 (contact) */
+.navbar-sliding[data-active="2"]:not(:has(.nav-item:hover))::before {
+  width: var(--item-2-width, 100px);
+  transform: translateX(var(--item-2-left, 0));
+}
+
+/* ===== ÉTAT HOVER - prioritaire ===== */
+
+/* Hover sur le premier élément (yohan) */
+.navbar-sliding:has(.nav-item:first-child:hover)::before {
+  width: var(--item-0-width, 100px);
+  transform: translateX(var(--item-0-left, 0));
+}
+
+/* Hover sur le deuxième élément (projets) */
+.navbar-sliding:has(.nav-item:nth-child(2):hover)::before {
+  width: var(--item-1-width, 100px);
+  transform: translateX(var(--item-1-left, 0));
+}
+
+/* Hover sur le troisième élément (contact) */
+.navbar-sliding:has(.nav-item:nth-child(3):hover)::before {
+  width: var(--item-2-width, 100px);
+  transform: translateX(var(--item-2-left, 0));
 }

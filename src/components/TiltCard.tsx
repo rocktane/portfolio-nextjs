@@ -6,32 +6,38 @@ import { ReactNode } from "react";
 interface TiltCardProps {
   children: ReactNode;
   className?: string;
+  /** Override default padding (p-8) */
+  noPadding?: boolean;
+  /** Override default background (bg-yellow) */
+  noBackground?: boolean;
+  /** Custom inline styles */
+  style?: React.CSSProperties;
 }
 
-export default function TiltCard({ children, className = "" }: TiltCardProps) {
+export default function TiltCard({
+  children,
+  className = "",
+  noPadding = false,
+  noBackground = false,
+  style,
+}: TiltCardProps) {
   const tiltRef = useTilt<HTMLDivElement>();
 
-  // Check if className contains any padding utility class (p-*, px-*, py-*, pt-*, pr-*, pb-*, pl-*)
-  const hasPadding = /\bp-[xytrbl]?-\d+|\bp-0\b/.test(className);
-  const defaultPadding = hasPadding ? "" : "p-8";
-
-  // Check if className contains any background utility class (bg-*)
-  const hasBackground = /\bbg-/.test(className);
-  const defaultBackground = hasBackground ? "" : "bg-yellow";
+  // Use explicit props instead of fragile regex parsing
+  const paddingClass = noPadding ? "" : "p-8";
+  const backgroundClass = noBackground ? "" : "bg-yellow";
 
   return (
     <div
       ref={tiltRef}
       className={`
-        ${defaultBackground} rounded-3xl ${defaultPadding} shadow-sm
+        ${backgroundClass} rounded-3xl ${paddingClass} shadow-sm
         transform-gpu origin-center transition-transform duration-1000
         relative z-0 first:z-10 hover:z-50
+        font-alata text-base md:text-lg
         ${className}
       `}
-      style={{
-        fontFamily: 'var(--font-alata), "Alata", system-ui, -apple-system, sans-serif',
-        fontSize: 'clamp(1rem, 2vw, 1.5rem)',
-      }}
+      style={style}
     >
       {children}
     </div>

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Alexandria, Alata } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -22,6 +22,12 @@ const bright = localFont({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#ffffff",
+};
+
 export const metadata: Metadata = {
   title: "Yohan Gouiran - Developpeur Web",
   description: "Developpeur Full Stack a Marseille. Ruby on Rails, JavaScript, React, Next.js.",
@@ -40,7 +46,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
+    <html lang="fr" className="scroll-smooth">
       <head>
         <link
           rel="stylesheet"
@@ -49,7 +55,7 @@ export default function RootLayout({
           crossOrigin=""
         />
       </head>
-      <body className={`${alexandria.variable} ${alata.variable} ${bright.variable} antialiased`}>
+      <body className={`${alexandria.variable} ${alata.variable} ${bright.variable} antialiased bg-background text-foreground font-sans min-h-screen m-0 p-0`}>
         <Navbar />
         <main>{children}</main>
         <Footer />

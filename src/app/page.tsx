@@ -3,8 +3,10 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 import TiltCard from "@/components/TiltCard";
 import { projects, technologies } from "@/data/projects";
+import { COLORS, FONTS, FONT_SIZES, SHADOWS, CARD_SIZES } from "@/constants/theme";
 
 // Dynamic import for Map (needs window/document)
 const Map = dynamic(() => import("@/components/Map"), {
@@ -12,17 +14,19 @@ const Map = dynamic(() => import("@/components/Map"), {
   loading: () => <div className="w-full h-full bg-gray-200 rounded-3xl animate-pulse" />,
 });
 
+// Typeform ID - could be moved to env variable
+const TYPEFORM_ID = "01HMTZTP9VNNTKA37GK2W7HJDQ";
+
 export default function Home() {
   return (
     <div className="min-h-screen pt-16">
       {/* Intro */}
       <section className="px-8 md:px-14 py-8 md:py-10">
         <h1
-          className="leading-tight"
+          className="leading-tight font-bright"
           style={{
-            fontFamily: "Bright, sans-serif",
-            color: "rgba(1, 56, 63, 0.8)",
-            fontSize: "clamp(2rem, 8vw, 5rem)",
+            color: COLORS.primary,
+            fontSize: FONT_SIZES.heroTitle,
             lineHeight: 1.2,
           }}
         >
@@ -37,7 +41,7 @@ export default function Home() {
           {/* Resume Card */}
           <TiltCard className="md:row-span-3 flex flex-col justify-between gap-4 pl-6">
             <div className="flex gap-3">
-              <span className="text-2xl" style={{ textShadow: "0 0 2px white, -1px -1px 1px white, -1px 1px 1px white, 1px 1px 1px white, 1px -1px 1px white" }}>&#127969;</span>
+              <span className="text-2xl" style={{ textShadow: SHADOWS.emoji }}>&#127969;</span>
               <div>
                 5 annees en tant qu&apos;ingenieur dans la construction durable.<br />
                 <span className="inline-block mt-1">→ </span>
@@ -47,7 +51,7 @@ export default function Home() {
               </div>
             </div>
             <div className="flex gap-3">
-              <span className="text-2xl" style={{ textShadow: "0 0 2px white, -1px -1px 1px white, -1px 1px 1px white, 1px 1px 1px white, 1px -1px 1px white" }}>&#128104;&#8205;&#128187;</span>
+              <span className="text-2xl" style={{ textShadow: SHADOWS.emoji }}>&#128104;&#8205;&#128187;</span>
               <div>
                 Une reconversion dans le developpement web.<br />
                 <div className="mt-1">
@@ -57,7 +61,7 @@ export default function Home() {
               </div>
             </div>
             <div className="flex gap-3">
-              <span className="text-2xl" style={{ textShadow: "0 0 2px white, -1px -1px 1px white, -1px 1px 1px white, 1px 1px 1px white, 1px -1px 1px white" }}>&#128640;</span>
+              <span className="text-2xl" style={{ textShadow: SHADOWS.emoji }}>&#128640;</span>
               <div>
                 Des competences en gestion de projets et en resolution de problemes que j&apos;applique maintenant dans ce nouveau domaine&nbsp;!
               </div>
@@ -74,12 +78,17 @@ export default function Home() {
           </TiltCard>
 
           {/* Map Card */}
-          <TiltCard className="p-0 overflow-hidden md:row-span-2 min-h-[200px]">
+          <TiltCard noPadding className="overflow-hidden md:row-span-2 min-h-[200px]">
             <Map />
           </TiltCard>
 
           {/* LinkedIn Card */}
-          <TiltCard className="bg-[#0078b5] p-0 flex items-center justify-center w-full md:w-[125px] md:h-[125px]">
+          <TiltCard
+            noPadding
+            noBackground
+            className="flex items-center justify-center w-full"
+            style={{ backgroundColor: COLORS.linkedin, width: CARD_SIZES.socialCard, height: CARD_SIZES.socialCard }}
+          >
             <Link href="https://www.linkedin.com/in/yohan-g" target="_blank">
               <Image
                 src="/images/linkedin.png"
@@ -92,7 +101,12 @@ export default function Home() {
           </TiltCard>
 
           {/* GitHub Card */}
-          <TiltCard className="bg-[#0d2636] p-0 flex items-center justify-center w-full md:w-[125px] md:h-[125px]">
+          <TiltCard
+            noPadding
+            noBackground
+            className="flex items-center justify-center w-full"
+            style={{ backgroundColor: COLORS.github, width: CARD_SIZES.socialCard, height: CARD_SIZES.socialCard }}
+          >
             <Link href="https://www.github.com/rocktane" target="_blank">
               <Image
                 src="/images/github-a.png"
@@ -107,12 +121,16 @@ export default function Home() {
       </section>
 
       {/* Skills Marquee */}
-      <section className="ctn-skills py-8 mt-8">
-        <div className="list-skills">
+      <section className="overflow-hidden w-full py-8 mt-8">
+        <div className="flex whitespace-nowrap w-fit animate-[scroll_60s_linear_infinite] max-md:flex-col max-md:animate-none">
           {[...technologies, ...technologies].map((tech, index) => (
-            <h1 key={index} className="techno flex items-center">
+            <h1
+              key={`${tech}-${index}`}
+              className="flex items-center m-0 p-0 font-black tracking-[-0.05em] text-[clamp(3rem,8vw,4.5rem)] leading-[0.9em] text-[rgba(1,56,63,0.8)]"
+              style={{ fontFamily: 'var(--font-alata), "Alata", system-ui, -apple-system, sans-serif' }}
+            >
               {tech}
-              <span className="dot">&#8226;</span>
+              <span className="text-yellow mx-[0.3em] max-md:hidden">&#8226;</span>
             </h1>
           ))}
         </div>
@@ -120,7 +138,12 @@ export default function Home() {
 
       {/* Projects */}
       <section className="px-8 md:px-14 py-8" id="projects">
-        <h2 className="text-3xl md:text-4xl font-bold mb-8" style={{ fontFamily: "Bright, sans-serif", color: "rgba(1, 56, 63, 0.8)" }}>Projets</h2>
+        <h2
+          className="text-3xl md:text-4xl font-bold mb-8 font-bright"
+          style={{ color: COLORS.primary }}
+        >
+          Projets
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {projects.map((project) => (
             <TiltCard key={project.id}>
@@ -139,17 +162,22 @@ export default function Home() {
 
       {/* Contact */}
       <section className="px-8 md:px-14 py-8" id="contact">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Bright, sans-serif", color: "rgba(1, 56, 63, 0.8)" }}>Contact</h2>
+        <h2
+          className="text-3xl md:text-4xl font-bold mb-4 font-bright"
+          style={{ color: COLORS.primary }}
+        >
+          Contact
+        </h2>
         <p className="text-gray-600 mb-8">
           Afin de repondre au mieux a vos besoins, je vous invite a organiser un point avec moi directement.&nbsp;&#11015;
         </p>
         <div className="bg-white rounded-3xl p-4 min-h-[500px]">
-          <div data-tf-live="01HMTZTP9VNNTKA37GK2W7HJDQ" suppressHydrationWarning />
+          <div data-tf-live={TYPEFORM_ID} suppressHydrationWarning />
         </div>
       </section>
 
-      {/* Typeform Script */}
-      <script src="//embed.typeform.com/next/embed.js" async />
+      {/* Typeform Script - lazy loaded */}
+      <Script src="//embed.typeform.com/next/embed.js" strategy="lazyOnload" />
     </div>
   );
 }

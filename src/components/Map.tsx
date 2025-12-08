@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import L from "leaflet";
+import { MAP_CONFIG } from "@/constants/theme";
 
 export default function Map() {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -18,15 +19,14 @@ export default function Map() {
       scrollWheelZoom: false,
       doubleClickZoom: false,
       touchZoom: false,
-    }).setView([43.2969, 5.3699], 13);
+    }).setView(MAP_CONFIG.center, MAP_CONFIG.zoom);
 
     L.tileLayer(
-      "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}" +
-        (L.Browser.retina ? "@2x.png" : ".png"),
+      MAP_CONFIG.tileUrl + (L.Browser.retina ? "@2x.png" : ".png"),
       {
-        minZoom: 13,
-        maxZoom: 13,
-        subdomains: "abcd",
+        minZoom: MAP_CONFIG.zoom,
+        maxZoom: MAP_CONFIG.zoom,
+        subdomains: MAP_CONFIG.subdomains,
       }
     ).addTo(map);
 
