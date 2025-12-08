@@ -1,26 +1,160 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Bright";
+  src: url("/fonts/bright.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: rgba(253, 245, 228, 0.95);
+  --background-solid: rgb(253, 245, 228);
+  --foreground: #0e0000;
+  --red: #fd1015;
+  --green: #1edd88;
+  --blue: #0d6efd;
+  --yellow: #ffc65a;
+  --orange: #e67e22;
+  --gray: #0e0000;
+  --light-gray: #f4f4f4;
+  --github-bg: #0d2636;
+  --linkedin-bg: #0078b5;
+  --text-dark: rgba(1, 56, 63, 0.8);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-yellow: var(--yellow);
+  --color-red: var(--red);
+  --color-green: var(--green);
+  --color-blue: var(--blue);
+  --color-orange: var(--orange);
+  --color-github: var(--github-bg);
+  --color-linkedin: var(--linkedin-bg);
+  --font-sans: "Alexandria", sans-serif;
+  --font-bright: "Bright", sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
+  background-image: url("/images/topography.svg");
+  background-blend-mode: lighten;
+  background-repeat: repeat;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Stabilo highlight effect */
+.stabilo {
+  text-decoration: none;
+  background-image: linear-gradient(var(--background-solid), var(--background-solid));
+  background-position: left bottom;
+  background-size: 95% 5px;
+  background-repeat: no-repeat;
+  transition: background-size 0.5s ease;
+}
+
+.stabilo:hover {
+  background-size: 100% 2.5rem;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--light-gray);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--yellow);
+  border-radius: 4px;
+}
+
+/* Skills/Technologies marquee */
+.ctn-skills {
+  overflow: hidden;
+  width: 100%;
+}
+
+.list-skills {
+  display: flex;
+  white-space: nowrap;
+  animation: scroll 60s linear infinite;
+  width: fit-content;
+}
+
+.techno {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-alata), "Alata", system-ui, -apple-system, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  line-height: 0.9em;
+  color: var(--text-dark);
+}
+
+.dot {
+  color: var(--yellow);
+  margin: 0 0.3em;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Leaflet map styles */
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+}
+
+/* Footer styles */
+.footer {
+  background: linear-gradient(0deg, var(--background-solid) 35%, transparent 100%);
+  padding: 10em 10em 1em 10em;
+}
+
+.footer .logos img {
+  width: 60px;
+  filter: grayscale(100%);
+  transition: filter 0.3s;
+}
+
+.footer .logos a:hover img {
+  filter: none;
+}
+
+@media screen and (max-width: 900px) {
+  .footer {
+    padding: 2em 1em 1em 1em;
+  }
+  .footer .logos img {
+    width: 40px;
+    filter: none;
+  }
+  .list-skills {
+    flex-direction: column;
+    animation: none;
+  }
+  .dot {
+    display: none;
+  }
 }
