@@ -1,14 +1,23 @@
-// Colors
+/**
+ * Design tokens - Single source of truth
+ * These values are mirrored in globals.css as CSS custom properties
+ * Update both files when making changes
+ */
+
+// Colors - Reference CSS variables for runtime, keep hex values for type safety
 export const COLORS = {
-  primary: "rgba(1, 56, 63, 0.8)",
-  linkedin: "#0078b5",
-  github: "#0d2636",
+  /** Primary text color - var(--text-dark) in CSS */
+  primary: "var(--text-dark)",
+  /** LinkedIn brand color - var(--linkedin-bg) in CSS */
+  linkedin: "var(--linkedin-bg)",
+  /** GitHub brand color - var(--github-bg) in CSS */
+  github: "var(--github-bg)",
 } as const;
 
 // Typography
 export const FONTS = {
-  bright: "Bright, sans-serif",
-  alata: 'var(--font-alata), "Alata", system-ui, -apple-system, sans-serif',
+  bright: "var(--font-bright)",
+  alata: "var(--font-alata)",
 } as const;
 
 export const FONT_SIZES = {

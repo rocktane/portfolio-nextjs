@@ -1,26 +1,32 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: "Bright";
-  src: url("/fonts/bright.otf") format("opentype");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
+/**
+ * Design tokens - Single source of truth
+ * These values are referenced in constants/theme.ts
+ * Update both files when making changes
+ */
 :root {
+  /* Background colors */
   --background: rgba(253, 245, 228, 0.95);
   --background-solid: rgb(253, 245, 228);
   --foreground: #0e0000;
+
+  /* Brand colors */
   --red: #fd1015;
   --green: #1edd88;
   --blue: #0d6efd;
   --yellow: #ffc65a;
   --orange: #e67e22;
+
+  /* Neutral colors */
   --gray: #0e0000;
   --light-gray: #f4f4f4;
+
+  /* Social brand colors */
   --github-bg: #0d2636;
   --linkedin-bg: #0078b5;
+
+  /* Text colors */
   --text-dark: rgba(1, 56, 63, 0.8);
 }
 
@@ -79,6 +85,60 @@ body {
   100% {
     transform: translateX(-50%);
   }
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Screen reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--yellow);
+  color: var(--foreground);
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  z-index: 100;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Focus visible styles for better keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 2px;
+}
+
+/* Remove default focus for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
 }
 
 /* Navbar sliding indicator - CSS :has() technique */

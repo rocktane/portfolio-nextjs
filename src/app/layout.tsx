@@ -30,9 +30,9 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://yohangouiran.com"),
-  title: "Yohan Gouiran - Developpeur Web",
-  description: "Developpeur Full Stack a Marseille. Ruby on Rails, JavaScript, React, Next.js.",
-  keywords: ["developpeur web", "full stack", "marseille", "ruby on rails", "react", "next.js"],
+  title: "Yohan Gouiran - Développeur Web",
+  description: "Développeur Full Stack à Marseille. Ruby on Rails, JavaScript, React, Next.js.",
+  keywords: ["développeur web", "full stack", "marseille", "ruby on rails", "react", "next.js"],
   authors: [{ name: "Yohan Gouiran" }],
   alternates: {
     canonical: "/",
@@ -46,8 +46,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Yohan Gouiran - Developpeur Web",
-    description: "Developpeur Full Stack a Marseille",
+    title: "Yohan Gouiran - Développeur Web",
+    description: "Développeur Full Stack à Marseille. Ruby on Rails, JavaScript, React, Next.js.",
     type: "website",
     url: "https://yohangouiran.com",
     siteName: "Yohan Gouiran",
@@ -55,8 +55,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Yohan Gouiran - Developpeur Web",
-    description: "Developpeur Full Stack a Marseille. Ruby on Rails, JavaScript, React, Next.js.",
+    title: "Yohan Gouiran - Développeur Web",
+    description: "Développeur Full Stack à Marseille. Ruby on Rails, JavaScript, React, Next.js.",
   },
   icons: {
     icon: "/favicon.ico",
@@ -71,8 +71,11 @@ export default function RootLayout({
   return (
     <html lang="fr" className="scroll-smooth">
       <body className={`${alexandria.variable} ${alata.variable} ${bright.variable} antialiased bg-background text-foreground font-sans min-h-screen m-0 p-0`}>
+        <a href="#main-content" className="skip-link">
+          Aller au contenu principal
+        </a>
         <Navbar />
-        <main>{children}</main>
+        <main id="main-content">{children}</main>
         <Footer />
       </body>
     </html>

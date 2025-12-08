@@ -4,6 +4,15 @@ export interface Logo {
   href: string;
 }
 
+export interface Project {
+  id: string;
+  title: string;
+  description: string;
+  url: string;
+  urlLabel: string;
+  status: "beta" | "progress" | "live";
+}
+
 export interface TiltConfig {
   initialDelay: number;
   sizeFactor: number;
