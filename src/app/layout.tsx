@@ -29,14 +29,37 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://yohangouiran.com"),
   title: "Yohan Gouiran - Developpeur Web",
   description: "Developpeur Full Stack a Marseille. Ruby on Rails, JavaScript, React, Next.js.",
   keywords: ["developpeur web", "full stack", "marseille", "ruby on rails", "react", "next.js"],
   authors: [{ name: "Yohan Gouiran" }],
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
   openGraph: {
     title: "Yohan Gouiran - Developpeur Web",
     description: "Developpeur Full Stack a Marseille",
     type: "website",
+    url: "https://yohangouiran.com",
+    siteName: "Yohan Gouiran",
+    locale: "fr_FR",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Yohan Gouiran - Developpeur Web",
+    description: "Developpeur Full Stack a Marseille. Ruby on Rails, JavaScript, React, Next.js.",
+  },
+  icons: {
+    icon: "/favicon.ico",
   },
 };
 
@@ -47,14 +70,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className="scroll-smooth">
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-          crossOrigin=""
-        />
-      </head>
       <body className={`${alexandria.variable} ${alata.variable} ${bright.variable} antialiased bg-background text-foreground font-sans min-h-screen m-0 p-0`}>
         <Navbar />
         <main>{children}</main>

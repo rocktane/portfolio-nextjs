@@ -15,7 +15,7 @@ function LogoGrid({ logos, description }: LogoGridProps) {
       <p className="text-sm mb-6" style={{ fontSize: FONT_SIZES.small }}>
         {description}
       </p>
-      <div className="logos flex flex-wrap items-center gap-2">
+      <div className="logos flex flex-wrap items-center gap-2" role="list">
         {logos.map((logo) => (
           <Link
             key={logo.href}
@@ -23,7 +23,9 @@ function LogoGrid({ logos, description }: LogoGridProps) {
             target="_blank"
             rel="noopener noreferrer"
             title={logo.alt}
+            aria-label={`Visiter le site ${logo.alt}`}
             className="relative group"
+            role="listitem"
           >
             <Image
               src={logo.src}
@@ -32,7 +34,10 @@ function LogoGrid({ logos, description }: LogoGridProps) {
               height={60}
               className="w-10 md:w-[60px] h-auto object-contain grayscale-0 md:grayscale hover:grayscale-0 transition-all"
             />
-            <span className="absolute bottom-full left-1/2 -translate-x-1/2 -translate-y-1 bg-white px-2 py-1 rounded-lg shadow-sm text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            <span
+              className="absolute bottom-full left-1/2 -translate-x-1/2 -translate-y-1 bg-white px-2 py-1 rounded-lg shadow-sm text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+              aria-hidden="true"
+            >
               {logo.alt}
             </span>
           </Link>

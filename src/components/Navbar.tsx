@@ -87,13 +87,16 @@ function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50 flex justify-center mt-4">
       <nav
         ref={navRef}
+        role="navigation"
+        aria-label="Navigation principale"
         className="navbar-sliding flex items-center backdrop-blur-sm rounded-full px-2 py-2 shadow-sm"
         data-active={activeNav}
       >
-        <Link href="/" className="nav-item flex items-center px-4 py-2 rounded-full">
+        <Link href="/" className="nav-item flex items-center px-4 py-2 rounded-full" aria-label="Accueil">
           <span
             className="text-sm mr-1 px-1 rounded shadow-sm"
             style={{ lineHeight: "1.5em" }}
+            aria-hidden="true"
           >
             /
           </span>

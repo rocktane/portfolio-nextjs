@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 import { MAP_CONFIG } from "@/constants/theme";
 
 export default function Map() {
@@ -40,5 +41,12 @@ export default function Map() {
     };
   }, []);
 
-  return <div ref={mapRef} className="w-full h-full min-h-[200px]" />;
+  return (
+    <div
+      ref={mapRef}
+      className="w-full h-full min-h-[200px]"
+      role="img"
+      aria-label="Carte de localisation - Marseille, France"
+    />
+  );
 }

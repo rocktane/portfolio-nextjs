@@ -1,18 +1,10 @@
-"use client";
-
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
 import TiltCard from "@/components/TiltCard";
+import DynamicMap from "@/components/DynamicMap";
 import { projects, technologies } from "@/data/projects";
-import { COLORS, FONTS, FONT_SIZES, SHADOWS, CARD_SIZES } from "@/constants/theme";
-
-// Dynamic import for Map (needs window/document)
-const Map = dynamic(() => import("@/components/Map"), {
-  ssr: false,
-  loading: () => <div className="w-full h-full bg-gray-200 rounded-3xl animate-pulse" />,
-});
+import { COLORS, FONT_SIZES, SHADOWS, CARD_SIZES } from "@/constants/theme";
 
 // Typeform ID - could be moved to env variable
 const TYPEFORM_ID = "01HMTZTP9VNNTKA37GK2W7HJDQ";
@@ -79,7 +71,7 @@ export default function Home() {
 
           {/* Map Card */}
           <TiltCard noPadding className="overflow-hidden md:row-span-2 min-h-[200px]">
-            <Map />
+            <DynamicMap />
           </TiltCard>
 
           {/* LinkedIn Card */}
