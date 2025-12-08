@@ -12,11 +12,14 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error(error);
+    // Only log errors in development
+    if (process.env.NODE_ENV === "development") {
+      console.error(error);
+    }
   }, [error]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-8">
+    <main className="min-h-screen flex flex-col items-center justify-center px-8" role="alert">
       <h1
         className="text-4xl md:text-6xl font-bright mb-4"
         style={{ color: COLORS.primary }}
@@ -24,22 +27,22 @@ export default function Error({
         Oups !
       </h1>
       <p className="text-gray-600 text-center mb-8 max-w-md">
-        Une erreur est survenue. Pas de panique, ca arrive aux meilleurs.
+        Une erreur est survenue. Pas de panique, ça arrive aux meilleurs.
       </p>
       <div className="flex gap-4">
         <button
           onClick={reset}
           className="px-6 py-3 bg-yellow rounded-full font-medium hover:opacity-80 transition-opacity"
         >
-          Reessayer
+          Réessayer
         </button>
         <Link
           href="/"
           className="px-6 py-3 border border-current rounded-full font-medium hover:bg-gray-100 transition-colors"
         >
-          Retour a l&apos;accueil
+          Retour à l&apos;accueil
         </Link>
       </div>
-    </div>
+    </main>
   );
 }

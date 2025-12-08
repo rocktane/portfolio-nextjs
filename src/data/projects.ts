@@ -1,17 +1,10 @@
-export interface Project {
-  id: string;
-  title: string;
-  description: string;
-  url: string;
-  urlLabel: string;
-  status: "beta" | "progress" | "live";
-}
+import type { Project } from "@/types";
 
 export const projects: Project[] = [
   {
     id: "brower",
     title: "brower",
-    description: "Une selection de paquets brew dans une interface moderne. Il n'y a plus qu'a les installer.",
+    description: "Une sélection de paquets brew dans une interface moderne. Il n'y a plus qu'à les installer.",
     url: "https://bro.yohan.one",
     urlLabel: "bro.yohan.one",
     status: "beta",
@@ -44,4 +37,7 @@ export const technologies = [
   "PYTHON",
   "WEBFLOW",
   "API",
-];
+] as const;
+
+/** Pre-computed doubled array for marquee animation - avoids recreation on each render */
+export const technologiesDoubled = [...technologies, ...technologies];

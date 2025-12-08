@@ -24,8 +24,12 @@
           "value": "camera=(), microphone=(), geolocation=()"
         },
         {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains"
+        },
+        {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://embed.typeform.com https://*.typeform.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.basemaps.cartocdn.com https://*.typeform.com; connect-src 'self' https://*.typeform.com; frame-src https://*.typeform.com;"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://embed.typeform.com https://*.typeform.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https://*.basemaps.cartocdn.com https://*.typeform.com https://images.typeform.com; connect-src 'self' https://*.typeform.com wss://*.typeform.com; frame-src https://*.typeform.com; base-uri 'self'; form-action 'self' https://*.typeform.com; frame-ancestors 'none';"
         }
       ]
     }
