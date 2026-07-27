@@ -75,3 +75,15 @@ Desktop.ini
 
 # Playwright MCP artifacts
 .playwright-mcp/
+
+# Agent tooling — skills installées localement, propres à la machine
+# (.claude/settings.json reste committable si un jour on veut le partager)
+.agents/
+.claude/skills/
+skills-lock.json
+
+# Lockfile : ce projet utilise bun.lock, pas npm.
+# En avoir deux fait diverger l'install locale et celle de Vercel.
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
