@@ -118,7 +118,9 @@ export default function HeroReel() {
           premier projet ait fini de défiler. */}
       {/* La largeur s'arrête avant la fenêtre du projet, à droite : l'accroche
           tient sur deux lignes, une par phrase, sans jamais la toucher. */}
-      <div className="absolute left-[var(--gutter)] top-[5.5rem] z-30 max-w-[min(86vw,40rem)] sm:top-24">
+      {/* Le bloc de menu, bandeau d'appel compris, descend jusqu'à ~7 rem :
+          l'accroche commence en dessous, à toutes les largeurs. */}
+      <div className="absolute left-[var(--gutter)] top-[7.5rem] z-30 max-w-[min(86vw,40rem)]">
         <p className="display text-[clamp(1.15rem,2vw,1.75rem)] leading-tight text-white">
           Yohan Gouiran, développeur fullstack.
         </p>
