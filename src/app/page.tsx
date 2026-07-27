@@ -3,7 +3,8 @@ import Link from "next/link";
 import Script from "next/script";
 import TiltCard from "@/components/TiltCard";
 import DynamicMap from "@/components/DynamicMap";
-import { projects, technologiesDoubled } from "@/data/projects";
+import SkillsMarquee from "@/components/SkillsMarquee";
+import { projects } from "@/data/projects";
 import { COLORS, FONT_SIZES, SHADOWS, CARD_SIZES } from "@/constants/theme";
 
 const TYPEFORM_ID = process.env.NEXT_PUBLIC_TYPEFORM_ID ?? "01HMTZTP9VNNTKA37GK2W7HJDQ";
@@ -36,9 +37,12 @@ function ExternalLink({
 
 export default function Home() {
   return (
-    <div className="min-h-screen pt-16 px-32">
+    <div className="min-h-screen pt-16 px-4 md:px-8 lg:px-32">
       {/* Intro */}
-      <section className="px-8 md:px-14 py-8 md:py-10" aria-labelledby="intro-heading">
+      <section
+        className="px-8 md:px-14 py-8 md:py-10"
+        aria-labelledby="intro-heading"
+      >
         <h1
           id="intro-heading"
           className="leading-tight font-bright"
@@ -48,8 +52,9 @@ export default function Home() {
             lineHeight: 1.2,
           }}
         >
-          Salut, moi c&apos;est <span className="stabilo">Yohan</span>.<br />
-          Je suis <span className="stabilo">développeur web</span>.
+          Salut, moi c&apos;est <span className="stabilo-hero">Yohan</span>.
+          <br />
+          Je suis <span className="stabilo-hero">développeur web</span>.
         </h1>
       </section>
 
@@ -58,36 +63,78 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-[3fr_1fr_auto] gap-4 auto-rows-auto">
           {/* Resume Card */}
           <TiltCard className="md:row-span-3 flex flex-col justify-between gap-4 pl-6">
-            <div className="flex gap-3">
-              <span className="text-2xl" style={{ textShadow: SHADOWS.emoji }} aria-hidden="true">🏡</span>
+            <div className="flex gap-3 text-lg md:text-xl">
+              <span
+                className="text-2xl"
+                style={{ textShadow: SHADOWS.emoji }}
+                aria-hidden="true"
+              >
+                🏗️
+              </span>
               <div>
-                5 années en tant qu&apos;ingénieur dans la construction durable.<br />
+                Ingénieur de formation (ESTP Paris), 5 ans dans la construction durable.
+                <br />
                 <span className="inline-block mt-1">→ </span>
-                <ExternalLink href="/CV-20240201.pdf" className="stabilo" ariaLabel="Télécharger mon CV (PDF)">
+                <ExternalLink
+                  href="/CV-20260409.pdf"
+                  className="stabilo"
+                  ariaLabel="Télécharger mon CV (PDF)"
+                >
                   Mon&nbsp;CV
                 </ExternalLink>
               </div>
             </div>
-            <div className="flex gap-3">
-              <span className="text-2xl" style={{ textShadow: SHADOWS.emoji }} aria-hidden="true">👨‍💻</span>
+            <div className="flex gap-3 text-lg md:text-xl">
+              <span
+                className="text-2xl"
+                style={{ textShadow: SHADOWS.emoji }}
+                aria-hidden="true"
+              >
+                👨‍💻
+              </span>
               <div>
-                Une reconversion dans le développement web.<br />
+                Aujourd&apos;hui développeur fullstack, formé en alternance chez{" "}
+                <ExternalLink href="https://www.safee.fr/" className="stabilo">
+                  Safee
+                </ExternalLink>
+                .<br />
                 <div className="mt-1">
-                  → <ExternalLink href="https://www.lewagon.com/" className="stabilo">Le&nbsp;Wagon</ExternalLink><br />
-                  → <ExternalLink href="https://www.epitech.eu/" className="stabilo">Epitech</ExternalLink>
+                  →{" "}
+                  <ExternalLink
+                    href="https://www.lewagon.com/"
+                    className="stabilo"
+                  >
+                    Le&nbsp;Wagon
+                  </ExternalLink>{" "}
+                  (Bootcamp 2023)
+                  <br />→{" "}
+                  <ExternalLink
+                    href="https://www.epitech.eu/"
+                    className="stabilo"
+                  >
+                    Epitech
+                  </ExternalLink>{" "}
+                  (Master Architecte SI 2026)
                 </div>
               </div>
             </div>
-            <div className="flex gap-3">
-              <span className="text-2xl" style={{ textShadow: SHADOWS.emoji }} aria-hidden="true">🚀</span>
+            <div className="flex gap-3 text-lg md:text-xl">
+              <span
+                className="text-2xl"
+                style={{ textShadow: SHADOWS.emoji }}
+                aria-hidden="true"
+              >
+                🚀
+              </span>
               <div>
-                Des compétences en gestion de projets et en résolution de problèmes que j&apos;applique maintenant dans ce nouveau domaine&nbsp;!
+                Rigueur d&apos;ingénieur, gestion de projets et expertise
+                technique au service du web et du mobile.
               </div>
             </div>
           </TiltCard>
 
           {/* Invite Card */}
-          <TiltCard className="md:col-span-2">
+          <TiltCard className="md:col-span-2 text-lg md:text-xl">
             Vous avez un projet ?{" "}
             <a href="#contact" className="stabilo">
               Parlons&#8209;en
@@ -96,7 +143,10 @@ export default function Home() {
           </TiltCard>
 
           {/* Map Card */}
-          <TiltCard noPadding className="overflow-hidden md:row-span-2 min-h-[200px]">
+          <TiltCard
+            noPadding
+            className="map-card overflow-hidden md:row-span-2 min-h-[200px]"
+          >
             <DynamicMap />
           </TiltCard>
 
@@ -105,9 +155,16 @@ export default function Home() {
             noPadding
             noBackground
             className="flex items-center justify-center w-full"
-            style={{ backgroundColor: COLORS.linkedin, width: CARD_SIZES.socialCard, height: CARD_SIZES.socialCard }}
+            style={{
+              backgroundColor: COLORS.linkedin,
+              width: CARD_SIZES.socialCard,
+              height: CARD_SIZES.socialCard,
+            }}
           >
-            <ExternalLink href="https://www.linkedin.com/in/yohan-g" ariaLabel="Profil LinkedIn de Yohan">
+            <ExternalLink
+              href="https://www.linkedin.com/in/yohan-g"
+              ariaLabel="Profil LinkedIn de Yohan"
+            >
               <Image
                 src="/images/linkedin.png"
                 alt="LinkedIn"
@@ -124,9 +181,16 @@ export default function Home() {
             noPadding
             noBackground
             className="flex items-center justify-center w-full"
-            style={{ backgroundColor: COLORS.github, width: CARD_SIZES.socialCard, height: CARD_SIZES.socialCard }}
+            style={{
+              backgroundColor: COLORS.github,
+              width: CARD_SIZES.socialCard,
+              height: CARD_SIZES.socialCard,
+            }}
           >
-            <ExternalLink href="https://www.github.com/rocktane" ariaLabel="Profil GitHub de Yohan">
+            <ExternalLink
+              href="https://www.github.com/rocktane"
+              ariaLabel="Profil GitHub de Yohan"
+            >
               <Image
                 src="/images/github-a.png"
                 alt="GitHub"
@@ -141,68 +205,111 @@ export default function Home() {
       </section>
 
       {/* Skills Marquee */}
-      <section
-        className="overflow-hidden w-screen py-8 mt-8 relative left-1/2 -translate-x-1/2"
-        aria-label="Compétences techniques"
-      >
-        <div className="flex whitespace-nowrap w-fit animate-[scroll_60s_linear_infinite] max-md:flex-col max-md:animate-none">
-          {technologiesDoubled.map((tech, index) => (
-            <span
-              key={`${tech}-${index}`}
-              className="flex items-center m-0 p-0 font-black tracking-[-0.05em] text-[clamp(3rem,8vw,4.5rem)] leading-[0.9em] text-[rgba(1,56,63,0.8)]"
-              style={{ fontFamily: 'var(--font-alata), "Alata", system-ui, -apple-system, sans-serif' }}
-            >
-              {tech}
-              <span className="text-yellow mx-[0.3em] max-md:hidden" aria-hidden="true">•</span>
-            </span>
-          ))}
-        </div>
-      </section>
+      <SkillsMarquee />
 
       {/* Projects */}
-      <section className="px-8 md:px-14 py-8" id="projects" aria-labelledby="projects-heading">
+      <section
+        className="px-8 md:px-14 py-8"
+        id="projects"
+        aria-labelledby="projects-heading"
+      >
         <h2
           id="projects-heading"
-          className="text-3xl md:text-4xl font-bold mb-8 font-bright"
+          className="text-3xl md:text-4xl font-bold mb-8 font-bright tracking-wider"
           style={{ color: COLORS.primary }}
         >
           Projets
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {projects.map((project) => (
-            <TiltCard key={project.id}>
-              <h3 className="font-bold text-xl mb-2">{project.title}</h3>
-              <p className="text-gray-700 mb-4">{project.description}</p>
-              <div className="flex items-center gap-2">
-                <span aria-hidden="true">🔗</span>
-                <ExternalLink href={project.url} className="stabilo">
-                  {project.urlLabel}
-                </ExternalLink>
+            <div
+              key={project.id}
+              className="bg-yellow rounded-3xl p-8 shadow-sm relative font-alata text-base md:text-lg overflow-hidden flex flex-col"
+            >
+              {project.status === "sunset" && (
+                <div
+                  className="absolute top-0 right-0 bg-gray-800 text-white text-xs font-bold pl-3 pr-4 py-3 z-10 rounded-tl-sm rounded-tr-none rounded-br-sm rounded-bl-xl"
+                  aria-label="Projet abandonné"
+                >
+                  Abandonné
+                </div>
+              )}
+              <h3 className="font-bold text-2xl mb-2">{project.title}</h3>
+              <p className="text-gray-700 text-lg md:text-xl mb-3">
+                {project.description}
+              </p>
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {project.technologies.map((tech) => (
+                  <span key={tech} className="tech-badge">
+                    {tech}
+                  </span>
+                ))}
               </div>
-            </TiltCard>
+              <div className="flex items-end justify-between mt-auto gap-3">
+                <div>
+                  {project.status === "sunset" ? (
+                    <span className="stabilo line-through cursor-default text-lg md:text-xl">
+                      {project.urlLabel}
+                    </span>
+                  ) : (
+                    <ExternalLink
+                      href={project.url}
+                      className="stabilo text-lg md:text-xl"
+                    >
+                      {project.urlLabel}
+                    </ExternalLink>
+                  )}
+                </div>
+                {project.image && (
+                  <div
+                    className="shrink-0 w-[160px] h-[120px] rounded-2xl overflow-hidden shadow-sm relative"
+                    style={{ backgroundColor: project.imageBg }}
+                  >
+                    <Image
+                      src={project.image}
+                      alt={`Aperçu du projet ${project.title}`}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
           ))}
         </div>
       </section>
 
       {/* Contact */}
-      <section className="px-8 md:px-14 py-8" id="contact" aria-labelledby="contact-heading">
+      <section
+        className="px-8 md:px-14 py-8"
+        id="contact"
+        aria-labelledby="contact-heading"
+      >
         <h2
           id="contact-heading"
-          className="text-3xl md:text-4xl font-bold mb-4 font-bright"
+          className="text-3xl md:text-4xl font-bold mb-4 font-bright tracking-wider"
           style={{ color: COLORS.primary }}
         >
           Contact
         </h2>
         <p className="text-gray-600 mb-8">
-          Afin de répondre au mieux à vos besoins, je vous invite à organiser un point avec moi directement.&nbsp;⬇
+          Afin de répondre au mieux à vos besoins, je vous invite à organiser un
+          point avec moi directement.&nbsp;⬇
         </p>
-        <div className="bg-white rounded-3xl p-4 min-h-[500px]" role="region" aria-label="Formulaire de contact Typeform">
-          <div data-tf-live={TYPEFORM_ID} />
+        <div
+          className="bg-white rounded-3xl p-4 overflow-hidden"
+          role="region"
+          aria-label="Formulaire de contact Typeform"
+        >
+          <div data-tf-live={TYPEFORM_ID} className="min-h-[400px]" />
         </div>
       </section>
 
       {/* Typeform Script - lazy loaded */}
-      <Script src="//embed.typeform.com/next/embed.js" strategy="lazyOnload" />
+      <Script
+        src="https://embed.typeform.com/next/embed.js"
+        strategy="lazyOnload"
+      />
     </div>
   );
 }

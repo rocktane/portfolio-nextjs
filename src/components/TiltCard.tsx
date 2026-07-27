@@ -31,8 +31,9 @@ export default function TiltCard({
     <div
       ref={tiltRef}
       className={`
+        tilt-card
         ${backgroundClass} rounded-3xl ${paddingClass} shadow-sm
-        transform-gpu origin-center transition-transform duration-1000
+        transform-gpu origin-center
         relative z-0 first:z-10 hover:z-50
         font-alata text-base md:text-lg
         ${className}

@@ -33,20 +33,18 @@ export const SHADOWS = {
 
 // Tilt Animation Config
 export const TILT_CONFIG = {
-  /** Delay before disabling initial transition (ms) */
-  initialDelay: 500,
-  /** Multiplier for calculating rotation based on element size */
-  sizeFactor: 1000,
-  /** Rotation scale factor */
-  rotationScale: 0.025,
   /** Perspective value for 3D transforms (px) */
-  perspective: 1000,
-  /** Transition duration for first mouse move */
-  transitionInitial: "0.5s",
-  /** Transition duration for subsequent moves */
-  transitionDefault: "0s",
-  /** Transition duration when mouse leaves */
-  transitionLeave: "1s",
+  perspective: 900,
+  /** Max rotation at the very edge of the card (deg) */
+  maxRotation: 8,
+  /** Extra scale applied while hovering (0.02 = +2%) */
+  hoverScale: 0.02,
+  /**
+   * Smoothing rates (1/s) for the exponential easing.
+   * Higher = snappier. `follow` tracks the cursor, `release` eases back to rest.
+   */
+  followSpeed: 16,
+  releaseSpeed: 6,
 } as const;
 
 // Map Config
@@ -55,6 +53,9 @@ export const MAP_CONFIG = {
   center: [43.2969, 5.3699] as [number, number],
   /** Default zoom level */
   zoom: 13,
+  /** Zoom bounds the visitor can navigate between */
+  minZoom: 4,
+  maxZoom: 18,
   /** CartoDB tile URL template */
   tileUrl: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}",
   /** Available subdomains for tile loading */

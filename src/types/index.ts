@@ -10,7 +10,10 @@ export interface Project {
   description: string;
   url: string;
   urlLabel: string;
-  status: "beta" | "progress" | "live";
+  status: "beta" | "progress" | "live" | "sunset";
+  technologies: string[];
+  image?: string;
+  imageBg?: string;
 }
 
 export interface TiltConfig {

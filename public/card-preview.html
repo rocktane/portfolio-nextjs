@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Cards — Design Variants</title>
+<link href="https://fonts.bunny.net/css?family=alexandria:400,600,700" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fdf5e4;
+    --card-bg: #ffc65a;
+    --text: rgba(1, 56, 63, 0.8);
+    --text-light: rgba(1, 56, 63, 0.55);
+    --white-soft: rgba(255, 255, 255, 0.55);
+    --border-subtle: rgba(1, 56, 63, 0.12);
+    --radius: 1.5rem;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Alexandria", sans-serif;
+    padding: 3rem 2rem;
+    min-height: 100vh;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.04em;
+  }
+
+  .subtitle {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    margin-bottom: 3rem;
+  }
+
+  .variant-section {
+    margin-bottom: 3.5rem;
+  }
+
+  .variant-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .variant-label::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border-subtle);
+  }
+
+  .card-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    max-width: 900px;
+  }
+
+  /* ── Shared card base ── */
+  .card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .card h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+
+  .card p {
+    font-size: 0.82rem;
+    color: rgba(1, 56, 63, 0.65);
+    line-height: 1.4;
+    margin-bottom: 0.6rem;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+    color: var(--text);
+    background: var(--white-soft);
+    border: 1px solid var(--border-subtle);
+    border-radius: 9999px;
+    white-space: nowrap;
+  }
+
+  .card-link {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    background-image: linear-gradient(rgb(253, 245, 228), rgb(253, 245, 228));
+    background-position: left bottom;
+    background-size: 95% 3px;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s ease;
+  }
+
+  .card-link:hover {
+    background-size: 100% 1.8rem;
+  }
+
+  /* ════════════════════════════════════════
+     VARIANT A — Compact Thumbnail
+     ════════════════════════════════════════ */
+  .card-a {
+    display: flex;
+    align-items: stretch;
+    padding: 0;
+  }
+
+  .card-a .thumb {
+    width: 100px;
+    min-height: 100%;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+  }
+
+  .card-a .thumb img {
+    width: 100%;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 0.5rem;
+  }
+
+  .card-a .content {
+    padding: 1rem 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ════════════════════════════════════════
+     VARIANT B — Slim Banner
+     ════════════════════════════════════════ */
+  .card-b .banner {
+    width: 100%;
+    height: 72px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .card-b .banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .card-b .content {
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ════════════════════════════════════════
+     VARIANT C — Corner Peek
+     ════════════════════════════════════════ */
+  .card-c {
+    padding: 1.25rem;
+  }
+
+  .card-c .corner-img {
+    float: right;
+    width: 90px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 0.75rem;
+    margin: 0 0 0.5rem 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .card-c .content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-c .badges {
+    clear: both;
+  }
+
+  /* ════════════════════════════════════════
+     VARIANT D — Background Ghost
+     ════════════════════════════════════════ */
+  .card-d {
+    padding: 1.25rem;
+    position: relative;
+  }
+
+  .card-d .ghost-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: var(--radius);
+    pointer-events: none;
+  }
+
+  .card-d .ghost-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.07;
+    filter: grayscale(100%) contrast(1.2);
+  }
+
+  .card-d .content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Sunset ribbon ── */
+  .ribbon {
+    position: absolute;
+    top: 10px;
+    right: -28px;
+    transform: rotate(45deg);
+    background: #1f2937;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.2rem 2rem;
+    z-index: 10;
+    letter-spacing: 0.03em;
+  }
+
+  .card-link.sunset {
+    text-decoration: line-through;
+    cursor: default;
+    background: none;
+    color: var(--text-light);
+  }
+
+  @media (max-width: 640px) {
+    .card-row { grid-template-columns: 1fr; }
+    body { padding: 2rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Project Cards</h1>
+<p class="subtitle">4 variantes de design pour l'intégration des images — choisis ta préférée.</p>
+
+<!-- ═══ VARIANT A ═══ -->
+<div class="variant-section">
+  <div class="variant-label">A — Compact Thumbnail</div>
+  <div class="card-row">
+    <div class="card card-a">
+      <div class="thumb">
+        <img src="/projects/bro-card-light.png" alt="brower">
+      </div>
+      <div class="content">
+        <h3>brower</h3>
+        <p>Une sélection de paquets brew dans une interface moderne.</p>
+        <div class="badges">
+          <span class="badge">Vue.js</span>
+          <span class="badge">TypeScript</span>
+          <span class="badge">Vite</span>
+          <span class="badge">Node.js</span>
+        </div>
+        <a href="#" class="card-link">bro.yohan.one</a>
+      </div>
+    </div>
+    <div class="card card-a">
+      <div class="thumb">
+        <img src="/projects/geeft.png" alt="geeft">
+      </div>
+      <div class="content">
+        <div class="ribbon">Abandonné</div>
+        <h3>geeft</h3>
+        <p>Une plateforme pour trouver le cadeau parfait.</p>
+        <div class="badges">
+          <span class="badge">Ruby on Rails</span>
+          <span class="badge">JavaScript</span>
+          <span class="badge">SQL</span>
+        </div>
+        <span class="card-link sunset">geeft.club</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VARIANT B ═══ -->
+<div class="variant-section">
+  <div class="variant-label">B — Slim Banner</div>
+  <div class="card-row">
+    <div class="card card-b">
+      <div class="banner">
+        <img src="/projects/bro-card-light.png" alt="brower">
+      </div>
+      <div class="content">
+        <h3>brower</h3>
+        <p>Une sélection de paquets brew dans une interface moderne.</p>
+        <div class="badges">
+          <span class="badge">Vue.js</span>
+          <span class="badge">TypeScript</span>
+          <span class="badge">Vite</span>
+          <span class="badge">Node.js</span>
+        </div>
+        <a href="#" class="card-link">bro.yohan.one</a>
+      </div>
+    </div>
+    <div class="card card-b">
+      <div class="ribbon">Abandonné</div>
+      <div class="banner">
+        <img src="/projects/geeft.png" alt="geeft">
+      </div>
+      <div class="content">
+        <h3>geeft</h3>
+        <p>Une plateforme pour trouver le cadeau parfait.</p>
+        <div class="badges">
+          <span class="badge">Ruby on Rails</span>
+          <span class="badge">JavaScript</span>
+          <span class="badge">SQL</span>
+        </div>
+        <span class="card-link sunset">geeft.club</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VARIANT C ═══ -->
+<div class="variant-section">
+  <div class="variant-label">C — Corner Peek</div>
+  <div class="card-row">
+    <div class="card card-c">
+      <img src="/projects/bro-card-light.png" alt="brower" class="corner-img">
+      <div class="content">
+        <h3>brower</h3>
+        <p>Une sélection de paquets brew dans une interface moderne.</p>
+        <div class="badges">
+          <span class="badge">Vue.js</span>
+          <span class="badge">TypeScript</span>
+          <span class="badge">Vite</span>
+          <span class="badge">Node.js</span>
+        </div>
+        <a href="#" class="card-link">bro.yohan.one</a>
+      </div>
+    </div>
+    <div class="card card-c">
+      <div class="ribbon">Abandonné</div>
+      <img src="/projects/geeft.png" alt="geeft" class="corner-img">
+      <div class="content">
+        <h3>geeft</h3>
+        <p>Une plateforme pour trouver le cadeau parfait.</p>
+        <div class="badges">
+          <span class="badge">Ruby on Rails</span>
+          <span class="badge">JavaScript</span>
+          <span class="badge">SQL</span>
+        </div>
+        <span class="card-link sunset">geeft.club</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VARIANT D ═══ -->
+<div class="variant-section">
+  <div class="variant-label">D — Background Ghost</div>
+  <div class="card-row">
+    <div class="card card-d">
+      <div class="ghost-bg"><img src="/projects/bro-card-light.png" alt=""></div>
+      <div class="content">
+        <h3>brower</h3>
+        <p>Une sélection de paquets brew dans une interface moderne.</p>
+        <div class="badges">
+          <span class="badge">Vue.js</span>
+          <span class="badge">TypeScript</span>
+          <span class="badge">Vite</span>
+          <span class="badge">Node.js</span>
+        </div>
+        <a href="#" class="card-link">bro.yohan.one</a>
+      </div>
+    </div>
+    <div class="card card-d">
+      <div class="ribbon">Abandonné</div>
+      <div class="ghost-bg"><img src="/projects/geeft.png" alt=""></div>
+      <div class="content">
+        <h3>geeft</h3>
+        <p>Une plateforme pour trouver le cadeau parfait.</p>
+        <div class="badges">
+          <span class="badge">Ruby on Rails</span>
+          <span class="badge">JavaScript</span>
+          <span class="badge">SQL</span>
+        </div>
+        <span class="card-link sunset">geeft.club</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

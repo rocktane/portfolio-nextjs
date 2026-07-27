@@ -41,6 +41,7 @@
   --color-github: var(--github-bg);
   --color-linkedin: var(--linkedin-bg);
   --font-sans: "Alexandria", sans-serif;
+  --font-alata: "Alata", sans-serif;
   --font-bright: "Bright", sans-serif;
 }
 
@@ -52,7 +53,7 @@ body {
 }
 
 /* Stabilo highlight effect - Hero text animation */
-span.stabilo {
+.stabilo-hero {
   background-position: left bottom 0.35em;
   background-size: 0% 0.4em;
   background-repeat: no-repeat;
@@ -70,7 +71,7 @@ span.stabilo {
 }
 
 /* Stabilo highlight effect - Links */
-a.stabilo {
+.stabilo {
   text-decoration: none;
   background-image: linear-gradient(var(--background-solid), var(--background-solid));
   background-position: left bottom;
@@ -79,8 +80,29 @@ a.stabilo {
   transition: background-size 0.5s ease;
 }
 
-a.stabilo:hover {
+.stabilo:hover {
   background-size: 100% 2.5rem;
+}
+
+.stabilo.line-through {
+  text-decoration: line-through;
+}
+
+/* Technology badges on project cards */
+.tech-badge {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+  color: var(--text-dark);
+  background: #ffffff;
+  border: none;
+  border-radius: 9999px;
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
+  cursor: default;
 }
 
 /* Scrollbar styling */
@@ -97,12 +119,125 @@ a.stabilo:hover {
   border-radius: 4px;
 }
 
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
+/* ===== Cartes 3D (tilt) =====
+   La rotation est pilotée en JS (rAF) ; le CSS ne gère que l'ombre portée,
+   qui s'accentue pendant le survol pour donner la sensation de décollage. */
+.tilt-card {
+  transition: box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tilt-card.is-tilting {
+  box-shadow: 0 18px 40px -20px rgba(1, 56, 63, 0.45);
+}
+
+/* Safari ne respecte pas toujours overflow:hidden + border-radius sur un
+   élément transformé en 3D : le masque force le rognage des coins. */
+.map-card {
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
+}
+
+/* ===== Bouton "recentrer" de la carte ===== */
+.map-recenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--text-dark);
+  box-shadow: 0 2px 8px rgba(1, 56, 63, 0.25);
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.map-recenter:hover {
+  background: #ffffff;
+  transform: scale(1.08);
+}
+
+.map-recenter:active {
+  transform: scale(0.94);
+}
+
+/* ===== Skills marquee =====
+   The track holds two identical groups and slides by exactly -50% (one group),
+   so the loop restarts on an identical frame: no visible seam. */
+.marquee {
+  --marquee-duration: 45s;
+  position: relative;
+  left: 50%;
+  width: 100vw;
+  margin-top: 2rem;
+  padding-block: 2rem;
+  overflow: hidden;
+  transform: translateX(-50%);
+  /* Le bandeau est décoratif : pas de curseur texte ni de sélection */
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll var(--marquee-duration) linear infinite;
+  will-change: transform;
+}
+
+/* Pause au survol du bandeau */
+.marquee:hover .marquee__track,
+.marquee:focus-within .marquee__track {
+  animation-play-state: paused;
+}
+
+.marquee__group {
+  display: flex;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.marquee__item {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+  font-family: var(--font-alata), "Alata", system-ui, -apple-system, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  line-height: 0.9em;
+  color: var(--text-dark);
+  transition: opacity 0.35s ease;
+}
+
+.marquee__dot {
+  margin-inline: 0.3em;
+  color: var(--yellow);
+}
+
+/* Au survol : on estompe tout sauf le langage pointé */
+.marquee:hover .marquee__item {
+  opacity: 0.25;
+}
+
+.marquee:hover .marquee__item:hover {
+  opacity: 1;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
   }
-  100% {
-    transform: translateX(-50%);
+  to {
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
@@ -114,6 +249,15 @@ a.stabilo:hover {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /* Le bandeau devient une liste défilable manuellement plutôt qu'un flash */
+  .marquee {
+    overflow-x: auto;
+  }
+
+  .marquee__track {
+    animation: none !important;
   }
 }
 

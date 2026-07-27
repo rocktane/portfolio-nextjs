@@ -116,7 +116,7 @@ npm run lint
 portfolio-nextjs/
 ├── public/
 │   ├── images/          # Images et assets statiques
-│   └── CV-20240201.pdf  # CV téléchargeable
+│   └── CV-20260409.pdf  # CV téléchargeable
 ├── src/
 │   ├── app/
 │   │   ├── layout.tsx   # Layout principal
@@ -169,7 +169,7 @@ Le projet inclut :
 
 ## 📄 License
 
-Ce projet est sous licence privée. Tous droits réservés © 2024 Yohan Gouiran.
+Ce projet est sous licence privée. Tous droits réservés © 2026 Yohan Gouiran.
 
 ---
 

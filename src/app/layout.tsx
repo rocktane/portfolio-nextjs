@@ -59,7 +59,11 @@ export const metadata: Metadata = {
     description: "Développeur Full Stack à Marseille. Ruby on Rails, JavaScript, React, Next.js.",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico", sizes: "16x16 32x32 48x48", type: "image/x-icon" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
 };
 
