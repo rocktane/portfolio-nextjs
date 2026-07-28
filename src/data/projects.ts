@@ -103,6 +103,7 @@ export const projects: Project[] = [
     hrefKind: "site",
     motif: "cashou",
     pattern: "dots",
+    hero: true,
   },
   {
     id: "travel-resolver",
@@ -249,7 +250,7 @@ export const projects: Project[] = [
 ];
 
 /** Ordre du carrousel d'accueil : du plus abouti au plus personnel. */
-export const HERO_ORDER = ["safee", "brower", "exo", "amp"] as const;
+export const HERO_ORDER = ["safee", "brower", "exo", "cashou", "amp"] as const;
 
 export const heroProjects: Project[] = HERO_ORDER.map(
   (id) => projects.find((p) => p.id === id)!,
