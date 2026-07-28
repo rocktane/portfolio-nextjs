@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -102,6 +103,8 @@ export default function RootLayout({
           src="https://embed.typeform.com/next/embed.js"
           strategy="lazyOnload"
         />
+
+        <Analytics />
       </body>
     </html>
   );
