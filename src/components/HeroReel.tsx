@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import ProjectPoster from "@/components/ProjectPoster";
 import ProjectStill from "@/components/ProjectStill";
 import { useProjects } from "@/components/ProjectsProvider";
-import { heroProjects, STATUS_LABEL } from "@/data/projects";
+import { heroProjects, isOpenSource, STATUS_LABEL } from "@/data/projects";
 import { scrollToId } from "@/components/SmoothScroll";
 import { isTyping } from "@/components/KeyboardNav";
 
@@ -142,7 +142,12 @@ export default function HeroReel() {
             transition={{ duration: 0.45 }}
             className="w-full"
           >
-            <span className="label text-amber">{STATUS_LABEL[project.status]}</span>
+            <span className="flex flex-wrap items-center gap-2">
+              <span className="label text-amber">{STATUS_LABEL[project.status]}</span>
+              {isOpenSource(project) && (
+                <span className="label text-amber">OPEN SOURCE</span>
+              )}
+            </span>
 
             {/* Le titre porte le cadre : il doit occuper la largeur, pas
                 flotter dans un coin. */}
@@ -172,7 +177,7 @@ export default function HeroReel() {
         </AnimatePresence>
 
         {/* Barre de bas d'écran */}
-        <div className="mt-10 flex items-end justify-between gap-6">
+        <div className="mt-10 flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
           <button
             type="button"
             onClick={() => scrollToId("projets")}
@@ -181,7 +186,11 @@ export default function HeroReel() {
             Scroll ↓
           </button>
 
-          <div className="flex items-center gap-4 sm:gap-6">
+          {/* Cinq traits de 48 px, une pause et un compteur ne tiennent pas
+              sur la ligne d'un téléphone : les commandes passent alors sous le
+              « Scroll », sur toute la largeur, et la réglette prend ce qui
+              reste au lieu de sortir de l'écran. */}
+          <div className="flex w-full items-center gap-4 sm:w-auto sm:gap-6">
             {/* Sans mouvement demandé, le carrousel ne tourne pas de lui-même :
                 un bouton de pause n'aurait rien à arrêter. */}
             {!reduced && (
@@ -189,13 +198,13 @@ export default function HeroReel() {
                 type="button"
                 onClick={() => setStopped((s) => !s)}
                 aria-pressed={stopped}
-                className="mono border border-white/25 px-2.5 py-2 text-white/70 transition-colors hover:border-amber hover:text-amber"
+                className="mono shrink-0 border border-white/25 px-2.5 py-2 text-white/70 transition-colors hover:border-amber hover:text-amber"
               >
                 {stopped ? "Lecture ▶" : "Pause ❙❙"}
               </button>
             )}
 
-            <div className="flex items-center gap-2">
+            <div className="flex min-w-0 flex-1 items-center gap-2 sm:flex-none">
               {heroProjects.map((p, i) => (
                 <button
                   key={p.id}
@@ -205,11 +214,11 @@ export default function HeroReel() {
                   onClick={() => goTo(i)}
                   // Le trait ne fait qu'un pixel de haut : sans zone tampon
                   // autour, la cible était pratiquement impossible à viser.
-                  className="group cursor-pointer px-1.5 py-5"
+                  className="group min-w-0 flex-1 cursor-pointer px-1.5 py-5 sm:flex-none"
                 >
                   {/* Ce trait est la seule forme visible du bouton : sous
                       3:1, la commande elle-même devenait indiscernable. */}
-                  <span className="relative block h-px w-8 bg-white/45 sm:w-12">
+                  <span className="relative block h-px w-full bg-white/45 sm:w-12">
                     {i === index && (
                       // `initial` doit être identique au rendu serveur :
                       // `useReducedMotion()` y vaut null, l'utiliser ici
@@ -232,7 +241,7 @@ export default function HeroReel() {
                 </button>
               ))}
             </div>
-            <span className="mono text-muted tabular-nums">
+            <span className="mono shrink-0 text-muted tabular-nums">
               {String(index + 1).padStart(2, "0")} / {String(heroProjects.length).padStart(2, "0")}
             </span>
           </div>

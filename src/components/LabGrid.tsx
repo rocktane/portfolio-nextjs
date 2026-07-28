@@ -5,7 +5,7 @@ import ProjectPoster from "@/components/ProjectPoster";
 import ProjectStill from "@/components/ProjectStill";
 import SectionHeading from "@/components/SectionHeading";
 import { useProjects } from "@/components/ProjectsProvider";
-import { labProjects, STATUS_LABEL } from "@/data/projects";
+import { isOpenSource, labProjects, STATUS_LABEL } from "@/data/projects";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -48,8 +48,13 @@ export default function LabGrid() {
             <div className="relative flex h-full flex-col justify-between p-6">
               <div>
                 <div className="flex items-start justify-between gap-3">
-                  <span className="label text-amber">
-                    {STATUS_LABEL[project.status]}
+                  <span className="flex flex-wrap items-center gap-2">
+                    <span className="label text-amber">
+                      {STATUS_LABEL[project.status]}
+                    </span>
+                    {isOpenSource(project) && (
+                      <span className="label text-amber">OPEN SOURCE</span>
+                    )}
                   </span>
                   {/* Le labo n'est plus que macOS : chaque affiche annonce
                       sa propre plateforme. */}

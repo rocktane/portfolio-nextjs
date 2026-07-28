@@ -14,7 +14,7 @@ import { useDialogFocus } from "@/lib/dialog";
 import ProjectPoster from "@/components/ProjectPoster";
 import ProjectStill from "@/components/ProjectStill";
 import { useProjects } from "@/components/ProjectsProvider";
-import { projects, STATUS_LABEL } from "@/data/projects";
+import { isOpenSource, projects, STATUS_LABEL } from "@/data/projects";
 import type { LinkKind, Project } from "@/types";
 
 const CTA_LABEL: Record<LinkKind, string> = {
@@ -313,11 +313,21 @@ function CardFace({ project, muted }: { project: Project; muted: boolean }) {
       {/* Cartouche de nom : le titre, et le statut en guise de coût. */}
       <div className="flex items-center justify-between gap-[2cqw] rounded-[1cqw] border border-white/10 bg-white/[0.05] px-[2.4cqw] py-[1.6cqw]">
         <h2 className="display truncate text-[6.4cqw] leading-none">{title}</h2>
-        <span
-          className="label shrink-0 text-[1.9cqw]"
-          style={{ color: accent, borderColor: accent }}
-        >
-          {STATUS_LABEL[status]}
+        <span className="flex shrink-0 items-center gap-[1cqw]">
+          {isOpenSource(project) && (
+            <span
+              className="label text-[1.9cqw]"
+              style={{ color: accent, borderColor: accent }}
+            >
+              OPEN SOURCE
+            </span>
+          )}
+          <span
+            className="label text-[1.9cqw]"
+            style={{ color: accent, borderColor: accent }}
+          >
+            {STATUS_LABEL[status]}
+          </span>
         </span>
       </div>
 

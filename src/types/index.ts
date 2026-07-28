@@ -1,5 +1,5 @@
 /** État d'avancement d'un projet. */
-export type ProjectStatus = "live" | "beta" | "wip" | "sunset";
+export type ProjectStatus = "live" | "beta" | "wip" | "unreleased" | "sunset";
 
 /** Section du site où le projet apparaît. */
 export type ProjectSection = "projets" | "labo" | "archives";

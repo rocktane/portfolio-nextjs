@@ -7,7 +7,7 @@ import ProjectStill from "@/components/ProjectStill";
 import SectionHeading from "@/components/SectionHeading";
 import { useProjects } from "@/components/ProjectsProvider";
 import { scrollBehavior } from "@/components/SmoothScroll";
-import { featuredProjects, STATUS_LABEL } from "@/data/projects";
+import { featuredProjects, isOpenSource, STATUS_LABEL } from "@/data/projects";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -55,16 +55,26 @@ export default function WorkRow() {
           l'autre axe en `auto` lui aussi, et le `y: 40` des cards pas encore
           entrées débordait alors vers le bas — la rangée se mettait à défiler
           verticalement de quelques pixels, sans raison visible. */}
+      {/* `scroll-px` est indispensable avec `snap-mandatory` : sans lui, le
+          point d'accroche d'une card s'aligne sur le bord du conteneur et non
+          sur sa marge intérieure — la rangée s'auto-défilait d'une gouttière
+          au chargement, et la première card collait au bord de l'écran. */}
       <div
         ref={scroller}
-        className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto overflow-y-hidden px-[var(--gutter)] pb-2"
+        className="no-scrollbar flex snap-x snap-mandatory scroll-px-[var(--gutter)] gap-4 overflow-x-auto overflow-y-hidden px-[var(--gutter)] pb-2"
       >
         {featuredProjects.map((project, i) => (
           <motion.button
             key={project.id}
             type="button"
             onClick={() => open(project.id)}
-            className="group cursor-enter relative aspect-[4/3] w-[86vw] shrink-0 snap-start overflow-hidden text-left sm:w-[56vw] lg:w-[38vw]"
+            // Le 4/3 est un plancher, pas un cadre : imposé, il rognait le
+            // titre et le lien dès que la card était étroite — sous `sm`, mais
+            // aussi à 640, 768 et 1024 px, où la fenêtre du projet, ses badges
+            // et le titre demandent jusqu'à soixante pixels de plus que les
+            // trois quarts de la largeur. La rangée étant un `flex`, les cards
+            // s'étirent toutes sur la plus haute : elles restent d'aplomb.
+            className="group cursor-enter relative w-[86vw] shrink-0 snap-start overflow-hidden text-left sm:min-h-[42vw] sm:w-[56vw] lg:min-h-[28.5vw] lg:w-[38vw]"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-10% 0px" }}
@@ -74,12 +84,23 @@ export default function WorkRow() {
               <ProjectPoster project={project} variant="card" />
             </div>
 
-            <div className="relative flex h-full flex-col justify-between p-6">
-              <div className="flex items-start justify-between gap-5">
-                <span className="label shrink-0 text-amber">
-                  {STATUS_LABEL[project.status]}
+            <div className="relative flex h-full flex-col justify-between gap-8 p-6 sm:gap-4">
+              {/* Le mobile empile : à 62 % d'une card étroite, la fenêtre du
+                  projet devenait illisible et sa stack se pliait sur quatre
+                  lignes, à côté d'une colonne de vide. */}
+              <div className="flex flex-col items-start gap-4 sm:flex-row sm:justify-between sm:gap-5">
+                <span className="flex shrink-0 flex-wrap items-center gap-2">
+                  <span className="label text-amber">
+                    {STATUS_LABEL[project.status]}
+                  </span>
+                  {isOpenSource(project) && (
+                    <span className="label text-amber">OPEN SOURCE</span>
+                  )}
                 </span>
-                <ProjectStill project={project} className="w-[62%] max-w-[340px]" />
+                <ProjectStill
+                  project={project}
+                  className="w-full sm:w-[62%] sm:max-w-[340px]"
+                />
               </div>
               <div>
                 <h3 className="display text-[clamp(2rem,4.5vw,3.5rem)]">

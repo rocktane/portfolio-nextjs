@@ -5,8 +5,15 @@ export const STATUS_LABEL: Record<ProjectStatus, string> = {
   live: "EN PRODUCTION",
   beta: "BETA",
   wip: "EN COURS",
+  unreleased: "NON DÉPLOYÉ",
   sunset: "ARCHIVÉ",
 };
+
+/** Un projet dont le lien pointe vers un dépôt public est ouvert : le label le
+ *  dit, plutôt que de dupliquer l'information dans les données. */
+export function isOpenSource(project: Project): boolean {
+  return Boolean(project.href?.includes("github.com"));
+}
 
 export const projects: Project[] = [
   {
@@ -95,7 +102,7 @@ export const projects: Project[] = [
     year: "2026",
     role: "Développement fullstack — projet EIP Epitech",
     stack: ["Expo", "tRPC", "Prisma", "PostgreSQL", "Bun"],
-    status: "live",
+    status: "wip",
     section: "projets",
     accent: "#16A34A",
     href: "https://cashou.app",
@@ -114,7 +121,7 @@ export const projects: Project[] = [
     year: "2026",
     role: "Conception et développement",
     stack: ["Python", "spaCy", "CamemBERT", "PyTorch", "FastAPI"],
-    status: "live",
+    status: "unreleased",
     section: "projets",
     accent: "#0D9488",
     href: "https://github.com/rocktane/T-AIA-911",
