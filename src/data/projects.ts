@@ -108,6 +108,7 @@ export const projects: Project[] = [
     href: "https://cashou.app",
     hrefLabel: "cashou.app",
     hrefKind: "site",
+    shot: "/projects/cashou.webp",
     motif: "cashou",
     pattern: "dots",
     hero: true,
