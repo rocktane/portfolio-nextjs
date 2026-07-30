@@ -2,11 +2,10 @@
 
 import dynamic from "next/dynamic";
 
+// Leaflet touche au DOM au montage : il ne peut pas être rendu côté serveur.
 const Map = dynamic(() => import("@/components/Map"), {
   ssr: false,
-  loading: () => (
-    <div className="w-full h-full bg-gray-200 rounded-3xl animate-pulse" />
-  ),
+  loading: () => <div className="h-full w-full bg-surface" />,
 });
 
 export default function DynamicMap() {

@@ -1,247 +1,256 @@
 @import "tailwindcss";
 
 /**
- * Design tokens - Single source of truth
- * These values are referenced in constants/theme.ts
- * Update both files when making changes
+ * Design tokens — source unique de vérité.
+ * Direction : catalogue de distributeur de films. Noir absolu, typo condensée,
+ * ambre en accent, mono pour toute la métadonnée.
  */
-:root {
-  /* Background colors */
-  --background: rgba(253, 245, 228, 0.95);
-  --background-solid: rgb(253, 245, 228);
-  --foreground: #0e0000;
+@theme {
+  --color-ink: #000000;
+  --color-paper: #ffffff;
+  --color-amber: #f5a623;
+  --color-muted: #8f8f8f;
+  --color-line: #1f1f1f;
+  --color-surface: #0a0a0a;
 
-  /* Brand colors */
-  --red: #fd1015;
-  --green: #1edd88;
-  --blue: #0d6efd;
-  --yellow: #ffc65a;
-  --orange: #e67e22;
-
-  /* Neutral colors */
-  --gray: #0e0000;
-  --light-gray: #f4f4f4;
-
-  /* Social brand colors */
-  --github-bg: #0d2636;
-  --linkedin-bg: #0078b5;
-
-  /* Text colors */
-  --text-dark: rgba(1, 56, 63, 0.8);
+  --font-display: "Anton", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-yellow: var(--yellow);
-  --color-red: var(--red);
-  --color-green: var(--green);
-  --color-blue: var(--blue);
-  --color-orange: var(--orange);
-  --color-github: var(--github-bg);
-  --color-linkedin: var(--linkedin-bg);
-  --font-sans: "Alexandria", sans-serif;
-  --font-alata: "Alata", sans-serif;
-  --font-bright: "Bright", sans-serif;
+:root {
+  color-scheme: dark;
+  /* Marge horizontale commune à toutes les sections. */
+  --gutter: clamp(1.25rem, 5vw, 5rem);
+}
+
+html {
+  background-color: var(--color-ink);
 }
 
 body {
-  background-image: url("/images/topography.svg");
-  background-blend-mode: lighten;
-  background-repeat: repeat;
+  /**
+   * Le fond n'est jamais un noir pur : trois nappes colorées fixes, très
+   * diffuses, donnent une ambiance au défilement sans nuire au contraste du
+   * texte blanc. Les sections n'ont pas de fond propre, elles laissent voir
+   * celui-ci.
+   */
+  background-color: #06050a;
+  background-image:
+    radial-gradient(58% 42% at 88% 4%, rgba(99, 65, 173, 0.34), transparent 62%),
+    radial-gradient(52% 38% at 6% 38%, rgba(34, 184, 207, 0.2), transparent 64%),
+    radial-gradient(50% 34% at 78% 62%, rgba(245, 166, 35, 0.16), transparent 62%),
+    radial-gradient(56% 40% at 18% 92%, rgba(79, 70, 229, 0.26), transparent 64%);
+  background-attachment: fixed;
+  color: var(--color-paper);
+  font-family: var(--font-sans);
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Stabilo highlight effect - Hero text animation */
-.stabilo-hero {
-  background-position: left bottom 0.35em;
-  background-size: 0% 0.4em;
-  background-repeat: no-repeat;
-  background-image: linear-gradient(var(--yellow) 0 0);
-  animation-name: underlineNameJob;
-  animation-duration: 1.8s;
-  animation-delay: 1.5s;
-  animation-fill-mode: forwards;
+::selection {
+  background-color: var(--color-amber);
+  color: var(--color-ink);
 }
 
-@keyframes underlineNameJob {
-  to {
-    background-size: 100% 0.4em;
-  }
+/* ---------------------------------------------------------------- Lenis */
+
+html.lenis,
+html.lenis body {
+  height: auto;
 }
 
-/* Stabilo highlight effect - Links */
-.stabilo {
-  text-decoration: none;
-  background-image: linear-gradient(var(--background-solid), var(--background-solid));
-  background-position: left bottom;
-  background-size: 95% 5px;
-  background-repeat: no-repeat;
-  transition: background-size 0.5s ease;
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
 }
 
-.stabilo:hover {
-  background-size: 100% 2.5rem;
-}
-
-.stabilo.line-through {
-  text-decoration: line-through;
-}
-
-/* Technology badges on project cards */
-.tech-badge {
-  display: inline-block;
-  padding: 0.15rem 0.55rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  line-height: 1.4;
-  color: var(--text-dark);
-  background: #ffffff;
-  border: none;
-  border-radius: 9999px;
-  backdrop-filter: blur(4px);
-  white-space: nowrap;
-  cursor: default;
-}
-
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--light-gray);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--yellow);
-  border-radius: 4px;
-}
-
-/* ===== Cartes 3D (tilt) =====
-   La rotation est pilotée en JS (rAF) ; le CSS ne gère que l'ombre portée,
-   qui s'accentue pendant le survol pour donner la sensation de décollage. */
-.tilt-card {
-  transition: box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.tilt-card.is-tilting {
-  box-shadow: 0 18px 40px -20px rgba(1, 56, 63, 0.45);
-}
-
-/* Safari ne respecte pas toujours overflow:hidden + border-radius sur un
-   élément transformé en 3D : le masque force le rognage des coins. */
-.map-card {
-  -webkit-mask-image: -webkit-radial-gradient(white, black);
-  mask-image: radial-gradient(white, black);
-}
-
-/* ===== Bouton "recentrer" de la carte ===== */
-.map-recenter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border: none;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.92);
-  color: var(--text-dark);
-  box-shadow: 0 2px 8px rgba(1, 56, 63, 0.25);
-  cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.map-recenter:hover {
-  background: #ffffff;
-  transform: scale(1.08);
-}
-
-.map-recenter:active {
-  transform: scale(0.94);
-}
-
-/* ===== Skills marquee =====
-   The track holds two identical groups and slides by exactly -50% (one group),
-   so the loop restarts on an identical frame: no visible seam. */
-.marquee {
-  --marquee-duration: 45s;
-  position: relative;
-  left: 50%;
-  width: 100vw;
-  margin-top: 2rem;
-  padding-block: 2rem;
+.lenis.lenis-stopped {
   overflow: hidden;
-  transform: translateX(-50%);
-  /* Le bandeau est décoratif : pas de curseur texte ni de sélection */
-  cursor: default;
-  user-select: none;
-  -webkit-user-select: none;
 }
 
-.marquee__track {
-  display: flex;
-  width: max-content;
-  animation: marquee-scroll var(--marquee-duration) linear infinite;
-  will-change: transform;
+/* ------------------------------------------------------------ Typographie */
+
+.display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  line-height: 0.88;
+  letter-spacing: 0.005em;
+  /* Jamais de césure au milieu d'un mot : à cette taille, ça se voit. */
+  overflow-wrap: normal;
+  hyphens: none;
 }
 
-/* Pause au survol du bandeau */
-.marquee:hover .marquee__track,
-.marquee:focus-within .marquee__track {
-  animation-play-state: paused;
+/**
+ * Un titre `display` qui tient sur plusieurs lignes.
+ *
+ * L'interligne serré ci-dessus est fait pour les très grands titres d'une
+ * seule ligne : à deux lignes, Anton monte si haut que les accents mordent la
+ * ligne précédente. La règle vit ici, hors `@layer`, parce que du CSS non
+ * calqué l'emporte sur les utilitaires Tailwind quelle que soit la
+ * spécificité — un `leading-*` posé sur `.display` n'aurait aucun effet.
+ */
+.display-multiline {
+  line-height: 1.2;
 }
 
-.marquee__group {
-  display: flex;
-  flex: 0 0 auto;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+.mono {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.6875rem;
+  line-height: 1.4;
 }
 
-.marquee__item {
-  display: flex;
-  flex: 0 0 auto;
-  align-items: center;
-  margin: 0;
-  padding: 0;
+/** Micro-label encadré, l'équivalent du « IN THEATERS » de la référence. */
+.label {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.625rem;
+  line-height: 1;
+  display: inline-block;
+  padding: 0.4em 0.6em 0.35em;
+  border: 1px solid currentColor;
   white-space: nowrap;
-  font-family: var(--font-alata), "Alata", system-ui, -apple-system, sans-serif;
-  font-weight: 900;
-  letter-spacing: -0.05em;
-  font-size: clamp(3rem, 8vw, 4.5rem);
-  line-height: 0.9em;
-  color: var(--text-dark);
-  transition: opacity 0.35s ease;
 }
 
-.marquee__dot {
-  margin-inline: 0.3em;
-  color: var(--yellow);
+/* ------------------------------------------------ Filet de sécurité JS */
+
+/**
+ * Les révélations au scroll sont pilotées par JavaScript, qui rend donc le
+ * contenu avec `opacity: 0` en attendant. Si ce JavaScript ne s'exécute
+ * jamais — désactivé, bloqué par une extension, ou hydratation interrompue —
+ * le site se réduirait à une page noire. Tant que `no-js` est présent sur
+ * <html>, on neutralise ces états d'attente : le contenu prime sur l'effet.
+ */
+.no-js [style*="opacity:0"],
+.no-js [style*="opacity: 0"],
+.no-js [style*="translateY"],
+.no-js [style*="translateX"] {
+  opacity: 1 !important;
+  transform: none !important;
 }
 
-/* Au survol : on estompe tout sauf le langage pointé */
-.marquee:hover .marquee__item {
-  opacity: 0.25;
+/* ------------------------------------------------------------------ Grain */
+
+/**
+ * Bruit fixe sur toute la page. C'est le détail qui fait basculer
+ * du « site noir » au rendu argentique.
+ */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.marquee:hover .marquee__item:hover {
-  opacity: 1;
+/* ------------------------------------------------------------- Interactions */
+
+/**
+ * Curseur « entrer dans le projet ». En PNG plutôt qu'en SVG : les curseurs
+ * SVG sont inégalement supportés. 64 px reste sous la limite des navigateurs,
+ * point chaud au centre du disque.
+ */
+.cursor-enter {
+  cursor: url("/cursor-arrow.png") 32 32, pointer;
 }
 
-@keyframes marquee-scroll {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
+/** Soulignement qui se déploie depuis la gauche. */
+.underline-sweep {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Respect user preference for reduced motion */
+.underline-sweep:hover,
+.underline-sweep:focus-visible {
+  background-size: 100% 1px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-amber);
+  outline-offset: 3px;
+}
+
+/** Rangées à défilement horizontal : on masque la barre sans casser le scroll. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 10000;
+  background: var(--color-amber);
+  color: var(--color-ink);
+  padding: 0.75rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+/**
+ * Survol de la signature du pied de page : tout le reste recule d'un plan,
+ * pour que le nom éclairé reste seul en avant. L'attribut est posé sur
+ * `<html>` parce que la section « Parlons-en » vit hors du pied de page.
+ */
+.signature-dim {
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-signature="lit"] .signature-dim {
+  opacity: 0.2;
+}
+
+/* --------------------------------------------------------------- Leaflet */
+
+/**
+ * La carte n'est qu'un décor : tuiles désaturées, aucune interaction,
+ * aucun contrôle. Elle situe, elle ne sert pas à naviguer.
+ */
+/* Leaflet empile ses panes jusqu'à z-index 400. Sans contexte d'empilement
+   propre, ils remontent dans le contexte racine et passent au-dessus de la
+   fiche projet : `isolation` les enferme ici. */
+.map-decor {
+  isolation: isolate;
+  position: relative;
+  z-index: 0;
+}
+
+.map-decor .leaflet-container {
+  background: var(--color-ink);
+}
+
+/* Le filtre ne porte que sur les tuiles : appliqué au conteneur, il
+   désaturerait aussi le repère ambre. Assez clair pour que le tracé des rues
+   reste lisible — en dessous, la carte disparaissait dans le fond noir. */
+.map-decor .leaflet-tile-pane {
+  filter: grayscale(0.7) contrast(1.05) brightness(1.5);
+}
+
+.map-decor .leaflet-control-container,
+.map-decor .leaflet-control-attribution {
+  display: none;
+}
+
+/* ------------------------------------------------------- Mouvement réduit */
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -249,128 +258,10 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 
-  /* Le bandeau devient une liste défilable manuellement plutôt qu'un flash */
-  .marquee {
-    overflow-x: auto;
+  .grain {
+    display: none;
   }
-
-  .marquee__track {
-    animation: none !important;
-  }
-}
-
-/* Screen reader only utility */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/* Skip link for keyboard navigation */
-.skip-link {
-  position: absolute;
-  top: -100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--yellow);
-  color: var(--foreground);
-  padding: 0.75rem 1.5rem;
-  border-radius: 9999px;
-  font-weight: 500;
-  z-index: 100;
-  transition: top 0.2s ease;
-}
-
-.skip-link:focus {
-  top: 1rem;
-}
-
-/* Focus visible styles for better keyboard navigation */
-:focus-visible {
-  outline: 2px solid var(--yellow);
-  outline-offset: 2px;
-}
-
-/* Remove default focus for mouse users */
-:focus:not(:focus-visible) {
-  outline: none;
-}
-
-/* Navbar sliding indicator - CSS :has() technique */
-.navbar-sliding {
-  position: relative;
-  color: var(--text-dark);
-  font-family: "Alexandria", sans-serif;
-  font-size: clamp(1rem, 3vw, 1.4rem);
-}
-
-.navbar-sliding .nav-item {
-  position: relative;
-  z-index: 1;
-}
-
-/* L'indicateur (pseudo-élément) */
-.navbar-sliding::before {
-  content: "";
-  position: absolute;
-  top: 0.5rem;
-  bottom: 0.5rem;
-  left: 0;
-  width: var(--item-0-width, 100px);
-  height: calc(100% - 1rem);
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 9999px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 0;
-  pointer-events: none;
-  transform: translateX(var(--item-0-left, 0));
-}
-
-/* ===== ÉTAT PAR DÉFAUT (pas de hover) - selon data-active ===== */
-
-/* Active = 0 (yohan) - défaut */
-.navbar-sliding[data-active="0"]:not(:has(.nav-item:hover))::before {
-  width: var(--item-0-width, 100px);
-  transform: translateX(var(--item-0-left, 0));
-}
-
-/* Active = 1 (projets) */
-.navbar-sliding[data-active="1"]:not(:has(.nav-item:hover))::before {
-  width: var(--item-1-width, 100px);
-  transform: translateX(var(--item-1-left, 0));
-}
-
-/* Active = 2 (contact) */
-.navbar-sliding[data-active="2"]:not(:has(.nav-item:hover))::before {
-  width: var(--item-2-width, 100px);
-  transform: translateX(var(--item-2-left, 0));
-}
-
-/* ===== ÉTAT HOVER - prioritaire ===== */
-
-/* Hover sur le premier élément (yohan) */
-.navbar-sliding:has(.nav-item:first-child:hover)::before {
-  width: var(--item-0-width, 100px);
-  transform: translateX(var(--item-0-left, 0));
-}
-
-/* Hover sur le deuxième élément (projets) */
-.navbar-sliding:has(.nav-item:nth-child(2):hover)::before {
-  width: var(--item-1-width, 100px);
-  transform: translateX(var(--item-1-left, 0));
-}
-
-/* Hover sur le troisième élément (contact) */
-.navbar-sliding:has(.nav-item:nth-child(3):hover)::before {
-  width: var(--item-2-width, 100px);
-  transform: translateX(var(--item-2-left, 0));
 }
