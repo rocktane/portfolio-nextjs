@@ -60,16 +60,6 @@ export default function Contact() {
             </button>
 
             <a
-              href="/CV-20260409.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Ouvrir mon CV (PDF, nouvel onglet)"
-              className="mono border border-white/30 px-6 py-4 text-white transition-colors hover:border-amber hover:text-amber"
-            >
-              Mon CV ↗
-            </a>
-
-            <a
               href="https://www.linkedin.com/in/yohan-g"
               target="_blank"
               rel="noopener noreferrer"
