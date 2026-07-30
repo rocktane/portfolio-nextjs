@@ -114,6 +114,25 @@ export const projects: Project[] = [
     hero: true,
   },
   {
+    id: "tvcal",
+    title: "tvcal",
+    tagline: "Vos séries dans votre agenda",
+    summary:
+      "Un calendrier ICS auquel on s'abonne pour recevoir les dates de diffusion de ses séries. TVmaze donne le planning, TMDB l'iconographie, et l'affiche impose sa teinte à l'interface. L'URL du flux ne change jamais : ajouter une série modifie le contenu, pas l'adresse — donc on ne se réabonne jamais. Ni compte, ni mot de passe.",
+    year: "2026",
+    role: "Conception et développement",
+    stack: ["Next.js", "TypeScript", "SQLite", "Bun"],
+    status: "live",
+    section: "projets",
+    accent: "#F35D7A",
+    href: "https://tvcal.yohan.one",
+    hrefLabel: "tvcal.yohan.one",
+    hrefKind: "site",
+    shot: "/projects/tvcal.webp",
+    pattern: "scanlines",
+    hero: true,
+  },
+  {
     id: "travel-resolver",
     title: "Travel Resolver",
     tagline: "Une phrase en français, un itinéraire SNCF",
@@ -258,7 +277,14 @@ export const projects: Project[] = [
 ];
 
 /** Ordre du carrousel d'accueil : du plus abouti au plus personnel. */
-export const HERO_ORDER = ["safee", "brower", "exo", "cashou", "amp"] as const;
+export const HERO_ORDER = [
+  "safee",
+  "brower",
+  "exo",
+  "tvcal",
+  "cashou",
+  "amp",
+] as const;
 
 export const heroProjects: Project[] = HERO_ORDER.map(
   (id) => projects.find((p) => p.id === id)!,
@@ -285,7 +311,7 @@ export const credits: CreditLine[] = [
 export const technicalCredits: CreditLine[] = [
   { role: "Front", value: "React · Next.js · Vue · TypeScript · Tailwind" },
   { role: "Back", value: "NestJS · Ruby on Rails · FastAPI · tRPC · Node" },
-  { role: "Données", value: "PostgreSQL · Prisma · Convex · Redis · SQL" },
+  { role: "Données", value: "PostgreSQL · SQLite · Prisma · Convex · Redis · SQL" },
   { role: "Mobile & natif", value: "React Native · Expo · SwiftUI · Kotlin" },
   { role: "IA & ML", value: "Python · spaCy · PyTorch · NLP · LLM" },
   { role: "Automatisation", value: "n8n · MCP · GitHub Actions" },
