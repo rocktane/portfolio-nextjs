@@ -87,6 +87,26 @@ export default function Parcours() {
         ))}
       </ol>
 
+      {/* La timeline dit déjà tout ; le CV n'est qu'un rappel, posé juste
+          après elle plutôt qu'en tête de section. */}
+      <motion.div
+        className="mt-14 flex justify-center"
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-8% 0px" }}
+        transition={{ duration: 0.55, ease: EASE }}
+      >
+        <a
+          href="/CV-20260409.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Ouvrir mon CV (PDF, nouvel onglet)"
+          className="mono border border-white/30 px-6 py-4 text-white transition-colors hover:border-amber hover:text-amber"
+        >
+          Mon CV ↗
+        </a>
+      </motion.div>
+
       <div className="mx-auto mt-32 max-w-4xl border-t border-line pt-16">
         <p className="mono mb-8 text-center text-muted">Stack technique</p>
         <dl>
@@ -104,26 +124,6 @@ export default function Parcours() {
             </motion.div>
           ))}
         </dl>
-
-        {/* Le parcours se lit ici en entier ; le CV n'est qu'un rappel, d'où
-            sa place en fin de section plutôt qu'en tête. */}
-        <motion.div
-          className="mt-14 flex justify-center"
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-8% 0px" }}
-          transition={{ duration: 0.55, ease: EASE }}
-        >
-          <a
-            href="/CV-20260409.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Ouvrir mon CV (PDF, nouvel onglet)"
-            className="mono border border-white/30 px-6 py-4 text-white transition-colors hover:border-amber hover:text-amber"
-          >
-            Mon CV ↗
-          </a>
-        </motion.div>
       </div>
     </section>
   );
