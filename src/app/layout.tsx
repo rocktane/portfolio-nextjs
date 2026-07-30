@@ -34,15 +34,15 @@ export const metadata: Metadata = {
   description: "Développeur Full Stack à Marseille. Ruby on Rails, JavaScript, React, Next.js.",
   keywords: ["développeur web", "full stack", "marseille", "ruby on rails", "react", "next.js"],
   authors: [{ name: "Yohan Gouiran" }],
-  alternates: {
-    canonical: "/",
-  },
+  // Archive de la v1 servie sur v1.yohangouiran.com : on la garde hors de
+  // l'index pour ne pas concurrencer le site en production. Pas de canonical
+  // ici non plus, Google déconseille de la combiner avec un noindex.
   robots: {
-    index: true,
-    follow: true,
+    index: false,
+    follow: false,
     googleBot: {
-      index: true,
-      follow: true,
+      index: false,
+      follow: false,
     },
   },
   openGraph: {
