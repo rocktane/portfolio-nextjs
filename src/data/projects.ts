@@ -252,13 +252,19 @@ export const projects: Project[] = [
     title: "EXIF Dates",
     tagline: "Rendre aux photos leur vraie date",
     summary:
-      "Un export Lightroom repart avec la date du jour et se retrouve rangé au mauvais endroit. Le champ DateTimeOriginal, lui, n'a pas bougé : il suffit de le relire et de le réappliquer au fichier. Deux entrées pour le même traitement — un script Lightroom qui s'exécute automatiquement en sortie d'export, et une extension Raycast pour rattraper à la main des fichiers déjà sortis.",
+      "Un export Lightroom repart avec la date du jour et se retrouve rangé au mauvais endroit. Le champ DateTimeOriginal, lui, n'a pas bougé : il suffit de le relire et de le réappliquer au fichier. Deux entrées pour le même traitement — un script shell branché en post-export Lightroom, qui s'exécute sans qu'on y pense, et une extension Raycast pour rattraper à la main des fichiers déjà sortis, avec un aperçu avant d'appliquer.",
     year: "2026",
     role: "Conception et développement",
-    stack: ["Lua", "Lightroom SDK", "Raycast", "TypeScript", "exifr"],
+    stack: ["Raycast", "TypeScript", "exifr", "Bash", "exiftool"],
     status: "live",
     section: "labo",
     accent: "#7C3AED",
+    href: "https://github.com/rocktane/exif-date-updater",
+    hrefLabel: "github.com/rocktane/exif-date-updater",
+    hrefKind: "code",
+    // Comme RemoveBG : la commande n'a pas d'interface à elle, le seul visuel
+    // honnête est la palette au moment où on l'appelle.
+    shot: "/projects/exifdates.webp",
     motif: "raycast",
     pattern: "diagonals",
     platform: "Lightroom & Raycast",
