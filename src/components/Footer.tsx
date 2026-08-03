@@ -16,8 +16,10 @@ export default function Footer() {
   const { open } = useProjects();
 
   return (
-    <footer className="border-t border-line px-[var(--gutter)] py-16">
-      <div className="signature-dim grid grid-cols-2 gap-8 md:grid-cols-4">
+    <footer className="px-[var(--gutter)] pb-16">
+      <div className="rule" aria-hidden="true" />
+
+      <div className="signature-dim grid grid-cols-2 gap-8 pt-16 md:grid-cols-4">
         <Column title="Projets">
           {featuredProjects.map((p) => (
             <FooterButton key={p.id} onClick={() => open(p.id)}>
@@ -45,7 +47,9 @@ export default function Footer() {
         </Column>
       </div>
 
-      <div className="mt-16 flex flex-wrap items-end justify-between gap-6 border-t border-line pt-8">
+      <div className="rule mt-16" aria-hidden="true" />
+
+      <div className="flex flex-wrap items-end justify-between gap-6 pt-8">
         <Signature />
         <p className="signature-dim mono text-muted" suppressHydrationWarning>
           © {new Date().getFullYear()} — Construit avec Next.js
@@ -108,7 +112,7 @@ function Signature() {
       // Gris volontairement éteint, mais pas au point d'être illisible : sous
       // 3:1 la signature ne passait plus le contraste exigé d'un grand texte.
       // Curseur masqué : le halo le remplace, c'est lui qu'on déplace.
-      className="display relative cursor-none select-none text-[clamp(2rem,9vw,6rem)] leading-none text-[#6a6a74]"
+      className="display relative cursor-none select-none text-[clamp(2rem,9vw,6rem)] leading-none text-muted"
       onPointerMove={track}
       onPointerEnter={() => setHovered(true)}
       onPointerLeave={() => {
@@ -154,7 +158,7 @@ function FooterButton({
       <button
         type="button"
         onClick={onClick}
-        className="mono text-left text-white/70 underline-sweep transition-colors hover:text-white"
+        className="link mono text-left text-fg/70 transition-colors hover:text-fg"
       >
         {children}
       </button>
@@ -169,7 +173,7 @@ function FooterLink({ href, children }: { href: string; children: React.ReactNod
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="mono text-white/70 underline-sweep transition-colors hover:text-white"
+        className="link mono text-fg/70 transition-colors hover:text-fg"
       >
         {children}
       </a>

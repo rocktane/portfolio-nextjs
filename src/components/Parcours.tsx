@@ -46,8 +46,8 @@ export default function Parcours() {
             <span
               className={`absolute left-0 top-1 z-10 block h-5 w-5 rounded-full border-2 md:left-1/2 md:-translate-x-1/2 ${
                 i === JALONS.length - 1
-                  ? "border-amber bg-amber"
-                  : "border-white/35 bg-ink"
+                  ? "border-accent bg-accent"
+                  : "border-fg/30 bg-[var(--c-bg)]"
               }`}
               aria-hidden="true"
             />
@@ -58,7 +58,7 @@ export default function Parcours() {
                 qui ne mène nulle part. */}
             {i < JALONS.length - 1 && (
               <span
-                className="absolute left-[9px] top-6 h-[calc(100%-1.25rem)] w-px bg-line md:left-1/2 md:-translate-x-1/2"
+                className="absolute left-[9px] top-6 h-[calc(100%-1.25rem)] w-px bg-gradient-to-b from-fg/25 to-fg/5 md:left-1/2 md:-translate-x-1/2"
                 aria-hidden="true"
               />
             )}
@@ -70,18 +70,18 @@ export default function Parcours() {
               <p className="display display-multiline mt-2 text-[clamp(1.15rem,2vw,1.6rem)]">
                 {j.ecole}
               </p>
-              <p className="mt-1.5 text-sm leading-snug text-white/60">{j.diplome}</p>
+              <p className="mt-1.5 text-sm leading-snug text-fg/60">{j.diplome}</p>
             </div>
 
             {/* Ce que le diplôme a ouvert. Même police et même corps que la
                 formation d'en face : les deux colonnes se répondent au lieu de
                 se hiérarchiser. */}
-            <div className="mt-5 border-l border-line pl-5 md:mt-0 md:border-l-0 md:pl-14">
+            <div className="mt-5 pl-5 md:mt-0 md:pl-14">
               <p className="mono text-muted">{j.periode}</p>
-              <p className="display display-multiline mt-2 text-[clamp(1.15rem,2vw,1.6rem)] text-white">
+              <p className="display display-multiline mt-2 text-[clamp(1.15rem,2vw,1.6rem)] text-fg">
                 {j.poste}
               </p>
-              <p className="mt-1.5 text-sm leading-snug text-white/60">{j.lieu}</p>
+              <p className="mt-1.5 text-sm leading-snug text-fg/60">{j.lieu}</p>
             </div>
           </motion.li>
         ))}
@@ -101,14 +101,18 @@ export default function Parcours() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Ouvrir mon CV (PDF, nouvel onglet)"
-          className="mono border border-white/30 px-6 py-4 text-white transition-colors hover:border-amber hover:text-amber"
+          className="btn-2"
         >
-          Mon CV ↗
+          Mon CV
+          <span className="btn-arrow" aria-hidden="true">
+            ↗
+          </span>
         </a>
       </motion.div>
 
-      <div className="mx-auto mt-32 max-w-4xl border-t border-line pt-16">
-        <p className="mono mb-8 text-center text-muted">Stack technique</p>
+      <div className="mx-auto mt-32 max-w-4xl">
+        <div className="rule" aria-hidden="true" />
+        <p className="mono mb-8 pt-16 text-center text-muted">Stack technique</p>
         <dl>
           {technicalCredits.map((line, i) => (
             <motion.div
@@ -120,7 +124,7 @@ export default function Parcours() {
               transition={{ duration: 0.55, delay: i * 0.06, ease: EASE }}
             >
               <dt className="mono text-muted sm:text-right">{line.role}</dt>
-              <dd className="font-mono text-sm text-white/70">{line.value}</dd>
+              <dd className="font-mono text-sm text-fg/75">{line.value}</dd>
             </motion.div>
           ))}
         </dl>

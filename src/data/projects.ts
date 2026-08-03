@@ -38,7 +38,7 @@ export const projects: Project[] = [
   {
     id: "brower",
     title: "Brower",
-    tagline: "Le brew store qu'Homebrew n'a jamais eu",
+    tagline: "Vos applications en une seule commande",
     summary:
       "Une sélection de paquets Homebrew dans une interface moderne. On coche les applications voulues, on récupère une seule commande d'installation.",
     year: "2024–2026",
@@ -75,7 +75,7 @@ export const projects: Project[] = [
   },
   {
     id: "amp",
-    title: "Amp",
+    title: "amp",
     tagline: "Sonos, enfin natif sur macOS",
     summary:
       "Un contrôleur Sonos écrit en SwiftUI. Toute la logique réseau vit dans un package séparé, SonosKit ; l'application n'est que la couche d'interface.",
@@ -183,6 +183,7 @@ export const projects: Project[] = [
     href: "https://github.com/rocktane/tama",
     hrefLabel: "github.com/rocktane/tama",
     hrefKind: "code",
+    shot: "/projects/tamanotchi.webp",
     motif: "tama",
     pattern: "dots",
   },
@@ -201,6 +202,7 @@ export const projects: Project[] = [
     href: "https://github.com/rocktane/betterbattery",
     hrefLabel: "brew install --cask rocktane/tap/betterbattery",
     hrefKind: "brew",
+    shot: "/projects/betterbattery.webp",
     motif: "battery",
     pattern: "diagonals",
   },
@@ -238,6 +240,9 @@ export const projects: Project[] = [
     href: "https://github.com/rocktane/removebg-raycast",
     hrefLabel: "github.com/rocktane/removebg-raycast",
     hrefKind: "code",
+    // Une commande Raycast n'a pas d'interface à elle : le seul visuel honnête
+    // est la palette au moment où on l'appelle.
+    shot: "/projects/removebg.webp",
     motif: "raycast",
     pattern: "rings",
     platform: "Raycast",
@@ -247,16 +252,22 @@ export const projects: Project[] = [
     title: "EXIF Dates",
     tagline: "Rendre aux photos leur vraie date",
     summary:
-      "Un export Lightroom repart avec la date du jour et se retrouve rangé au mauvais endroit. Cette extension Raycast relit le champ DateTimeOriginal des fichiers sélectionnés et leur rend leur date de prise de vue.",
+      "Un export Lightroom repart avec la date du jour et se retrouve rangé au mauvais endroit. Le champ DateTimeOriginal, lui, n'a pas bougé : il suffit de le relire et de le réappliquer au fichier. Deux entrées pour le même traitement — un script shell branché en post-export Lightroom, qui s'exécute sans qu'on y pense, et une extension Raycast pour rattraper à la main des fichiers déjà sortis, avec un aperçu avant d'appliquer.",
     year: "2026",
     role: "Conception et développement",
-    stack: ["Raycast", "TypeScript", "exifr"],
+    stack: ["Raycast", "TypeScript", "exifr", "Bash", "exiftool"],
     status: "live",
     section: "labo",
     accent: "#7C3AED",
+    href: "https://github.com/rocktane/exif-date-updater",
+    hrefLabel: "github.com/rocktane/exif-date-updater",
+    hrefKind: "code",
+    // Comme RemoveBG : la commande n'a pas d'interface à elle, le seul visuel
+    // honnête est la palette au moment où on l'appelle.
+    shot: "/projects/exifdates.webp",
     motif: "raycast",
     pattern: "diagonals",
-    platform: "Raycast",
+    platform: "Lightroom & Raycast",
   },
   {
     id: "geeft",

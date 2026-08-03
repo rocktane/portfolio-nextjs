@@ -74,7 +74,7 @@ export default function WorkRow() {
             // et le titre demandent jusqu'à soixante pixels de plus que les
             // trois quarts de la largeur. La rangée étant un `flex`, les cards
             // s'étirent toutes sur la plus haute : elles restent d'aplomb.
-            className="group cursor-enter relative w-[86vw] shrink-0 snap-start overflow-hidden text-left sm:min-h-[42vw] sm:w-[56vw] lg:min-h-[28.5vw] lg:w-[38vw]"
+            className="group cursor-enter relative w-[86vw] shrink-0 snap-start overflow-hidden rounded-[var(--r-lg)] text-left sm:min-h-[42vw] sm:w-[56vw] lg:min-h-[28.5vw] lg:w-[38vw]"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-10% 0px" }}
@@ -89,7 +89,7 @@ export default function WorkRow() {
                   projet devenait illisible et sa stack se pliait sur quatre
                   lignes, à côté d'une colonne de vide. */}
               <div className="flex flex-col items-start gap-4 sm:flex-row sm:justify-between sm:gap-5">
-                <span className="flex shrink-0 flex-wrap items-center gap-2">
+                <span className="chrome-status flex shrink-0 flex-wrap items-center gap-2">
                   <span className="label text-amber">
                     {STATUS_LABEL[project.status]}
                   </span>
@@ -106,7 +106,7 @@ export default function WorkRow() {
                 <h3 className="display text-[clamp(2rem,4.5vw,3.5rem)]">
                   {project.title}
                 </h3>
-                <p className="mono mt-2 text-white/55 transition-colors group-hover:text-amber">
+                <p className="mono mt-2 text-muted transition-colors group-hover:text-amber">
                   {project.hrefLabel ?? "Voir le projet"} →
                 </p>
               </div>
@@ -132,7 +132,7 @@ function RowButton({
       type="button"
       onClick={onClick}
       aria-label={label}
-      className="mono grid h-9 w-9 place-items-center border border-line text-muted transition-colors hover:border-white/40 hover:text-white"
+      className="iconbtn mono h-9 w-9"
     >
       {children}
     </button>

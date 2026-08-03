@@ -35,7 +35,7 @@ export default function LabGrid() {
             key={project.id}
             type="button"
             onClick={() => open(project.id)}
-            className="group cursor-enter relative aspect-[3/4] overflow-hidden text-left"
+            className="group cursor-enter relative aspect-[3/4] overflow-hidden rounded-[var(--r-lg)] text-left"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-10% 0px" }}
@@ -48,7 +48,7 @@ export default function LabGrid() {
             <div className="relative flex h-full flex-col justify-between p-6">
               <div>
                 <div className="flex items-start justify-between gap-3">
-                  <span className="flex flex-wrap items-center gap-2">
+                  <span className="chrome-status flex flex-wrap items-center gap-2">
                     <span className="label text-amber">
                       {STATUS_LABEL[project.status]}
                     </span>
@@ -58,7 +58,7 @@ export default function LabGrid() {
                   </span>
                   {/* Le labo n'est plus que macOS : chaque affiche annonce
                       sa propre plateforme. */}
-                  <span className="mono text-white/60">
+                  <span className="chrome-platform mono text-muted">
                     {project.platform ?? "macOS"}
                   </span>
                 </div>
@@ -69,10 +69,10 @@ export default function LabGrid() {
                 <h3 className="display text-[clamp(1.75rem,3.6vw,2.75rem)]">
                   {project.title}
                 </h3>
-                <p className="mt-2 max-w-[24ch] text-sm leading-snug text-white/60">
+                <p className="mt-2 max-w-[24ch] text-sm leading-snug text-fg/65">
                   {project.tagline}
                 </p>
-                <p className="mono mt-4 text-white/60 transition-colors group-hover:text-amber">
+                <p className="mono mt-4 text-muted transition-colors group-hover:text-amber">
                   Voir le projet →
                 </p>
               </div>

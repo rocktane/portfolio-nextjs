@@ -20,8 +20,12 @@ const SOCIALS = [
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 /**
- * Le menu : un bloc ambre plein, posé en haut de l'écran, qui se déplie sur
- * place.
+ * Le menu : un bloc plein, posé en haut de l'écran, qui se déplie sur place.
+ *
+ * Sa couleur est celle du projet affiché par le carrousel, et elle change
+ * avec lui. En descendant dans la page elle se calme — à moitié seulement :
+ * le menu reste le témoin de l'accent du site quand tout le reste est
+ * redevenu neutre. Voir `.nav-block` et `--c-accent-nav` dans globals.css.
  *
  * Il ne bascule pas en surcouche plein écran : la page reste visible derrière,
  * et le bloc garde exactement la même largeur ouvert que fermé — seule sa
@@ -63,8 +67,13 @@ export default function Nav() {
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-0 z-[150] flex justify-center px-[var(--gutter)] pt-4">
-      <div ref={root} className="pointer-events-auto w-[min(88vw,23rem)]">
-        <div className="bg-amber text-ink">
+      {/* La coque porte le rayon et l'ombre ; la barre et le bandeau d'appel
+          se contentent d'être empilés dedans, sans coin à gérer. */}
+      <div
+        ref={root}
+        className="nav-shell pointer-events-auto w-[min(88vw,23rem)]"
+      >
+        <div className="nav-block">
           {/* La barre ne bouge pas d'un pixel entre les deux états : seul le
               pictogramme du bouton change. */}
           <div className="flex items-center gap-3 px-3 py-2.5">
@@ -79,12 +88,12 @@ export default function Nav() {
             >
               <span className="relative block h-[11px] w-[15px]" aria-hidden="true">
                 <motion.span
-                  className="absolute left-0 top-0 block h-[1.5px] w-full origin-center bg-ink"
+                  className="absolute left-0 top-0 block h-[1.5px] w-full origin-center rounded-full bg-on-accent"
                   animate={open ? { y: 5, rotate: 45 } : { y: 0, rotate: 0 }}
                   transition={{ duration: 0.3, ease: EASE }}
                 />
                 <motion.span
-                  className="absolute bottom-0 left-0 block h-[1.5px] w-full origin-center bg-ink"
+                  className="absolute bottom-0 left-0 block h-[1.5px] w-full origin-center rounded-full bg-on-accent"
                   animate={open ? { y: -5, rotate: -45 } : { y: 0, rotate: 0 }}
                   transition={{ duration: 0.3, ease: EASE }}
                 />
@@ -134,7 +143,7 @@ export default function Nav() {
                   {LINKS.map((link, i) => (
                     <motion.li
                       key={link.id}
-                      className="border-t border-ink/20"
+                      className="nav-sep"
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, delay: 0.06 + i * 0.04, ease: EASE }}
@@ -173,7 +182,7 @@ export default function Nav() {
             <motion.button
               type="button"
               onClick={() => go("contact")}
-              className="mono group flex w-full items-center justify-between overflow-hidden bg-ink px-3 text-white transition-colors duration-[120ms] ease-out hover:text-amber"
+              className="nav-cta mono group flex w-full items-center justify-between overflow-hidden px-3 transition-colors duration-[120ms] ease-out"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}

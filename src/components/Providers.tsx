@@ -5,6 +5,7 @@ import { MotionConfig } from "motion/react";
 import SmoothScroll from "@/components/SmoothScroll";
 import KeyboardNav from "@/components/KeyboardNav";
 import ProjectsProvider from "@/components/ProjectsProvider";
+import AccentProvider from "@/components/AccentProvider";
 
 declare global {
   interface Window {
@@ -25,9 +26,13 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <MotionConfig reducedMotion="user">
-      <SmoothScroll />
-      <KeyboardNav />
-      <ProjectsProvider>{children}</ProjectsProvider>
+      {/* AccentProvider englobe tout : c'est lui qui écrit l'accent et le
+          fondu sur <html>, dont dépend la moindre couleur de la page. */}
+      <AccentProvider>
+        <SmoothScroll />
+        <KeyboardNav />
+        <ProjectsProvider>{children}</ProjectsProvider>
+      </AccentProvider>
     </MotionConfig>
   );
 }

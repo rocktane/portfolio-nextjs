@@ -9,15 +9,16 @@ import ProjectModal from "@/components/ProjectModal";
 
 /**
  * Polices servies par Bunny Fonts (miroir de Google Fonts sans cookies).
- * Anton pour les titres, JetBrains Mono pour la métadonnée, Inter pour le texte.
+ * JetBrains Mono pour la métadonnée, Inter pour tout le reste — c'est aussi
+ * la police de titre, en 600, via `--f-display`.
  */
 const FONTS_HREF =
-  "https://fonts.bunny.net/css2?family=Anton&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap";
+  "https://fonts.bunny.net/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap";
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#000000",
+  themeColor: "#f4f1ec",
 };
 
 export const metadata: Metadata = {
@@ -72,10 +73,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.bunny.net" crossOrigin="" />
         <link rel="stylesheet" href={FONTS_HREF} />
         {/*
-          Retire `no-js` avant le premier rendu, pour que les animations
-          partent de leur état initial sans clignotement. Le minuteur le
-          remet si l'hydratation n'aboutit pas : mieux vaut un site sans
-          animation qu'une page noire. Providers l'annule une fois monté.
+          Retire `no-js` avant la première peinture, pour que les animations
+          partent de leur état initial sans clignotement. Le minuteur le remet
+          si l'hydratation n'aboutit pas : mieux vaut un site sans animation
+          qu'une page vide. Providers l'annule une fois monté.
         */}
         <script
           dangerouslySetInnerHTML={{
@@ -85,7 +86,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-ink text-paper antialiased">
+      <body className="min-h-screen antialiased">
         <a href="#main-content" className="skip-link">
           Aller au contenu principal
         </a>

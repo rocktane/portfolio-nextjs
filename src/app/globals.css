@@ -1,80 +1,321 @@
 @import "tailwindcss";
 
-/**
- * Design tokens — source unique de vérité.
- * Direction : catalogue de distributeur de films. Noir absolu, typo condensée,
- * ambre en accent, mono pour toute la métadonnée.
- */
-@theme {
-  --color-ink: #000000;
-  --color-paper: #ffffff;
-  --color-amber: #f5a623;
-  --color-muted: #8f8f8f;
-  --color-line: #1f1f1f;
-  --color-surface: #0a0a0a;
+/* ==========================================================================
+   Le système de couleur
+   ==========================================================================
 
-  --font-display: "Anton", "Arial Narrow", "Helvetica Neue", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+   Deux valeurs seulement sont pilotées de l'extérieur, toutes deux posées sur
+   <html> :
+
+     --accent-src  la couleur signature du projet affiché par le carrousel
+                   d'ouverture. HeroReel l'écrit à chaque changement de plan.
+     --fade        0 en haut de page, 1 une fois le hero passé. Le scroll
+                   l'écrit en continu.
+
+   Tout le reste en découle. `--fade` fait glisser l'accent du projet vers la
+   couleur maison — celle qui n'appartient à aucun projet — et ramène le fond
+   vers son neutre. On entre dans la page par la couleur d'un projet, on la
+   traverse pour arriver chez soi.
+
+   Les deux propriétés sont déclarées : sans `@property`, une couleur
+   personnalisée ne sait pas s'animer, et le carrousel changerait d'accent d'un
+   coup sec. */
+
+@property --accent-src {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f5a623;
 }
 
+@property --fade {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+/**
+ * Le pont vers Tailwind. `inline` est indispensable ici : sans lui, un
+ * utilitaire comme `text-accent` figerait la valeur du thème au lieu de
+ * pointer vers `--c-accent`, qui change à chaque projet et à chaque pixel de
+ * défilement.
+ */
+@theme inline {
+  --color-ink: var(--c-ink);
+  --color-paper: var(--c-fg);
+  --color-fg: var(--c-fg);
+  --color-muted: var(--c-fg-2);
+  --color-line: var(--c-line);
+  --color-surface: var(--c-surface);
+  --color-frame: var(--c-frame);
+  --color-shell: var(--c-shell);
+  /* Deux accents, et il faut les distinguer.
+
+     `accent` est la couleur pleine : c'est elle qu'on étale en fond de menu,
+     en jauge, en pastille. `amber` — le nom historique de l'accent unique,
+     conservé pour que les classes existantes suivent — est sa version
+     lisible en texte : les projets vont du violet sombre (#6341AD) au cyan
+     clair (#22B8CF), et aucun des deux n'est lisible tel quel sur le papier
+     de la page. On rapproche donc l'accent de l'encre avant de l'écrire. */
+  --color-accent: var(--c-accent);
+  --color-amber: var(--c-accent-ink);
+  --color-accent-nav: var(--c-accent-nav);
+  --color-on-accent: var(--c-on-accent);
+  --color-on-ink: var(--c-on-ink);
+
+  --font-display: var(--f-display);
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+  --font-sans: var(--f-sans);
+}
+
+/* ---------------------------------------------------------- Socle commun */
+
 :root {
-  color-scheme: dark;
-  /* Marge horizontale commune à toutes les sections. */
+  /** Marge horizontale commune à toutes les sections. */
   --gutter: clamp(1.25rem, 5vw, 5rem);
+
+  /* Le menu ne se décolore jamais complètement : il garde toujours un peu de
+     la teinte du projet, sinon il cesserait d'annoncer où l'on est. */
+  --nav-fade: calc(var(--fade) * 0.55);
+
+  /** L'accent utilisable : celui du projet en haut, celui de la maison en bas. */
+  --c-accent: color-mix(
+    in oklab,
+    var(--accent-src),
+    var(--house) calc(var(--fade) * 100%)
+  );
+  --c-accent-nav: color-mix(
+    in oklab,
+    var(--accent-src),
+    var(--house) calc(var(--nav-fade) * 100%)
+  );
+
+  /**
+   * Le texte posé sur un aplat d'accent. `data-accent-tone` est écrit par
+   * AccentProvider, qui mesure la luminance de la couleur réellement
+   * affichée : c'est la seule décision du système que le CSS ne sait pas
+   * prendre seul. En son absence — JavaScript coupé — on suppose l'accent
+   * sombre, ce qui est le cas de la majorité des projets.
+   */
+  --c-on-accent: var(--paper-on-accent);
+
+  /** Le fond de page : teinté par le projet en haut, neutre en bas. */
+  --c-tone: color-mix(
+    in oklab,
+    var(--accent-src) calc((1 - var(--fade)) * var(--tone-max)),
+    var(--c-bg)
+  );
+
+  /* Le changement de plan du carrousel dure une seconde : la page entière
+     change de couleur avec lui, en fondu. */
+  transition: --accent-src 900ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html[data-accent-tone="light"] {
+  --c-on-accent: var(--ink-on-accent);
 }
 
 html {
-  background-color: var(--color-ink);
+  background-color: var(--c-tone);
 }
 
 body {
-  /**
-   * Le fond n'est jamais un noir pur : trois nappes colorées fixes, très
-   * diffuses, donnent une ambiance au défilement sans nuire au contraste du
-   * texte blanc. Les sections n'ont pas de fond propre, elles laissent voir
-   * celui-ci.
-   */
-  background-color: #06050a;
-  background-image:
-    radial-gradient(58% 42% at 88% 4%, rgba(99, 65, 173, 0.34), transparent 62%),
-    radial-gradient(52% 38% at 6% 38%, rgba(34, 184, 207, 0.2), transparent 64%),
-    radial-gradient(50% 34% at 78% 62%, rgba(245, 166, 35, 0.16), transparent 62%),
-    radial-gradient(56% 40% at 18% 92%, rgba(79, 70, 229, 0.26), transparent 64%);
-  background-attachment: fixed;
-  color: var(--color-paper);
+  background: transparent;
+  color: var(--c-fg);
   font-family: var(--font-sans);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background-color: var(--color-amber);
-  color: var(--color-ink);
+  background-color: var(--c-accent);
+  color: var(--c-on-accent);
 }
 
-/* ---------------------------------------------------------------- Lenis */
+/* ============================================================ La palette
 
-html.lenis,
-html.lenis body {
-  height: auto;
+   Papier blanc cassé, et rien d'autre. Aucun dégradé, aucune trame, aucun
+   cadre, aucun angle arrondi. L'affiche d'un projet est un aplat de sa
+   couleur, point. Titres en grotesque bas-de-casse, très grands et très
+   serrés ; le seul geste est un filet sous les mots cliquables.
+
+   Le seul dégradé qui subsiste est celui du menu, dont le balayage perpétuel
+   est le seul geste vivant d'une page par ailleurs entièrement plate.
+
+   Aucun composant ne connaît de couleur en dur : tout passe par ces jetons.
+
+     --house      la couleur d'arrivée, celle d'aucun projet
+     --c-bg       le fond neutre, en bas de page
+     --tone-max   combien le projet teinte ce fond, en haut de page
+     --c-fg/-2    texte principal / secondaire
+     --c-line     les filets — proche de zéro, c'est le sujet
+     --c-frame    le cadre des fenêtres de projet
+     --c-ink      l'encre
+     --c-shell    l'intérieur des fenêtres et des cartes
+     --poster-fill  la part d'accent dans l'aplat d'une affiche
+     --r-*        les rayons
+   ------------------------------------------------------------------------ */
+
+:root {
+  color-scheme: light;
+
+  --house: #b4451f;
+  --c-bg: #f4f1ec;
+  --tone-max: 14%;
+  --c-fg: #17181b;
+  --c-fg-2: #86868d;
+  --c-line: transparent;
+  --c-surface: color-mix(in srgb, #17181b 4%, transparent);
+  --c-frame: color-mix(in srgb, #17181b 10%, transparent);
+  --c-ink: #17181b;
+  --c-shell: #ffffff;
+  --ink-on-accent: #17181b;
+  --paper-on-accent: #f4f1ec;
+  --c-on-ink: #f4f1ec;
+  --c-poster-bg: #ece8e1;
+  /* La couleur qui recouvre la page, en RGB : la surcouche de la fiche
+     projet s'en sert comme fond. */
+  --c-veil: 244 241 236;
+  --c-accent-ink: color-mix(in oklab, var(--c-accent), #17181b 30%);
+  --poster-fill: 26%;
+
+  --r-sm: 0;
+  --r-md: 0;
+  --r-lg: 0;
+  --r-nav: 0;
+
+  --f-display: "Inter", system-ui, sans-serif;
+  --f-sans: "Inter", system-ui, sans-serif;
+
+  --grain-blend: multiply;
+  --grain-opacity: 0;
+
+  --rule-bg: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--c-fg) 16%, transparent),
+    transparent 45%
+  );
 }
 
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
+
+/* ==================================================== Ce qu'on ne dit plus
+
+   L'appareil de bord — statut, année, « Scroll », compteur, plateforme,
+   appel à l'action, badges de stack — a quitté la page. Rien n'est supprimé
+   du balisage : chaque élément porte une classe, et c'est ici qu'on décide
+   de le montrer. Le remettre revient à retirer une ligne.
+
+   `display: none` plutôt qu'une opacité nulle : l'élément quitte alors aussi
+   l'arbre d'accessibilité, au lieu d'y rester en fantôme tabulable.
+   ------------------------------------------------------------------------ */
+
+/* Le sélecteur est préfixé par `html` à dessein. Sans lui, ces règles pèsent
+   exactement autant que `.btn` ou `.label`, qui posent un `display` plus bas
+   dans le fichier — et l'ordre l'emporterait sur l'intention : l'appel à
+   l'action réapparaissait. */
+html .chrome-status,
+html .chrome-year,
+html .chrome-scroll,
+html .chrome-cta,
+html .chrome-platform,
+html .chrome-counter,
+html .chrome-stack {
+  display: none;
 }
 
-.lenis.lenis-stopped {
+/**
+ * La pause, elle, ne disparaît pas : elle s'efface.
+ *
+ * Un défilement automatique de plus de cinq secondes doit pouvoir être
+ * arrêté (WCAG 2.2.2), et ni le survol ni le focus ne sont un vrai contrôle.
+ * Le bouton reste donc là, invisible au repos, et revient dès que le
+ * pointeur entre dans le carrousel — c'est-à-dire au moment exact où l'on
+ * pourrait vouloir l'arrêter — ou dès qu'on l'atteint au clavier.
+ */
+.chrome-pause {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#top:hover .chrome-pause,
+.chrome-pause:focus-visible {
+  opacity: 1;
+}
+
+/* ========================================================== Les affiches
+
+   Le fond coloré d'un projet : un aplat, et rien de plus. `--a` est la
+   couleur du projet, posée en style en ligne — c'est la seule chose que le
+   composant décide. La part d'accent (`--poster-fill`) est réglée par
+   `--poster-fill` de façon que le texte reste lisible quelle que soit la
+   couleur du projet : les affiches vont du violet profond au cyan vif, et
+   c'est le mélange avec le papier, non la couleur brute, qui garantit le
+   contraste.
+   ------------------------------------------------------------------------ */
+
+.poster {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
+  background-color: var(--c-poster-bg);
+}
+
+.poster > div {
+  position: absolute;
+  inset: 0;
+}
+
+.poster-tint {
+  background-color: color-mix(
+    in srgb,
+    var(--a) var(--poster-fill),
+    var(--c-poster-bg)
+  );
+}
+
+/* Halos, trame et voile de lisibilité appartenaient à des directions à
+   dégradés qu'on a laissées de côté : il ne reste que l'aplat. Les couches
+   restent dans le balisage — les rallumer se fait ici, sans toucher à
+   React. */
+.poster-glow,
+.poster-pattern,
+.poster-veil {
+  display: none;
+}
+
+/* ------------------------------------------------- Fenêtre de projet
+
+   La capture, présentée dans un cadre applicatif. Ni ombre portée ni halo :
+   les deux sont des dégradés, la fenêtre est posée à plat sur la page.
+   ------------------------------------------------------------------------ */
+
+.still-motif-bg {
+  background-color: color-mix(in srgb, var(--a) 16%, var(--c-shell));
+}
+
+/* ------------------------------------------------------- Fiche projet
+
+   La tranche de la carte : un aplat de la couleur du projet, sans lumière ni
+   reflet. Le relief venait d'un dégradé, il n'a plus sa place.
+   ------------------------------------------------------------------------ */
+
+.card-edge {
+  background-color: var(--a);
+}
+
+.card-sheen {
+  display: none;
 }
 
 /* ------------------------------------------------------------ Typographie */
 
+/**
+ * Le grotesque n'a pas la densité d'un condensé : il faut le pousser en
+ * graisse et resserrer l'approche pour qu'il tienne le rôle de titre. Les
+ * On le veut fin et posé : 600, pas davantage.
+ */
 .display {
   font-family: var(--font-display);
-  text-transform: uppercase;
-  line-height: 0.88;
-  letter-spacing: 0.005em;
+  line-height: 0.95;
   /* Jamais de césure au milieu d'un mot : à cette taille, ça se voit. */
   overflow-wrap: normal;
   hyphens: none;
@@ -84,14 +325,20 @@ html.lenis body {
  * Un titre `display` qui tient sur plusieurs lignes.
  *
  * L'interligne serré ci-dessus est fait pour les très grands titres d'une
- * seule ligne : à deux lignes, Anton monte si haut que les accents mordent la
- * ligne précédente. La règle vit ici, hors `@layer`, parce que du CSS non
- * calqué l'emporte sur les utilitaires Tailwind quelle que soit la
+ * seule ligne : à deux lignes, les jambages d'une ligne viennent toucher les
+ * accents de la suivante. La règle vit ici, hors `@layer`, parce que du CSS
+ * non calqué l'emporte sur les utilitaires Tailwind quelle que soit la
  * spécificité — un `leading-*` posé sur `.display` n'aurait aucun effet.
  */
 .display-multiline {
-  line-height: 1.2;
+  line-height: 1.12;
 }
+
+.display {
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+
 
 .mono {
   font-family: var(--font-mono);
@@ -101,17 +348,359 @@ html.lenis body {
   line-height: 1.4;
 }
 
-/** Micro-label encadré, l'équivalent du « IN THEATERS » de la référence. */
+/**
+ * Le titre du carrousel, c'est-à-dire le plus grand mot de la page.
+ *
+ * Il porte la couleur du projet, rapprochée de l'encre pour tenir sur le
+ * papier.
+ */
+.hero-title {
+  color: var(--c-accent-ink);
+}
+
+
+/* ============================================================ Composants
+
+   Boutons, liens et micro-labels sont définis ici plutôt que dans les
+   composants React : les changer ne demande pas de toucher au balisage, et
+   ils restent lisibles d'un seul endroit.
+   ------------------------------------------------------------------------ */
+
+/* ---------------------------------------------------------- Micro-label */
+
+/**
+ * Le petit label de statut et les badges de stack. Ils ne sont pas affichés
+ * pour l'instant (voir `.chrome-*`), mais le style reste : les rallumer ne
+ * doit pas demander de le réécrire.
+ */
 .label {
   font-family: var(--font-mono);
   text-transform: uppercase;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.2em;
   font-size: 0.625rem;
   line-height: 1;
   display: inline-block;
-  padding: 0.4em 0.6em 0.35em;
-  border: 1px solid currentColor;
   white-space: nowrap;
+}
+
+.label + .label {
+  padding-left: 1.2em;
+  position: relative;
+}
+
+.label + .label::before {
+  content: "·";
+  position: absolute;
+  left: 0.35em;
+  opacity: 0.55;
+}
+
+/* ------------------------------------------------------------- Boutons */
+
+/**
+ * `.btn` est l'action principale, `.btn-2` la secondaire. Les deux partent
+ * du même socle sans décor, et se réduisent ici à un mot souligné d'un
+ * filet — ni aplat, ni cadre.
+ */
+.btn,
+.btn-2 {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.6875rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.35s ease,
+    opacity 0.25s ease;
+}
+
+/* La flèche de fin de bouton avance d'un cran au survol. Elle est portée par
+   le balisage, pas générée : les libellés n'ont pas tous le même signe. */
+.btn > .btn-arrow,
+.btn-2 > .btn-arrow {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn:hover > .btn-arrow,
+.btn-2:hover > .btn-arrow,
+.btn:focus-visible > .btn-arrow,
+.btn-2:focus-visible > .btn-arrow {
+  transform: translateX(0.3em);
+}
+
+.btn,
+.btn-2 {
+  padding: 0.55em 0;
+  color: var(--c-ink);
+  box-shadow: inset 0 -1px 0 0 color-mix(in srgb, var(--c-fg) 30%, transparent);
+}
+
+.btn:hover {
+  color: var(--c-accent-ink);
+  box-shadow: inset 0 -1px 0 0 var(--c-accent-ink);
+}
+
+.btn-2 {
+  color: var(--c-fg-2);
+}
+
+.btn-2:hover {
+  color: var(--c-ink);
+  box-shadow: inset 0 -1px 0 0 var(--c-ink);
+}
+
+
+
+
+
+/* ---------------------------------------------------- Bouton à icône */
+
+/** Les commandes carrées : flèches de rangée, pause du carrousel. */
+.iconbtn {
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-sm);
+  color: var(--c-fg-2);
+  background-color: transparent;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.iconbtn:hover {
+  color: var(--c-fg);
+}
+
+
+
+/* --------------------------------------------------------------- Liens */
+
+.link {
+  position: relative;
+  color: inherit;
+  transition: color 0.25s ease;
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.18em;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.link:hover::after,
+.link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* Le filet est là en permanence, le survol le fait passer à l'encre pleine.
+   Aucun mouvement, aucune couleur de plus. */
+.link::after {
+  transform: scaleX(1);
+  background-color: color-mix(in srgb, var(--c-fg) 26%, transparent);
+  transition: background-color 0.25s ease;
+}
+
+.link:hover::after,
+.link:focus-visible::after {
+  background-color: var(--c-fg);
+}
+
+
+
+
+/* ================================================================== Menu
+
+   Le menu prend la couleur du projet affiché, et la garde.
+
+   Il puise dans `--c-accent-nav` et non dans `--c-accent` : le fondu vers le
+   neutre n'y joue qu'à moitié. En bas de page le menu s'est calmé, mais il
+   porte encore la teinte du projet — il continue de dire où l'on est, ce
+   qu'un bandeau redevenu gris ne ferait plus.
+
+   Et il ne se tient jamais tout à fait tranquille : deux bandes traversent
+   l'aplat de droite à gauche, en boucle. C'est la seule chose qui bouge
+   d'elle-même sur une page par ailleurs entièrement plate — d'où sa mesure.
+   ------------------------------------------------------------------------ */
+
+.nav-shell {
+  border-radius: var(--r-nav);
+  overflow: hidden;
+}
+
+.nav-block {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--c-accent-nav);
+  color: var(--c-on-accent);
+  transition: background-color 200ms linear;
+}
+
+/* Le contenu repasse devant les bandes : sans cela elles laveraient le nom
+   et les pictogrammes en même temps que le fond. */
+.nav-block > * {
+  position: relative;
+  z-index: 1;
+}
+
+.nav-block::before,
+.nav-block::after {
+  content: "";
+  position: absolute;
+  /* Débordement volontaire : les bandes doivent naître et mourir hors du
+     cadre, sinon on verrait le saut de la boucle. */
+  top: -60%;
+  bottom: -60%;
+  left: -40%;
+  right: -40%;
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/**
+ * Première bande : une dérive de teinte. L'accent y est mêlé à la couleur
+ * maison, donc la bande reste dans la famille du projet tout en s'en
+ * écartant assez pour se voir. C'est elle qui donne l'impression que la
+ * couleur respire plutôt qu'elle ne clignote.
+ */
+.nav-block::before {
+  background-image: linear-gradient(
+    100deg,
+    transparent 0%,
+    color-mix(in oklab, var(--c-accent-nav), var(--house) 55%) 26%,
+    color-mix(in oklab, var(--c-accent-nav), var(--house) 28%) 42%,
+    transparent 66%
+  );
+  animation: nav-drift 13s linear infinite;
+}
+
+/**
+ * Seconde bande : un éclat, tiré de la couleur du texte. Très dilué, donc
+ * clair sur un accent sombre et sombre sur un accent clair — sans avoir à
+ * savoir lequel des deux on a.
+ *
+ * Les deux périodes sont volontairement premières entre elles : leur
+ * superposition ne se répète qu'au bout de plusieurs minutes, ce qui suffit à
+ * ce que l'œil n'y voie jamais de boucle.
+ */
+.nav-block::after {
+  background-image: linear-gradient(
+    100deg,
+    transparent 0%,
+    color-mix(in srgb, var(--c-on-accent) 15%, transparent) 30%,
+    transparent 58%
+  );
+  animation: nav-drift 7.5s linear infinite;
+}
+
+/* De la droite vers la gauche, sans fin. */
+@keyframes nav-drift {
+  from {
+    transform: translateX(38%);
+  }
+  to {
+    transform: translateX(-38%);
+  }
+}
+
+/** Le bandeau d'appel, sous la barre. */
+.nav-cta {
+  background-color: var(--c-poster-bg);
+  color: var(--c-fg);
+}
+
+.nav-cta:hover {
+  color: var(--c-accent-ink);
+}
+
+
+/** Les séparateurs de la liste dépliée. */
+.nav-sep {
+  border-top: 1px solid color-mix(in srgb, var(--c-on-accent) 20%, transparent);
+}
+
+/* ------------------------------------------------------------ Surfaces */
+
+/** Les cartes et vignettes. */
+.panel {
+  border-radius: var(--r-md);
+  background-color: var(--c-surface);
+}
+
+/**
+ * Le séparateur. Il remplace les `border-t` d'avant : au lieu d'un trait
+ * franc d'un bord à l'autre, il s'éteint en chemin.
+ */
+.rule {
+  height: 1px;
+  border: 0;
+  background-image: var(--rule-bg);
+}
+
+/**
+ * Une ligne de liste — les archives, essentiellement.
+ *
+ * Le trait qui la ferme est le même séparateur que partout ailleurs, et le
+ * survol allume un aplat très dilué de l'accent : c'est lui qui porte la
+ * séparation, la page n'ayant plus de filet du tout.
+ */
+.row {
+  position: relative;
+  border-radius: var(--r-sm);
+  transition: background-color 0.35s ease;
+}
+
+.row::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background-image: var(--rule-bg);
+}
+
+.row:hover {
+  background-color: color-mix(in srgb, var(--c-accent) 12%, transparent);
+}
+
+
+/* ------------------------------------------------------ Jauge du carrousel
+
+   Une vraie barre de progression : les plans déjà vus restent pleins, celui
+   en cours se remplit, les suivants attendent vides. Elle reste discrète —
+   c'est une indication, pas une commande à lire — et ne s'affirme qu'au
+   survol du trait visé.
+   ------------------------------------------------------------------------ */
+
+.reel-track {
+  background-color: color-mix(in srgb, var(--c-fg) 12%, transparent);
+  transition: background-color 0.3s ease;
+}
+
+.reel-bar {
+  background-color: color-mix(in srgb, var(--c-fg) 38%, transparent);
+}
+
+.reel-tick:hover .reel-track {
+  background-color: color-mix(in srgb, var(--c-fg) 26%, transparent);
+}
+
+.reel-tick:hover .reel-bar {
+  background-color: var(--c-accent-ink);
 }
 
 /* ------------------------------------------------ Filet de sécurité JS */
@@ -120,7 +709,7 @@ html.lenis body {
  * Les révélations au scroll sont pilotées par JavaScript, qui rend donc le
  * contenu avec `opacity: 0` en attendant. Si ce JavaScript ne s'exécute
  * jamais — désactivé, bloqué par une extension, ou hydratation interrompue —
- * le site se réduirait à une page noire. Tant que `no-js` est présent sur
+ * le site se réduirait à une page vide. Tant que `no-js` est présent sur
  * <html>, on neutralise ces états d'attente : le contenu prime sur l'effet.
  */
 .no-js [style*="opacity:0"],
@@ -134,16 +723,16 @@ html.lenis body {
 /* ------------------------------------------------------------------ Grain */
 
 /**
- * Bruit fixe sur toute la page. C'est le détail qui fait basculer
- * du « site noir » au rendu argentique.
+ * Bruit fixe sur toute la page. Éteint — une texture est le contraire d'un
+ * aplat — mais conservé : `--grain-opacity` suffit à le rallumer.
  */
 .grain {
   position: fixed;
   inset: 0;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.045;
-  mix-blend-mode: overlay;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -158,22 +747,8 @@ html.lenis body {
   cursor: url("/cursor-arrow.png") 32 32, pointer;
 }
 
-/** Soulignement qui se déploie depuis la gauche. */
-.underline-sweep {
-  background-image: linear-gradient(currentColor, currentColor);
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  background-size: 0% 1px;
-  transition: background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.underline-sweep:hover,
-.underline-sweep:focus-visible {
-  background-size: 100% 1px;
-}
-
 :focus-visible {
-  outline: 2px solid var(--color-amber);
+  outline: 2px solid var(--c-accent-ink);
   outline-offset: 3px;
 }
 
@@ -192,8 +767,8 @@ html.lenis body {
   left: -9999px;
   top: 0;
   z-index: 10000;
-  background: var(--color-amber);
-  color: var(--color-ink);
+  background: var(--c-accent);
+  color: var(--c-on-accent);
   padding: 0.75rem 1.25rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
@@ -218,6 +793,21 @@ html.lenis body {
   opacity: 0.2;
 }
 
+/* --------------------------------------------------------------- Lenis */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 /* --------------------------------------------------------------- Leaflet */
 
 /**
@@ -234,14 +824,19 @@ html.lenis body {
 }
 
 .map-decor .leaflet-container {
-  background: var(--color-ink);
+  background: var(--c-shell);
 }
 
 /* Le filtre ne porte que sur les tuiles : appliqué au conteneur, il
-   désaturerait aussi le repère ambre. Assez clair pour que le tracé des rues
-   reste lisible — en dessous, la carte disparaissait dans le fond noir. */
+   désaturerait aussi le repère coloré. */
 .map-decor .leaflet-tile-pane {
   filter: grayscale(0.7) contrast(1.05) brightness(1.5);
+}
+
+/* CartoDB ne sert que des tuiles sombres : on les inverse pour qu'elles
+   rejoignent le papier au lieu d'y faire un trou noir. */
+.map-decor .leaflet-tile-pane {
+  filter: grayscale(1) invert(1) brightness(1.03) contrast(0.9);
 }
 
 .map-decor .leaflet-control-container,
@@ -262,6 +857,14 @@ html.lenis body {
   }
 
   .grain {
+    display: none;
+  }
+
+  /* Les bandes du menu sont une boucle : neutralisée, elle s'arrête à sa
+     dernière image, bande hors cadre. On les retire franchement plutôt que
+     de laisser un état d'arrêt arbitraire. */
+  .nav-block::before,
+  .nav-block::after {
     display: none;
   }
 }
