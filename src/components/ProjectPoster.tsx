@@ -1,4 +1,5 @@
 import { memo } from "react";
+import type { CSSProperties } from "react";
 import type { PosterPattern, Project } from "@/types";
 
 type Variant = "hero" | "card" | "portrait";
@@ -6,31 +7,38 @@ type Variant = "hero" | "card" | "portrait";
 /**
  * Les trames de fond, une par projet.
  *
- * Le carrousel enchaîne quatre plans sur le même cadrage : sans trame propre,
- * seule la couleur changerait et les projets se confondraient. `size` est la
- * maille de base, doublée sur le plan large du hero.
+ * Le carrousel enchaîne plusieurs plans sur le même cadrage : sans trame
+ * propre, seule la couleur changerait et les projets se confondraient. `size`
+ * est la maille de base, doublée sur le plan large du hero ; les trames à
+ * répétition intrinsèque (diagonales, anneaux, lignes) portent déjà la leur.
+ *
+ * Le trait est tracé dans la couleur du texte de la variante : blanc sur les
+ * designs sombres, encre sur le papier. En blanc en dur, la trame disparaissait
+ * des variantes claires.
  */
 const PATTERNS: Record<PosterPattern, { image: string; size: number }> = {
   grid: {
     image:
-      "linear-gradient(to right, #fff 1px, transparent 1px), linear-gradient(to bottom, #fff 1px, transparent 1px)",
+      "linear-gradient(to right, var(--c-fg) 1px, transparent 1px), linear-gradient(to bottom, var(--c-fg) 1px, transparent 1px)",
     size: 48,
   },
   dots: {
-    image: "radial-gradient(#fff 1.5px, transparent 1.6px)",
+    image: "radial-gradient(var(--c-fg) 1.5px, transparent 1.6px)",
     size: 26,
   },
   diagonals: {
-    image: "repeating-linear-gradient(45deg, #fff 0 1px, transparent 1px 14px)",
+    image:
+      "repeating-linear-gradient(45deg, var(--c-fg) 0 1px, transparent 1px 14px)",
     size: 0,
   },
   rings: {
     image:
-      "repeating-radial-gradient(circle at 50% 45%, transparent 0 34px, #fff 34px 35px)",
+      "repeating-radial-gradient(circle at 50% 45%, transparent 0 34px, var(--c-fg) 34px 35px)",
     size: 0,
   },
   scanlines: {
-    image: "repeating-linear-gradient(to bottom, #fff 0 1px, transparent 1px 8px)",
+    image:
+      "repeating-linear-gradient(to bottom, var(--c-fg) 0 1px, transparent 1px 8px)",
     size: 0,
   },
 };
@@ -39,9 +47,13 @@ const PATTERNS: Record<PosterPattern, { image: string; size: number }> = {
  * Le fond coloré d'un projet.
  *
  * La couleur signature est celle qui domine la capture d'écran du projet : le
- * fond et le visuel s'accordent donc naturellement. Deux halos larges, une
- * trame propre au projet et un voile de lisibilité — assez de couleur pour que
- * la page ne soit pas un mur noir, assez de contraste pour le texte blanc.
+ * fond et le visuel s'accordent donc naturellement.
+ *
+ * Le composant ne décide de rien d'autre que cette couleur, qu'il passe en
+ * `--a`. Les quatre couches — teinte, halos, trame, voile — sont décrites dans
+ * globals.css, où chaque variante peut en éteindre certaines : les designs
+ * plats coupent les halos et le voile pour ne garder qu'un aplat, ceux sans
+ * trame coupent la trame. Une seule structure, six rendus.
  */
 function ProjectPoster({
   project,
@@ -50,49 +62,27 @@ function ProjectPoster({
   project: Project;
   variant: Variant;
 }) {
-  const { accent } = project;
   const isHero = variant === "hero";
   const pattern = PATTERNS[project.pattern ?? "grid"];
+  const size = pattern.size * (isHero ? 2 : 1);
 
   return (
-    <div className="absolute inset-0 overflow-hidden bg-[#06050a]">
-      {/* Nappe de fond : une teinte sourde de la couleur du projet. */}
-      <div className="absolute inset-0" style={{ backgroundColor: `${accent}33` }} />
-
-      <div
-        className="absolute inset-0"
-        style={{
-          background: isHero
-            ? `radial-gradient(75% 65% at 12% 88%, ${accent}cc 0%, transparent 66%),
-               radial-gradient(65% 60% at 92% 6%, ${accent}99 0%, transparent 60%),
-               radial-gradient(50% 45% at 62% 45%, ${accent}66 0%, transparent 70%)`
-            : `radial-gradient(90% 80% at 78% 12%, ${accent}bb 0%, transparent 68%),
-               radial-gradient(70% 70% at 8% 92%, ${accent}88 0%, transparent 62%)`,
-        }}
-      />
-
-      {/* Trame technique : donne de la matière sans ajouter de bruit. Les
-          trames à répétition intrinsèque (diagonales, anneaux, lignes) portent
-          déjà leur maille : leur imposer un `background-size` les écraserait. */}
-      <div
-        className="absolute inset-0 opacity-[0.09]"
-        aria-hidden="true"
-        style={{
-          backgroundImage: pattern.image,
-          backgroundSize: pattern.size
-            ? `${pattern.size * (isHero ? 2 : 1)}px ${pattern.size * (isHero ? 2 : 1)}px`
-            : undefined,
-        }}
-      />
-
-      {/* Voile de lisibilité, sous le bloc de texte. */}
-      <div
-        className={
-          isHero
-            ? "absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"
-            : "absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent"
-        }
-      />
+    <div
+      className="poster"
+      data-variant={variant}
+      aria-hidden="true"
+      style={
+        {
+          "--a": project.accent,
+          "--pat": pattern.image,
+          ...(size ? { "--pat-size": `${size}px ${size}px` } : {}),
+        } as CSSProperties
+      }
+    >
+      <div className="poster-tint" />
+      <div className="poster-glow" />
+      <div className="poster-pattern" />
+      <div className="poster-veil" />
     </div>
   );
 }

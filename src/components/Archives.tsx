@@ -23,7 +23,9 @@ export default function Archives() {
         Archives
       </h2>
 
-      <ul className="border-t border-line">
+      <div className="rule" aria-hidden="true" />
+
+      <ul>
         {archivedProjects.map((project, i) => (
           <ArchiveRow key={project.id} id={project.id} index={i} />
         ))}
@@ -38,7 +40,7 @@ function ArchiveRow({ id, index }: { id: string; index: number }) {
 
   return (
     <motion.li
-      className="border-b border-line"
+      className="row"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
@@ -47,9 +49,9 @@ function ArchiveRow({ id, index }: { id: string; index: number }) {
       <button
         type="button"
         onClick={() => open(id)}
-        className="group flex w-full flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-5 text-left"
+        className="group flex w-full flex-wrap items-baseline justify-between gap-x-6 gap-y-1 px-3 py-5 text-left"
       >
-        <span className="display text-[clamp(1.5rem,4vw,2.5rem)] text-muted line-through decoration-1 transition-colors group-hover:text-white/70">
+        <span className="display text-[clamp(1.5rem,4vw,2.5rem)] text-muted line-through decoration-1 transition-colors group-hover:text-fg/75">
           {project.title}
         </span>
         <span className="mono text-muted">{project.year}</span>

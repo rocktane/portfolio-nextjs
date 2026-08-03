@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { memo } from "react";
+import type { CSSProperties } from "react";
 import PosterMotif from "@/components/PosterMotif";
 import type { Project } from "@/types";
 
@@ -36,9 +37,9 @@ function ProjectStill({
 
   return (
     <div className={className}>
-      <figure className="relative overflow-hidden rounded-lg border border-white/15 bg-[#0c0c0f] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)]">
+      <figure className="still-frame relative overflow-hidden rounded-[var(--r-sm)] border border-frame bg-shell">
         {/* Barre de titre */}
-        <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.06] px-3 py-2">
+        <div className="flex items-center gap-2 border-b border-frame bg-fg/[0.05] px-3 py-2">
           <span className="flex gap-1.5" aria-hidden="true">
             <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
             <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
@@ -46,13 +47,27 @@ function ProjectStill({
           </span>
           {/* Une adresse ne se crie pas : on n'emprunte pas `.mono`, qui
               passerait tout en capitales, seulement sa fonte. */}
-          <span className="truncate font-mono text-[9px] lowercase tracking-[0.08em] text-white/60">
+          <span className="truncate font-mono text-[9px] lowercase tracking-[0.08em] text-muted">
             {barLabel}
+          </span>
+
+          {/* La flèche d'entrée dans le projet.
+              Elle n'apparaît que si la fenêtre est posée dans un élément
+              cliquable — ce qui est le cas partout sauf dans la fiche projet,
+              où `group-hover` ne trouve aucun groupe et ne se déclenche donc
+              jamais. C'est le seul appel à l'action des variantes dépouillées,
+              qui n'ont plus de bouton : le titre de la fenêtre dit l'adresse,
+              la flèche dit qu'on peut y aller. */}
+          <span
+            aria-hidden="true"
+            className="ml-auto shrink-0 translate-x-1 font-mono text-[10px] text-muted opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:text-amber group-hover:opacity-100"
+          >
+            →
           </span>
         </div>
 
         {/* Contenu */}
-        <div className="relative aspect-[16/10] w-full overflow-hidden bg-ink">
+        <div className="relative aspect-[16/10] w-full overflow-hidden bg-shell">
           {shot ? (
             <Image
               src={shot}
@@ -64,11 +79,11 @@ function ProjectStill({
             />
           ) : (
             <>
+              {/* Le fond des projets sans capture. Le halo vit en CSS, où
+                  les variantes plates le remplacent par un aplat. */}
               <div
-                className="absolute inset-0"
-                style={{
-                  background: `radial-gradient(90% 90% at 50% 40%, ${accent}55 0%, #0c0c0f 72%)`,
-                }}
+                className="still-motif-bg absolute inset-0"
+                style={{ "--a": accent } as CSSProperties}
               />
               {motif && (
                 <div className="absolute left-1/2 top-1/2 h-[78%] w-[78%] -translate-x-1/2 -translate-y-1/2">
@@ -82,9 +97,9 @@ function ProjectStill({
 
       {/* La stack, en badges — même micro-label encadré que partout ailleurs. */}
       {showStack && (
-        <ul className="mt-3 flex flex-wrap gap-1.5">
+        <ul className="chrome-stack mt-3 flex flex-wrap gap-1.5">
           {stack.map((tech) => (
-            <li key={tech} className="label text-white/60">
+            <li key={tech} className="label text-muted">
               {tech}
             </li>
           ))}

@@ -32,7 +32,7 @@ export default function Contact() {
 
       <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,220px)_1fr] md:items-start md:gap-16">
         {/* Même cadre que les fenêtres de projet, pour l'unité de l'ensemble. */}
-        <div className="map-decor aspect-square w-full max-w-[260px] overflow-hidden rounded-lg border border-white/15 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)]">
+        <div className="map-decor aspect-square w-full max-w-[260px] overflow-hidden rounded-[var(--r-md)] border border-frame">
           <DynamicMap />
         </div>
 
@@ -41,7 +41,7 @@ export default function Contact() {
               de plus à lire. Reste le nom, qui lui légende la vignette. */}
           <p className="mono text-muted">Marseille, France</p>
 
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-white/70">
+          <p className="mt-6 max-w-lg text-lg leading-relaxed text-fg/75">
             Un projet, une mission, une question ? Le formulaire prend deux
             minutes et me donne le contexte pour répondre utilement.
           </p>
@@ -54,16 +54,19 @@ export default function Contact() {
               data-tf-popup={TYPEFORM_ID}
               data-tf-size="70"
               suppressHydrationWarning
-              className="mono border border-white/30 px-6 py-4 text-white transition-colors hover:border-amber hover:text-amber"
+              className="btn"
             >
-              Ouvrir le formulaire →
+              Ouvrir le formulaire
+              <span className="btn-arrow" aria-hidden="true">
+                →
+              </span>
             </button>
 
             <a
               href="https://www.linkedin.com/in/yohan-g"
               target="_blank"
               rel="noopener noreferrer"
-              className="mono text-muted underline-sweep transition-colors hover:text-white"
+              className="link mono text-muted transition-colors hover:text-fg"
             >
               LinkedIn ↗
             </a>
@@ -71,13 +74,13 @@ export default function Contact() {
               href="https://www.github.com/rocktane"
               target="_blank"
               rel="noopener noreferrer"
-              className="mono text-muted underline-sweep transition-colors hover:text-white"
+              className="link mono text-muted transition-colors hover:text-fg"
             >
               GitHub ↗
             </a>
             <a
               href="mailto:dev@yohangouiran.com"
-              className="mono text-muted underline-sweep transition-colors hover:text-white"
+              className="link mono text-muted transition-colors hover:text-fg"
             >
               Email ↗
             </a>

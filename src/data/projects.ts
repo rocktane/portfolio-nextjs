@@ -38,7 +38,7 @@ export const projects: Project[] = [
   {
     id: "brower",
     title: "Brower",
-    tagline: "Le brew store qu'Homebrew n'a jamais eu",
+    tagline: "Vos applications en une seule commande",
     summary:
       "Une sélection de paquets Homebrew dans une interface moderne. On coche les applications voulues, on récupère une seule commande d'installation.",
     year: "2024–2026",
@@ -75,7 +75,7 @@ export const projects: Project[] = [
   },
   {
     id: "amp",
-    title: "Amp",
+    title: "amp",
     tagline: "Sonos, enfin natif sur macOS",
     summary:
       "Un contrôleur Sonos écrit en SwiftUI. Toute la logique réseau vit dans un package séparé, SonosKit ; l'application n'est que la couche d'interface.",
