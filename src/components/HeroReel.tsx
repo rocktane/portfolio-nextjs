@@ -96,23 +96,6 @@ export default function HeroReel() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Le visuel du projet, en grand : c'est lui la preuve.
-          Ni `AnimatePresence` ni sortie animée : le plan sortant et le plan
-          entrant ne portent ni la même adresse ni les mêmes badges, et se
-          chevaucher les faisait vibrer à mi-fondu. Le sortant disparaît net,
-          le nouveau monte sur l'affiche — qui, elle, reste. */}
-      <motion.div
-        key={`still-${project.id}`}
-        // Motion pilote `transform` : le positionnement vertical passe donc
-        // par `top`, pas par une classe translate qui serait écrasée.
-        className="hero-preview absolute right-[var(--gutter)] top-[15%] hidden w-[44vw] max-w-[720px] md:block"
-        initial={{ opacity: 0, y: 30, scale: 0.97 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.55, ease: EASE }}
-      >
-        <ProjectStill project={project} priority />
-      </motion.div>
-
       {/* Sur les écrans étroits ou bas, l'accroche participe au flux : le
           hero peut grandir plutôt que superposer deux blocs de texte. */}
       <div className="hero-content relative flex h-full flex-col justify-end px-[var(--gutter)] pb-28 pt-32">
@@ -126,6 +109,20 @@ export default function HeroReel() {
             Voici mes projets ⤵
           </p>
         </div>
+
+        {/* Le même aperçu et la même stack à toutes les tailles : dans le
+            flux sur mobile, en haut à droite sur desktop. Le sortant disparaît
+            sans fondu pour éviter de superposer adresses et badges. */}
+        <motion.div
+          key={`still-${project.id}`}
+          // Le positionnement desktop passe par `top` : Motion pilote transform.
+          className="hero-preview absolute right-[var(--gutter)] top-[15%] w-[44vw] max-w-[720px]"
+          initial={{ opacity: 0, y: 30, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.55, ease: EASE }}
+        >
+          <ProjectStill project={project} priority />
+        </motion.div>
 
         {/* Texte */}
         <AnimatePresence mode="wait">
