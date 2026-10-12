@@ -35,7 +35,7 @@ export default function LabGrid() {
             key={project.id}
             type="button"
             onClick={() => open(project.id)}
-            className="group cursor-enter relative aspect-[3/4] overflow-hidden text-left"
+            className="@container group cursor-enter relative overflow-hidden text-left"
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-10% 0px" }}
@@ -45,7 +45,7 @@ export default function LabGrid() {
               <ProjectPoster project={project} variant="portrait" />
             </div>
 
-            <div className="relative flex h-full flex-col justify-between p-6">
+            <div className="relative flex h-full min-h-[133.333cqw] flex-col justify-between gap-8 p-6">
               <div>
                 <div className="flex items-start justify-between gap-3">
                   <span className="flex flex-wrap items-center gap-2">
