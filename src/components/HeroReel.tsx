@@ -69,7 +69,7 @@ export default function HeroReel() {
       role="group"
       aria-roledescription="carrousel"
       aria-label="Projets mis en avant"
-      className="relative h-[100svh] min-h-[560px] w-full overflow-hidden"
+      className="hero-reel relative h-[100svh] min-h-[560px] w-full overflow-hidden"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onFocusCapture={() => setFocused(true)}
@@ -105,7 +105,7 @@ export default function HeroReel() {
         key={`still-${project.id}`}
         // Motion pilote `transform` : le positionnement vertical passe donc
         // par `top`, pas par une classe translate qui serait écrasée.
-        className="absolute right-[var(--gutter)] top-[15%] hidden w-[44vw] max-w-[720px] md:block"
+        className="hero-preview absolute right-[var(--gutter)] top-[15%] hidden w-[44vw] max-w-[720px] md:block"
         initial={{ opacity: 0, y: 30, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.55, ease: EASE }}
@@ -113,26 +113,21 @@ export default function HeroReel() {
         <ProjectStill project={project} priority />
       </motion.div>
 
-      {/* L'accroche ne change pas d'un plan à l'autre : elle est posée hors du
-          carrousel, au-dessus de la pile, et dit qui parle avant que le
-          premier projet ait fini de défiler. */}
-      {/* La largeur s'arrête avant la fenêtre du projet, à droite : l'accroche
-          tient sur deux lignes, une par phrase, sans jamais la toucher. */}
-      {/* Le bloc de menu, bandeau d'appel compris, descend jusqu'à ~7 rem :
-          l'accroche commence en dessous, à toutes les largeurs. */}
-      <div className="absolute left-[var(--gutter)] top-[7.5rem] z-30 max-w-[min(86vw,40rem)]">
-        <p className="display text-[clamp(1.15rem,2vw,1.75rem)] leading-tight text-white">
-          Yohan Gouiran, développeur fullstack.
-        </p>
-        {/* Flèche en variante texte, pas en émoji : la version colorée jurait
-            avec le reste des signes de la page (→, ↓). */}
-        <p className="display mt-1 text-[clamp(1.15rem,2vw,1.75rem)] leading-tight text-white/55">
-          Voici mes projets ⤵
-        </p>
-      </div>
+      {/* Sur les écrans étroits ou bas, l'accroche participe au flux : le
+          hero peut grandir plutôt que superposer deux blocs de texte. */}
+      <div className="hero-content relative flex h-full flex-col justify-end px-[var(--gutter)] pb-28 pt-32">
+        <div className="hero-intro absolute left-[var(--gutter)] top-[7.5rem] z-30 max-w-[min(86vw,40rem)]">
+          <p className="display text-[clamp(1.15rem,2vw,1.75rem)] leading-tight text-white">
+            Yohan Gouiran, développeur fullstack.
+          </p>
+          {/* Flèche en variante texte, pas en émoji : la version colorée jurait
+              avec le reste des signes de la page (→, ↓). */}
+          <p className="display mt-1 text-[clamp(1.15rem,2vw,1.75rem)] leading-tight text-white/55">
+            Voici mes projets ⤵
+          </p>
+        </div>
 
-      {/* Texte */}
-      <div className="relative flex h-full flex-col justify-end px-[var(--gutter)] pb-28 pt-32">
+        {/* Texte */}
         <AnimatePresence mode="wait">
           <motion.div
             key={project.id}
@@ -140,7 +135,7 @@ export default function HeroReel() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.45 }}
-            className="w-full"
+            className="hero-slide w-full"
           >
             <span className="flex flex-wrap items-center gap-2">
               <span className="label text-amber">{STATUS_LABEL[project.status]}</span>
@@ -177,74 +172,70 @@ export default function HeroReel() {
         </AnimatePresence>
 
         {/* Barre de bas d'écran */}
-        <div className="mt-10 flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
+        <div className="mt-10 grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-4 gap-y-2 lg:grid-cols-[1fr_auto_auto_auto] lg:gap-x-6">
           <button
             type="button"
             onClick={() => scrollToId("projets")}
-            className="mono text-muted transition-colors hover:text-white"
+            className="mono min-h-11 text-left text-muted transition-colors hover:text-white"
           >
             Scroll ↓
           </button>
 
-          {/* Cinq traits de 48 px, une pause et un compteur ne tiennent pas
-              sur la ligne d'un téléphone : les commandes passent alors sous le
-              « Scroll », sur toute la largeur, et la réglette prend ce qui
-              reste au lieu de sortir de l'écran. */}
-          <div className="flex w-full items-center gap-4 sm:w-auto sm:gap-6">
-            {/* Sans mouvement demandé, le carrousel ne tourne pas de lui-même :
-                un bouton de pause n'aurait rien à arrêter. */}
-            {!reduced && (
-              <button
-                type="button"
-                onClick={() => setStopped((s) => !s)}
-                aria-pressed={stopped}
-                className="mono shrink-0 border border-white/25 px-2.5 py-2 text-white/70 transition-colors hover:border-amber hover:text-amber"
-              >
-                {stopped ? "Lecture ▶" : "Pause ❙❙"}
-              </button>
-            )}
+          {/* Pause et compteur partagent la première ligne ; les six cibles
+              de 44 px disposent de toute la largeur sur mobile. */}
+          {/* Sans mouvement demandé, le carrousel ne tourne pas de lui-même :
+              un bouton de pause n'aurait rien à arrêter. */}
+          {!reduced && (
+            <button
+              type="button"
+              onClick={() => setStopped((s) => !s)}
+              aria-pressed={stopped}
+              className="mono col-start-2 row-start-1 min-h-11 shrink-0 border border-white/25 px-2.5 py-2 text-white/70 transition-colors hover:border-amber hover:text-amber"
+            >
+              {stopped ? "Lecture ▶" : "Pause ❙❙"}
+            </button>
+          )}
 
-            <div className="flex min-w-0 flex-1 items-center gap-2 sm:flex-none">
-              {heroProjects.map((p, i) => (
-                <button
-                  key={p.id}
-                  type="button"
-                  aria-current={i === index}
-                  aria-label={`Afficher ${p.title}`}
-                  onClick={() => goTo(i)}
-                  // Le trait ne fait qu'un pixel de haut : sans zone tampon
-                  // autour, la cible était pratiquement impossible à viser.
-                  className="group min-w-0 flex-1 cursor-pointer px-1.5 py-5 sm:flex-none"
-                >
-                  {/* Ce trait est la seule forme visible du bouton : sous
-                      3:1, la commande elle-même devenait indiscernable. */}
-                  <span className="relative block h-px w-full bg-white/45 sm:w-12">
-                    {i === index && (
-                      // `initial` doit être identique au rendu serveur :
-                      // `useReducedMotion()` y vaut null, l'utiliser ici
-                      // cassait l'hydratation. On joue sur la durée à la place.
-                      <motion.span
-                        key={`${p.id}-${paused}`}
-                        className="absolute inset-y-0 left-0 block bg-amber"
-                        initial={{ width: 0 }}
-                        animate={{ width: "100%" }}
-                        transition={{
-                          duration: reduced || paused ? 0 : DURATION / 1000,
-                          ease: "linear",
-                        }}
-                      />
-                    )}
-                    {i !== index && (
-                      <span className="absolute inset-0 bg-white/0 transition-colors group-hover:bg-white/60" />
-                    )}
-                  </span>
-                </button>
-              ))}
-            </div>
-            <span className="mono shrink-0 text-muted tabular-nums">
-              {String(index + 1).padStart(2, "0")} / {String(heroProjects.length).padStart(2, "0")}
-            </span>
+          <div className="col-span-3 row-start-2 grid min-w-0 grid-cols-6 lg:col-span-1 lg:col-start-3 lg:row-start-1 lg:flex lg:gap-2">
+            {heroProjects.map((p, i) => (
+              <button
+                key={p.id}
+                type="button"
+                aria-current={i === index}
+                aria-label={`Afficher ${p.title}`}
+                onClick={() => goTo(i)}
+                // Le trait ne fait qu'un pixel de haut : sans zone tampon
+                // autour, la cible était pratiquement impossible à viser.
+                className="group min-h-11 min-w-11 cursor-pointer px-1.5 py-5 lg:w-15"
+              >
+                {/* Ce trait est la seule forme visible du bouton : sous
+                    3:1, la commande elle-même devenait indiscernable. */}
+                <span className="relative block h-px w-full bg-white/45">
+                  {i === index && (
+                    // `initial` doit être identique au rendu serveur :
+                    // `useReducedMotion()` y vaut null, l'utiliser ici
+                    // cassait l'hydratation. On joue sur la durée à la place.
+                    <motion.span
+                      key={`${p.id}-${paused}`}
+                      className="absolute inset-y-0 left-0 block bg-amber"
+                      initial={{ width: 0 }}
+                      animate={{ width: "100%" }}
+                      transition={{
+                        duration: reduced || paused ? 0 : DURATION / 1000,
+                        ease: "linear",
+                      }}
+                    />
+                  )}
+                  {i !== index && (
+                    <span className="absolute inset-0 bg-white/0 transition-colors group-hover:bg-white/60" />
+                  )}
+                </span>
+              </button>
+            ))}
           </div>
+          <span className="mono col-start-3 row-start-1 shrink-0 text-muted tabular-nums lg:col-start-4">
+            {String(index + 1).padStart(2, "0")} / {String(heroProjects.length).padStart(2, "0")}
+          </span>
         </div>
       </div>
     </section>

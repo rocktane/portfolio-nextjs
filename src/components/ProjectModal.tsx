@@ -3,6 +3,7 @@
 import {
   AnimatePresence,
   motion,
+  useIsPresent,
   useMotionValue,
   useReducedMotion,
   useSpring,
@@ -52,8 +53,15 @@ const STEP = 68;
 export default function ProjectModal() {
   const { active, close, open } = useProjects();
   const panel = useRef<HTMLDivElement>(null);
+  const hand = useRef<HTMLDivElement>(null);
 
   useDialogFocus(active !== null, panel);
+
+  // Une nouvelle fiche se lit depuis le haut, même après avoir parcouru
+  // toute la description de la précédente sur un petit écran.
+  useEffect(() => {
+    hand.current?.scrollTo({ top: 0, behavior: "instant" });
+  }, [active?.id]);
 
   // Position horizontale du pointeur dans la main, ramenée à [0, 1]. C'est la
   // seule chose que les cartes latérales ont besoin de savoir.
@@ -82,7 +90,12 @@ export default function ProjectModal() {
       {active && (
         <motion.div
           key="backdrop"
-          className="fixed inset-0 z-[200] flex flex-col items-center justify-center gap-5 bg-black/85 px-4 py-6 backdrop-blur-md"
+          ref={panel}
+          role="dialog"
+          aria-modal="true"
+          tabIndex={-1}
+          aria-label={`Fiche du projet ${active.title}`}
+          className="project-dialog fixed inset-0 z-[200] flex flex-col items-center justify-center gap-5 bg-black/85 px-4 py-6 backdrop-blur-md"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -90,12 +103,8 @@ export default function ProjectModal() {
           onClick={close}
         >
           <div
-            ref={panel}
-            role="dialog"
-            aria-modal="true"
-            tabIndex={-1}
-            aria-label={`Fiche du projet ${active.title}`}
-            className="relative flex w-full flex-1 items-center justify-center"
+            ref={hand}
+            className="project-hand relative flex min-h-0 w-full flex-1 items-center justify-center"
             onPointerMove={(e) => {
               const r = e.currentTarget.getBoundingClientRect();
               pointer.set((e.clientX - r.left) / r.width);
@@ -123,13 +132,13 @@ export default function ProjectModal() {
           {/* Les commandes vivent hors de la carte : rien ne vient se poser
               sur l'objet lui-même. */}
           <div
-            className="flex shrink-0 items-center gap-8"
+            className="project-commands flex shrink-0 items-center gap-8"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               type="button"
               onClick={close}
-              className="mono text-white/70 underline-sweep transition-colors hover:text-white"
+              className="mono min-h-11 text-white/70 underline-sweep transition-colors hover:text-white"
             >
               ✕ Fermer
             </button>
@@ -140,7 +149,7 @@ export default function ProjectModal() {
             <button
               type="button"
               onClick={() => open(at(index + 1).id)}
-              className="mono text-white/70 underline-sweep transition-colors hover:text-white"
+              className="mono min-h-11 text-white/70 underline-sweep transition-colors hover:text-white"
             >
               Carte suivante →
             </button>
@@ -164,6 +173,7 @@ function Card({
 }) {
   const reduced = useReducedMotion();
   const center = slot === 0;
+  const present = useIsPresent();
 
   /**
    * Proximité du pointeur, de 0 (il est de l'autre côté) à 1 (il est arrivé
@@ -229,9 +239,10 @@ function Card({
       onClick={(e) => e.stopPropagation()}
       onPointerMove={onPointerMove}
       onPointerLeave={resetTilt}
-      // La largeur est déduite de la hauteur disponible : la carte garde son
-      // format, c'est l'écran qui décide de sa taille.
-      className="@container absolute aspect-[5/7] w-[min(80vw,calc((100svh-10rem)*0.714))]"
+      // Sur grand écran, la hauteur disponible détermine le format 5:7.
+      // La variante mobile laisse la fiche grandir dans son conteneur défilable.
+      data-center={center && present}
+      className="project-card @container absolute aspect-[5/7] w-[min(80vw,calc((100svh-10rem)*0.714))]"
       style={{ perspective: 1200, zIndex: center ? 20 : 10 }}
       initial={{ opacity: 0, x: `${slot * (STEP + 26)}%`, rotate: slot * 6 }}
       animate={{ opacity: 1, x: `${slot * STEP}%`, rotate: slot * 4 }}
@@ -242,7 +253,7 @@ function Card({
           une taille fixes : la montée au pointeur disparaît, pas la mise en
           scène — à l'échelle 1 elles recouvriraient la carte centrale. */}
       <motion.div
-        className="h-full w-full origin-center"
+        className="project-card-inner h-full w-full origin-center"
         style={{
           y: center ? 0 : reduced ? "13%" : sideY,
           scale: center ? 1 : reduced ? 0.74 : sideScale,
@@ -250,7 +261,7 @@ function Card({
         }}
       >
         <motion.div
-          className="relative h-full w-full rounded-[3.4cqw] p-[2.2cqw]"
+          className="project-card-frame relative h-full w-full rounded-[3.4cqw] p-[2.2cqw]"
           style={{
             rotateX: reduced || !center ? 0 : rotateX,
             rotateY: reduced || !center ? 0 : rotateY,
@@ -304,15 +315,15 @@ function CardFace({ project, muted }: { project: Project; muted: boolean }) {
 
   return (
     <div
-      className="flex h-full flex-col gap-[1.5cqw] rounded-[2cqw] bg-[#08080c] p-[2.2cqw]"
+      className="project-card-face flex h-full flex-col gap-[1.5cqw] rounded-[2cqw] bg-[#08080c] p-[2.2cqw]"
       aria-hidden={muted}
       // Sous une carte de côté, plus rien n'est tabulable : c'est le bouton
       // qui la recouvre qui porte l'interaction.
       inert={muted ? true : undefined}
     >
       {/* Cartouche de nom : le titre, et le statut en guise de coût. */}
-      <div className="flex items-center justify-between gap-[2cqw] rounded-[1cqw] border border-white/10 bg-white/[0.05] px-[2.4cqw] py-[1.6cqw]">
-        <h2 className="display truncate text-[6.4cqw] leading-none">{title}</h2>
+      <div className="project-card-heading flex items-center justify-between gap-[2cqw] rounded-[1cqw] border border-white/10 bg-white/[0.05] px-[2.4cqw] py-[1.6cqw]">
+        <h2 className="project-card-title display truncate text-[6.4cqw] leading-none">{title}</h2>
         <span className="flex shrink-0 items-center gap-[1cqw]">
           {isOpenSource(project) && (
             <span
@@ -333,7 +344,7 @@ function CardFace({ project, muted }: { project: Project; muted: boolean }) {
 
       {/* Illustration. Elle absorbe toute la hauteur restante : c'est elle qui
           s'ajuste, jamais le texte. */}
-      <div className="relative min-h-0 flex-1 overflow-hidden rounded-[1cqw] border border-white/10">
+      <div className="project-card-illustration relative min-h-0 flex-1 overflow-hidden rounded-[1cqw] border border-white/10">
         <ProjectPoster project={project} variant="card" />
         <ProjectStill
           project={project}
@@ -343,7 +354,7 @@ function CardFace({ project, muted }: { project: Project; muted: boolean }) {
       </div>
 
       {/* Ligne de type. */}
-      <div className="flex items-center justify-between gap-[2cqw] rounded-[1cqw] border border-white/10 bg-white/[0.05] px-[2.4cqw] py-[1.4cqw]">
+      <div className="project-card-type flex items-center justify-between gap-[2cqw] rounded-[1cqw] border border-white/10 bg-white/[0.05] px-[2.4cqw] py-[1.4cqw]">
         {/* Pas de troncature : un rôle un peu long passe à la ligne, il ne se
             fait pas couper au milieu d'un mot. */}
         <p className="mono text-[2.1cqw] leading-[1.4]">
@@ -359,7 +370,7 @@ function CardFace({ project, muted }: { project: Project; muted: boolean }) {
 
       {/* Encadré de texte : capacité, puis description, puis texte d'ambiance
           en italique, comme sur une vraie carte. */}
-      <div className="flex flex-col gap-[1.6cqw] rounded-[1cqw] border border-white/10 bg-white/[0.03] px-[2.4cqw] py-[2cqw]">
+      <div className="project-card-description flex flex-col gap-[1.6cqw] rounded-[1cqw] border border-white/10 bg-white/[0.03] px-[2.4cqw] py-[2cqw]">
         <p className="mono text-[2.1cqw] leading-[1.5] text-white/75">
           <span style={{ color: accent }}>◆ </span>
           {stack.join(" · ")}
@@ -367,10 +378,10 @@ function CardFace({ project, muted }: { project: Project; muted: boolean }) {
 
         <div className="h-px w-full bg-white/10" />
 
-        <p className="text-[2.5cqw] leading-[1.5] text-white/70">{summary}</p>
+        <p className="project-card-summary text-[2.5cqw] leading-[1.5] text-white/70">{summary}</p>
 
         <p
-          className="border-l-[0.4cqw] pl-[2cqw] text-[2.4cqw] italic leading-[1.45] text-white/45"
+          className="project-card-tagline border-l-[0.4cqw] pl-[2cqw] text-[2.4cqw] italic leading-[1.45] text-white/45"
           style={{ borderColor: `${accent}66` }}
         >
           {tagline}
@@ -378,7 +389,7 @@ function CardFace({ project, muted }: { project: Project; muted: boolean }) {
       </div>
 
       {/* Bas de carte : l'appel à l'action, et le numéro de la série. */}
-      <div className="flex items-center justify-between gap-[2cqw]">
+      <div className="project-card-footer flex items-center justify-between gap-[2cqw]">
         {live ? (
           muted ? (
             <span

@@ -114,6 +114,145 @@ html.lenis body {
   white-space: nowrap;
 }
 
+/* ------------------------------------------------------ Petits écrans */
+
+/* Le hero conserve sa composition d'affiche sur grand écran. Dès que la
+   largeur ou la hauteur manque, les deux textes retrouvent le flux normal. */
+@media (max-width: 767px), (max-height: 699px) {
+  .hero-reel {
+    height: auto;
+    min-height: 100svh;
+  }
+
+  .hero-content {
+    height: auto;
+    min-height: 100svh;
+    padding-top: calc(7.5rem + env(safe-area-inset-top));
+    padding-bottom: 2rem;
+  }
+
+  .hero-intro {
+    position: static;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-slide {
+    margin-top: auto;
+  }
+
+  .hero-preview {
+    display: none;
+  }
+}
+
+/* Une fiche doit rester lisible en portrait comme en paysage : son contenu
+   défile, tandis que fermer et changer de carte restent à portée de main. */
+@media (max-width: 1023px), (max-height: 699px) {
+  .project-dialog {
+    gap: 0.75rem;
+    padding: max(1rem, env(safe-area-inset-top))
+      max(1rem, env(safe-area-inset-right))
+      max(0.5rem, env(safe-area-inset-bottom))
+      max(1rem, env(safe-area-inset-left));
+  }
+
+  .project-hand {
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+  }
+
+  .project-card {
+    position: relative;
+    width: min(100%, 36rem);
+    aspect-ratio: auto;
+    margin-inline: auto;
+    transform: none !important;
+  }
+
+  .project-card[data-center="false"] {
+    display: none;
+  }
+
+  .project-card-inner,
+  .project-card-frame {
+    height: auto;
+    transform: none !important;
+  }
+
+  .project-card-frame {
+    padding: 0.375rem;
+    border-radius: 1rem;
+  }
+
+  .project-card-face {
+    height: auto;
+    gap: 1rem;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+  }
+
+  .project-card-heading,
+  .project-card-type,
+  .project-card-footer {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .project-card-heading,
+  .project-card-type,
+  .project-card-description {
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+  }
+
+  .project-card-title {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    line-height: 1.15;
+    white-space: normal;
+    overflow: visible;
+  }
+
+  .project-card-illustration {
+    flex: none;
+    aspect-ratio: 16 / 10;
+  }
+
+  .project-card-description {
+    gap: 0.75rem;
+  }
+
+  .project-card-summary {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .project-card-tagline {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .project-card-face .mono {
+    font-size: 0.6875rem;
+    line-height: 1.5;
+  }
+
+  .project-card-footer a {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    padding: 0.75rem 1rem;
+  }
+
+  .project-commands {
+    width: min(100%, 36rem);
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+}
+
 /* ------------------------------------------------ Filet de sécurité JS */
 
 /**
