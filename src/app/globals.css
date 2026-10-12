@@ -133,15 +133,18 @@ html.lenis body {
 
   .hero-intro {
     position: static;
-    margin-bottom: 2.5rem;
+    margin-bottom: 1.5rem;
   }
 
   .hero-slide {
-    margin-top: auto;
+    margin-top: 0;
   }
 
   .hero-preview {
-    display: none;
+    position: static;
+    flex-shrink: 0;
+    width: min(100%, 24rem);
+    margin: auto auto 2rem;
   }
 }
 
