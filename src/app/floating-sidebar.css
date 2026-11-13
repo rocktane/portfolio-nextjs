@@ -1,0 +1,33 @@
+:root {
+  --workspace-top-inset: 8px;
+}
+/* Trial isolated here: remove this stylesheet import to restore the flush sidebar. */
+.atelier-layout {
+  padding: 8px 8px 0;
+  gap: 8px;
+}
+.atelier-sidebar {
+  top: 8px;
+  height: calc(100dvh - 16px);
+  border: 1px solid #d1dfd4;
+  border-radius: 14px;
+}
+.workspace-shell {
+  min-height: calc(100dvh - 8px);
+}
+@media (max-width: 760px) {
+  .atelier-sidebar {
+    height: 130px;
+    min-height: 130px;
+    margin-bottom: 8px;
+  }
+  .workspace-shell {
+    min-height: calc(100dvh - 146px);
+  }
+}
+@media (min-width: 761px) {
+  .atelier-brand {
+    height: calc(var(--header-height) - 2px);
+    min-height: calc(var(--header-height) - 2px);
+  }
+}

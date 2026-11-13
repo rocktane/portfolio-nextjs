@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/next";
 import Shell from "@/components/atelier/Shell";
 import "./fonts.css";
 import "./globals.css";
+import "./floating-sidebar.css";
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,

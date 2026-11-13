@@ -43,3 +43,7 @@ La proposition 1 est intégrée avec les trois chemins de la proposition 3. Pale
 Ajout de `/a-essayer` : sélection explicite des sept outils utilisables, liens exacts, contraintes visibles, copie de la commande BetterBattery avec solution de repli. La palette ⌘K / Ctrl K recherche pages, projets et technologies ; bouton visible aussi sur mobile, navigation par flèches et Entrée, fermeture Échap et retour du focus. CV et copie de l’e-mail dans la palette. Palette et liste gardent les couleurs existantes (papier #f5f7f4, menthe #e5eee7, encre #193e32, secondaire #52695d, forêt #245b46), Manrope et Space Grotesk. Une liste d’actions sobres remplace une seconde grille d’aperçus. Le bouton Se connecter est uniquement dans le header ; footer compact, aligné à droite et sans filet. Le nom et son crayon partagent une largeur contrainte, le texte se tronque avant le crayon.
 
 L’accueil n’est pas redessiné tant que Yohan n’a pas choisi entre une sélection d’outils à essayer, un projet unique mis en avant ou un aperçu de parcours.
+
+## Essai de sidebar flottante
+
+Essai isolé dans `src/app/floating-sidebar.css`, importé après les styles communs : retrait de 8 px, angles de 14 px, aucun ajout d’ombre. La sidebar garde sa hauteur visible et son comportement sticky ; sur mobile, la barre de navigation adopte le même retrait. Palette, polices et contenu conservés. Retour visuel immédiat à la version précédente : retirer l’import de `floating-sidebar.css` dans `layout.tsx`. Le commit dédié peut aussi être reverté. Version de référence avant essai : `eca9f6c`.

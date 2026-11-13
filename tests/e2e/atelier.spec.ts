@@ -596,3 +596,25 @@ test("command search supports keyboard, empty states, focus return and navigatio
     ),
   ).toBe(true);
 });
+
+test("floating sidebar keeps a tight inset and follows desktop scroll", async ({
+  page,
+}) => {
+  for (const width of [320, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    const box = await page.locator(".atelier-sidebar").boundingBox();
+    expect(box!.x).toBe(8);
+    expect(box!.y).toBe(8);
+    expect(
+      await page
+        .locator(".atelier-sidebar")
+        .evaluate((el) => getComputedStyle(el).borderRadius),
+    ).toBe("14px");
+    if (width > 760) expect(box!.height).toBe(884);
+  }
+  await page.goto("/projets");
+  await page.evaluate(() => scrollTo(0, 400));
+  const sticky = await page.locator(".atelier-sidebar").boundingBox();
+  expect(sticky!.y).toBe(8);
+});
