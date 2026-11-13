@@ -1,8 +1,8 @@
 # Atelier : intégration Next.js
 
-Identité : **yohan/atelier**, monogramme Y simple, fond menthe et point abricot. Alternatives proposées : **~/yohan**, **Le bureau de Yohan**. Le logo existe en SVG, sans image générée.
+Identité : **yohan/atelier**, monogramme Y simple, fond menthe et point abricot. Alternatives proposées : **~/yohan**, **Le bureau de Yohan**. Le monogramme utilise un Y Newsreader, accompagné d’un point abricot, sans image générée.
 
-Palette : papier `#f5f7f4`, menthe `#e5eee7`, texte `#193e32`, secondaire `#52695d`, action `#245b46`, accent `#e6ab69`. Manrope pour l’interface, Space Grotesk pour les titres ; fontes locales issues de la maquette validée. Pas de filtre ni de recoloration des captures.
+Palette : papier `#f5f7f4`, menthe `#e5eee7`, texte `#193e32`, secondaire `#52695d`, action `#245b46`, accent `#e6ab69`. Manrope pour l’interface, Space Grotesk pour les titres et la température, Newsreader uniquement pour le Y ; fontes locales issues de la maquette validée. Pas de filtre ni de recoloration des captures.
 
 La structure conserve la sidebar et le catalogue de la maquette. Le header a une hauteur fixe partagée par toutes les routes ; le footer participe à une colonne flex occupant au moins la hauteur de l’écran. Sur mobile la navigation et le header restent compacts. Projets, labo, archives, parcours, contact et les fiches utilisent de vraies routes statiques Next.js. Les filtres sont dans l’URL, sans stockage local supplémentaire.
 
@@ -19,3 +19,11 @@ Les suggestions de nouvelles pages sont documentées séparément et ne sont pas
 La version Next.js est consultable sur https://maquettes-portfolio.23o.dev. C’est l’export de la branche `feat/atelier-dashboard`, servi par Caddy ; le domaine de production conserve son processus Vercel via `main`. Le sélecteur de maquettes et Canopée ne font pas partie de cette application. Les maquettes historiques restent dans `design-explorations/`.
 
 Vérification du déploiement : `PLAYWRIGHT_BASE_URL=https://maquettes-portfolio.23o.dev bun run test:e2e`. Les tests météo sont déterministes ; la météo réelle a aussi été vérifiée séparément dans le navigateur.
+
+## Ajustements de l’interface
+
+Direction : conserver papier `#f5f7f4`, menthe `#e5eee7`, encre `#193e32`, secondaire `#52695d`, forêt `#245b46`, abricot `#e6ab69`. Identité typographique Y Newsreader ; interface Manrope et titres Space Grotesk. Alignement à gauche, marque et fil d’Ariane centrés sur la même ligne du header. Profil invité sur un emplacement de hauteur constante. Le CV reste dans Parcours.
+
+Disposition : `marque | fil d’Ariane … contact`, puis `invité / navigation | contenu`, puis `réseaux / météo | pied de page`. Sur mobile, réseaux et météo occupent la barre compacte. Les captures remplissent leur cadre en vue liste ; les vues grille et détail conservent l’image entière.
+
+Révision du plan : la météo devient un relevé local sans carte ni décor : icône, ville, condition et température. Les boutons de réseaux restent sobres. Le focus vert suit les contours du champ de recherche au lieu de dessiner un rectangle autour du texte. Aucun mouvement décoratif.

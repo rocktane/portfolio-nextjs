@@ -76,7 +76,7 @@ test("weather comes from live API data, uses the rain icon and persists across n
   await page.goto("/");
   const weather = page.locator(".sidebar-weather .marseille-weather");
   await expect(weather).toContainText("18°");
-  await expect(weather.locator("svg")).toHaveAttribute(
+  await expect(weather.locator("svg[data-weather-icon]")).toHaveAttribute(
     "data-weather-icon",
     "rain",
   );
@@ -103,6 +103,13 @@ test("weather failure is honest, not a made-up temperature", async ({
   const weather = page.locator(".sidebar-weather .marseille-weather");
   await expect(weather).toContainText("indisponible");
   await expect(weather).not.toContainText("18°");
+  await page.setViewportSize({ width: 320, height: 900 });
+  await expect(
+    page.locator(".header-weather .weather-condition"),
+  ).toBeVisible();
+  await expect(page.locator(".header-weather .weather-condition")).toHaveText(
+    "Météo indisponible",
+  );
 });
 test("catalog filters, actual routes and query state survive a project round trip", async ({
   page,
@@ -285,4 +292,96 @@ test("editing a search in the middle preserves caret and character order", async
   await page.locator('.sidebar-nav a[href="/"]').click();
   await expect(input).toHaveValue("");
   await expect(page.locator(".project-card")).toHaveCount(7);
+});
+
+test("editing the guest name does not move sidebar items", async ({ page }) => {
+  for (const width of [320, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    const before = await page.locator(".sidebar-nav").boundingBox();
+    const profile = await page.locator(".guest-identity").boundingBox();
+    for (const key of ["Escape", "Enter"]) {
+      await page.getByRole("button", { name: /Renommer l’invité/ }).click();
+      const input = page.getByRole("textbox", {
+        name: "Votre prénom ou pseudo",
+      });
+      await input.fill("Un prénom et un nom particulièrement longs");
+      const after = await page.locator(".sidebar-nav").boundingBox();
+      const editingProfile = await page
+        .locator(".guest-identity")
+        .boundingBox();
+      expect(Math.abs(after!.y - before!.y)).toBeLessThanOrEqual(0.5);
+      expect(
+        Math.abs(editingProfile!.height - profile!.height),
+      ).toBeLessThanOrEqual(0.5);
+      await input.press(key);
+      const saved = await page.locator(".sidebar-nav").boundingBox();
+      expect(Math.abs(saved!.y - before!.y)).toBeLessThanOrEqual(0.5);
+    }
+  }
+});
+
+test("sidebar identity aligns with the header; networks and CV have their own place", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page.evaluate(() => document.fonts.ready);
+  const brand = await page.locator(".atelier-brand").boundingBox();
+  const breadcrumb = await page.locator(".breadcrumbs").boundingBox();
+  expect(
+    Math.abs(
+      brand!.y + brand!.height / 2 - breadcrumb!.y - breadcrumb!.height / 2,
+    ),
+  ).toBeLessThanOrEqual(1);
+  await expect(page.locator(".workspace-header a[href$='.pdf']")).toHaveCount(
+    0,
+  );
+  for (const name of ["GitHub", "LinkedIn"]) {
+    await expect(
+      page.locator(".sidebar-bottom").getByRole("link", { name, exact: true }),
+    ).toBeVisible();
+  }
+  await page.setViewportSize({ width: 320, height: 900 });
+  for (const name of ["GitHub", "LinkedIn"]) {
+    await expect(
+      page
+        .locator(".workspace-header")
+        .getByRole("link", { name, exact: true }),
+    ).toBeVisible();
+  }
+  await page.goto("/parcours");
+  await expect(page.locator("main a[href$='.pdf']")).toBeVisible();
+});
+
+test("search focus follows its container and list screenshots fill their card", async ({
+  page,
+}) => {
+  for (const width of [320, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/?vue=liste");
+    await page.getByRole("searchbox").focus();
+    const focus = await page.locator(".project-search").evaluate((el) => ({
+      outline: getComputedStyle(el.querySelector("input")!).outlineStyle,
+      border: getComputedStyle(el).borderColor,
+      shadow: getComputedStyle(el).boxShadow,
+    }));
+    expect(focus.outline).toBe("none");
+    expect(focus.border).toBe("rgb(36, 91, 70)");
+    expect(focus.shadow).not.toBe("none");
+    for (const card of await page.locator(".project-card").all()) {
+      const image = card.locator("img");
+      if (!(await image.count())) continue;
+      const box = await card.boundingBox();
+      const shot = await image.boundingBox();
+      expect(Math.abs(box!.height - 2 - shot!.height)).toBeLessThanOrEqual(1);
+      expect(await image.evaluate((el) => getComputedStyle(el).filter)).toBe(
+        "none",
+      );
+    }
+    await page.screenshot({
+      path: test.info().outputPath(`list-${width}.png`),
+      animations: "disabled",
+    });
+  }
 });

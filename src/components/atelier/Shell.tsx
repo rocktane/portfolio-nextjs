@@ -8,6 +8,7 @@ import { resetCollectionQuery } from "@/lib/collection-navigation";
 import Brand from "./Brand";
 import GuestIdentity from "./GuestIdentity";
 import Icon, { type IconName } from "./Icon";
+import SocialLinks from "./SocialLinks";
 import { MarseilleWeather, WeatherProvider } from "./Weather";
 const navigation: {
   href: string;
@@ -66,16 +67,7 @@ export default function Shell({ children }: { children: ReactNode }) {
             ))}
           </nav>
           <div className="sidebar-bottom">
-            <a
-              className="sidebar-github"
-              href="https://github.com/rocktane"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Icon name="code" />
-              GitHub
-              <Icon name="arrow" />
-            </a>
+            <SocialLinks />
             <Link className="outline-button sidebar-contact" href="/contact">
               Parlons-en
               <Icon name="arrow" />
@@ -111,15 +103,7 @@ export default function Shell({ children }: { children: ReactNode }) {
               <MarseilleWeather />
             </div>
             <div className="header-actions">
-              <a
-                className="header-cv"
-                href="/CV-20260409.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Icon name="file" />
-                <span>CV</span>
-              </a>
+              <SocialLinks compact />
               <Link
                 href="/contact"
                 className={`outline-button header-contact${pathname === "/contact" ? " header-contact-hidden" : ""}`}

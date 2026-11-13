@@ -76,8 +76,8 @@ button {
 a:focus-visible,
 button:focus-visible,
 input:focus-visible {
-  outline: 3px solid #ac6028;
-  outline-offset: 4px;
+  outline: 2px solid var(--forest);
+  outline-offset: 3px;
 }
 ::selection {
   background: #c4dfca;
@@ -123,7 +123,7 @@ input:focus-visible {
   flex-direction: column;
   height: 100dvh;
   min-height: 540px;
-  padding: 27px 18px 22px;
+  padding: 0 18px 22px;
   border-right: 1px solid #d1dfd4;
   background: var(--surface);
 }
@@ -131,12 +131,36 @@ input:focus-visible {
   display: flex;
   align-items: center;
   gap: 10px;
-  min-height: 44px;
+  height: var(--header-height);
+  min-height: var(--header-height);
+  flex-shrink: 0;
   color: var(--forest);
 }
-.atelier-brand > svg {
+.brand-monogram {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
   width: 34px;
   height: 34px;
+  padding-top: 3px;
+  border-radius: 10px;
+  background: var(--forest);
+  color: var(--paper);
+  font:
+    400 33px/1 "Newsreader",
+    Georgia,
+    serif;
+}
+.brand-monogram::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
 }
 .brand-word {
   display: flex;
@@ -159,9 +183,11 @@ input:focus-visible {
   display: flex;
   align-items: center;
   gap: 11px;
-  border-top: 1px solid #cbdacf;
-  padding: 24px 8px 0;
-  margin: 24px 0 27px;
+  height: 44px;
+  min-height: 44px;
+  flex-shrink: 0;
+  padding: 0 8px;
+  margin: 20px 0 24px;
   min-width: 0;
 }
 .guest-avatar {
@@ -179,6 +205,8 @@ input:focus-visible {
   letter-spacing: -0.6px;
 }
 .guest-text {
+  display: grid;
+  grid-template-rows: 22px 16px;
   min-width: 0;
   flex: 1;
 }
@@ -187,7 +215,9 @@ input:focus-visible {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  min-height: 28px;
+  height: 22px;
+  min-height: 22px;
+  line-height: 20px;
   width: 100%;
   padding: 0;
   border: 0;
@@ -213,16 +243,22 @@ input:focus-visible {
   display: block;
   font-size: 12px;
   color: var(--secondary);
-  margin-top: 1px;
+  height: 16px;
+  line-height: 16px;
 }
 .guest-text form {
+  display: flex;
+  height: 22px;
+  min-width: 0;
   margin: 0;
 }
 .guest-text input {
   width: 100%;
   min-width: 0;
-  min-height: 30px;
-  padding: 2px 6px;
+  height: 22px;
+  min-height: 22px;
+  padding: 0 5px;
+  line-height: 20px;
   border: 1px solid #a1b7a5;
   border-radius: 4px;
   background: var(--paper);
@@ -274,54 +310,86 @@ input:focus-visible {
   margin-top: auto;
   padding-top: 35px;
 }
-.sidebar-github {
+.social-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.social-links > a {
   display: flex;
   align-items: center;
-  gap: 12px;
-  min-height: 44px;
-  padding: 8px 12px;
-  color: #3b5b48;
-  font-size: 13px;
+  justify-content: center;
+  gap: 7px;
+  min-height: 39px;
+  border: 1px solid #bed0c2;
+  border-radius: 7px;
+  background: #edf3ee;
+  font-size: 12px;
+  font-weight: 600;
 }
-.sidebar-github > svg:last-child {
-  margin-left: auto;
-  width: 16px;
-  height: 16px;
+.social-links > a:hover {
+  border-color: #8cae96;
+  background: #f5f8f4;
+}
+.social-links svg {
+  width: 15px;
+  height: 15px;
+}
+.social-links-compact {
+  display: none;
 }
 .sidebar-contact {
   justify-content: center;
 }
 .sidebar-weather {
-  margin-top: 2px;
+  margin-top: 3px;
 }
 .marseille-weather {
-  display: flex;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  color: var(--secondary);
-  min-height: 40px;
-  white-space: nowrap;
-  font-size: 12px;
-  border-radius: 6px;
-}
-.marseille-weather:hover {
-  background: #dbe8de;
-}
-.marseille-weather svg {
-  width: 20px;
-  height: 24px;
-  overflow: visible;
+  gap: 0 9px;
+  padding: 15px 3px 0;
+  border-top: 1px solid #c3d5c8;
   color: var(--forest);
 }
-.marseille-weather strong {
-  font-weight: 700;
+.marseille-weather:hover {
   color: var(--ink);
-  font-variant-numeric: tabular-nums;
 }
-.weather-unavailable {
+.weather-symbol {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 36px;
+}
+.weather-symbol svg {
+  width: 28px;
+  height: 28px;
+  overflow: visible;
+}
+.weather-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.weather-city {
+  font-size: 12px;
+  line-height: 19px;
+  font-weight: 700;
+}
+.weather-condition {
+  color: var(--secondary);
   font-size: 11px;
-  color: #52695d;
+  line-height: 16px;
+}
+.marseille-weather strong {
+  align-self: center;
+  color: var(--ink);
+  font:
+    500 27px/1.15 "Space Grotesk",
+    sans-serif;
+  letter-spacing: -1.5px;
+  font-variant-numeric: tabular-nums;
 }
 .workspace-shell {
   display: flex;
@@ -366,18 +434,6 @@ input:focus-visible {
   align-items: center;
   gap: 20px;
   flex-shrink: 0;
-}
-.header-cv {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  font-size: 12px;
-  font-weight: 600;
-}
-.header-cv svg {
-  width: 17px;
-  height: 17px;
 }
 .header-contact {
   font-size: 12px !important;
@@ -557,7 +613,14 @@ input:focus-visible {
   background: transparent;
   color: var(--ink);
   font-size: 13px;
-  outline-offset: 6px;
+  outline: none;
+}
+.project-search:focus-within {
+  border-color: var(--forest);
+  box-shadow: 0 0 0 2px #245b4640;
+}
+.project-search input:focus-visible {
+  outline: none;
 }
 .project-search input::placeholder {
   color: var(--secondary);
@@ -728,16 +791,27 @@ input:focus-visible {
 }
 .project-list .project-card {
   display: grid;
-  grid-template-columns: 190px minmax(0, 1fr);
+  grid-template-columns: 206px minmax(0, 1fr);
+  min-height: 136px;
 }
 .project-list .project-shot {
-  display: flex;
-  align-items: center;
   border-right: 1px solid #e3ebe4;
   border-radius: 0;
 }
+.project-list .project-capture {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  aspect-ratio: auto;
+  object-fit: cover;
+  object-position: left top;
+}
 .project-list .project-card-info {
   border-top: 0;
+  padding-block: 12px;
+}
+.project-list .project-card-bottom {
+  margin-top: 8px;
 }
 .project-list .project-no-capture {
   width: 100%;
@@ -1071,10 +1145,14 @@ input:focus-visible {
   }
   .atelier-brand {
     gap: 8px;
+    height: 44px;
+    min-height: 44px;
   }
-  .atelier-brand > svg {
+  .brand-monogram {
     width: 29px;
     height: 29px;
+    font-size: 28px;
+    border-radius: 9px;
   }
   .brand-word {
     font-size: 17px;
@@ -1093,11 +1171,16 @@ input:focus-visible {
     border-radius: 10px;
   }
   .guest-text {
+    display: block;
     width: 88px;
+  }
+  .guest-text form {
+    height: 36px;
   }
   .guest-name {
     font-size: 12px;
     gap: 5px;
+    height: 36px;
     min-height: 36px;
   }
   .guest-name svg {
@@ -1109,6 +1192,7 @@ input:focus-visible {
   }
   .guest-text input {
     font-size: 12px;
+    height: 36px;
     min-height: 36px;
   }
   .sidebar-nav {
@@ -1143,17 +1227,58 @@ input:focus-visible {
     display: block;
   }
   .header-weather .marseille-weather {
-    justify-content: flex-start;
-    font-size: 12px;
+    display: flex;
+    gap: 7px;
+    padding: 4px 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+  }
+  .header-weather .weather-condition {
+    display: none;
+  }
+  .header-weather [data-weather-state="unavailable"] .weather-condition,
+  .header-weather [data-weather-state="loading"] .weather-condition {
+    display: block;
+  }
+  .header-weather .weather-symbol {
+    width: 22px;
+    height: 30px;
+  }
+  .header-weather .weather-symbol svg {
+    width: 21px;
+    height: 21px;
+  }
+  .header-weather .weather-city {
+    font-size: 13px;
+  }
+  .header-weather strong {
+    align-self: center;
+    padding-top: 0;
+    font-size: 20px;
+    letter-spacing: -0.7px;
+  }
+  .social-links-compact {
+    display: flex;
+    gap: 6px;
+  }
+  .social-links-compact a {
+    width: 36px;
+    min-height: 36px;
+    background: transparent;
+  }
+  .social-links-compact span {
+    display: none;
+  }
+  .social-links-compact svg {
+    width: 17px;
+    height: 17px;
   }
   .header-actions {
     gap: 10px;
   }
   .header-contact {
     display: none;
-  }
-  .header-cv {
-    min-height: 44px;
   }
   .workspace-main {
     padding: 25px 24px 30px;
@@ -1196,9 +1321,10 @@ input:focus-visible {
   .brand-word {
     font-size: 16px;
   }
-  .atelier-brand > svg {
+  .brand-monogram {
     width: 27px;
     height: 27px;
+    font-size: 27px;
   }
   .atelier-brand {
     gap: 7px;
@@ -1313,12 +1439,11 @@ input:focus-visible {
 @media (max-height: 600px) and (min-width: 761px) {
   .atelier-sidebar {
     min-height: 0;
-    padding-block: 15px;
+    padding-bottom: 15px;
     overflow-y: auto;
   }
   .guest-identity {
     margin: 12px 0 17px;
-    padding-top: 15px;
   }
   .sidebar-nav {
     gap: 2px;

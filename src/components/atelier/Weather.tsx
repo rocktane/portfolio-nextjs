@@ -147,26 +147,32 @@ export function MarseilleWeather() {
   return (
     <a
       className="marseille-weather"
+      data-weather-state={
+        weather ? "current" : loading ? "loading" : "unavailable"
+      }
       href="https://open-meteo.com/"
       target="_blank"
       rel="noopener noreferrer"
       title={label}
       aria-label={label}
     >
-      <WeatherIcon
-        symbol={condition?.symbol ?? "cloud"}
-        isDay={weather?.isDay}
-      />
-      <span>Marseille</span>
+      <span className="weather-symbol">
+        <WeatherIcon
+          symbol={condition?.symbol ?? "cloud"}
+          isDay={weather?.isDay}
+        />
+      </span>
+      <span className="weather-copy">
+        <span className="weather-city">Marseille</span>
+        <span className="weather-condition">
+          {condition?.label ?? (loading ? "Chargement…" : "Météo indisponible")}
+        </span>
+      </span>
       {weather ? (
         <strong>
           {Math.round(weather.temperature)}°<span className="sr-only">C</span>
         </strong>
-      ) : (
-        <span className="weather-unavailable">
-          {loading ? "…" : "indisponible"}
-        </span>
-      )}
+      ) : null}
     </a>
   );
 }

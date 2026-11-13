@@ -31,3 +31,19 @@ Claude Opus 5.5 medium confirme S2 corrigé et aucun constat matériel restant. 
 Derniers ajustements de livraison : Analytics injecté uniquement pour les builds Vercel (le domaine de prévisualisation Caddy n’a pas de collecteur Vercel), et configuration de tests acceptant `PLAYWRIGHT_BASE_URL` pour contrôler le déploiement. Lint, typecheck, six tests unitaires, reconstruction de l’export et onze tests navigateur relancés avec succès.
 
 Prévisualisation publiée sur https://maquettes-portfolio.23o.dev : release complète de 6,1 Mo, bascule Caddy après validation et sauvegarde, aucun changement des autres sites. Onze tests passent également sur ce domaine HTTPS ; égalité SHA-256 de l’index avec l’export. Vérification navigateur séparée sans interception : météo réelle Marseille chargée, icône correspondant aux conditions et aucune erreur JavaScript. L’état Git initial et son archivage sont décrits dans REPOSITORY-CLEANUP.md. La branche principale du portfolio reste distincte de cette livraison de fonctionnalité.
+
+## Finitions de l’interface — APPROVE
+
+Périmètre fixe : diff depuis `428e818700e1d1f311e45807f79e5836a895ccaa`, auteur GPT-6.1 Sol, reviewer indépendant Claude Opus 5.5 medium, une passe. Le test de régression a reproduit un déplacement de 2 px de la navigation lors de l’édition du nom avant la correction.
+
+Verdict APPROVE, aucun constat bloquant ou matériel. Le reviewer a inspecté le diff, les captures et exécuté ses propres probes à 320, 390, 761 et 900 px, notamment avec une température négative et un orage. Il n’a pas relancé notre suite. Son appréciation visuelle était 8,5/10 avant les ajustements de retenue ci-dessous ; aucune note supérieure n’est revendiquée.
+
+| Constat                                                 | Niveau | Décision et résolution                                                                                |
+| ------------------------------------------------------- | ------ | ----------------------------------------------------------------------------------------------------- |
+| N1 : focus vert global au-delà du champ de recherche    | Nit    | Conservé pour une cohérence visuelle et un focus clavier visible sur tous les contrôles.              |
+| N2 : halo de recherche trop faible                      | Nit    | Opacité portée de `#245b461c` à `#245b4640`, bordure verte conservée.                                 |
+| N3 : remplacement visible de Georgia au chargement du Y | Nit    | `font-display: block` sur le sous-ensemble Newsreader de 1,6 Ko.                                      |
+| N4 : carte météo lourde et dessin du port trop faible   | Nit    | Dessin et carte retirés ; relevé compact avec une séparation, icône, ville, condition et température. |
+| N5 : hauteur interne météo différente selon son état    | Nit    | Accepté : le header reste de hauteur constante et les états d’indisponibilité sont visibles.          |
+
+Ces corrections mineures sont vérifiées localement, sans nouvelle délégation. Le retour à la ligne de « Le labo » à 320 px préexistait et reste hors du périmètre de cette passe.
