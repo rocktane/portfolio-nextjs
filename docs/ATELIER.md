@@ -47,3 +47,7 @@ L’accueil n’est pas redessiné tant que Yohan n’a pas choisi entre une sé
 ## Essai de sidebar flottante
 
 Essai isolé dans `src/app/floating-sidebar.css`, importé après les styles communs : retrait de 8 px, angles de 14 px, aucun ajout d’ombre. La sidebar garde sa hauteur visible et son comportement sticky ; sur mobile, la barre de navigation adopte le même retrait. Palette, polices et contenu conservés. Retour visuel immédiat à la version précédente : retirer l’import de `floating-sidebar.css` dans `layout.tsx`. Le commit dédié peut aussi être reverté. Version de référence avant essai : `eca9f6c`.
+
+## Fiches projet sans scroll sur ordinateur
+
+À partir de 1100 px de large et 680 px de haut, la fiche utilise la hauteur disponible du workspace. Retour, titre et action restent au-dessus de deux colonnes ; les informations sont compactées en quatre champs sur deux colonnes. L’image garde son ratio, sa bordure suit ses dimensions, sans rognage ni défilement interne. Les descriptions complètes restent visibles. En-dessous de ces dimensions, le flux naturel conserve la lisibilité et tous les contenus. Cette correction est indépendante de l’essai de sidebar.

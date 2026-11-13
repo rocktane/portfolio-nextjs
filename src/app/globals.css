@@ -1838,3 +1838,94 @@ body:has(.command-dialog[open]) {
     flex-basis: 11px;
   }
 }
+
+/* A project sheet fits the desktop workspace; images keep their intrinsic ratio. */
+@media (min-width: 1100px) and (min-height: 680px) {
+  .workspace-shell:has(.project-page) {
+    height: calc(100dvh - var(--workspace-top-inset, 0px));
+    min-height: 0;
+  }
+  .workspace-main:has(.project-page) {
+    display: flex;
+    min-height: 0;
+    padding: 20px;
+  }
+  .project-page {
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    gap: 12px;
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+    flex: 1;
+  }
+  .project-page .detail-back {
+    min-height: 30px;
+    margin: 0;
+    justify-self: start;
+  }
+  .project-page .detail-heading {
+    margin: 0;
+    gap: 20px;
+  }
+  .project-page .detail-heading h1 {
+    font-size: 32px;
+  }
+  .project-page .detail-heading p {
+    margin-top: 5px;
+    font-size: 13px;
+  }
+  .project-detail {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 24px;
+    min-height: 0;
+  }
+  .project-detail figure {
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+  }
+  .project-detail .project-capture {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    border: 1px solid #d3dfd6;
+    border-radius: 9px;
+  }
+  .project-detail .project-no-capture {
+    min-height: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 9px;
+  }
+  .detail-metadata > p {
+    margin-top: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .detail-metadata dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 18px;
+    margin-top: 14px;
+    padding-top: 14px;
+  }
+  .detail-metadata dl > div + div {
+    margin-top: 0;
+  }
+  .detail-metadata dt {
+    font-size: 11px;
+  }
+  .detail-metadata dd {
+    margin-top: 4px;
+    font-size: 12px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+}

@@ -416,7 +416,7 @@ test("project details preserve every image ratio and the archive visual fits", a
         height: el.clientHeight,
       }));
       expect(Math.abs(g.ratio - g.actual)).toBeLessThan(0.015);
-      expect(Math.abs(g.frame - g.height)).toBeLessThanOrEqual(1);
+      expect(g.height).toBeLessThanOrEqual(g.frame + 1);
       expect(
         await page.evaluate(
           () => document.documentElement.scrollWidth <= innerWidth,
@@ -617,4 +617,67 @@ test("floating sidebar keeps a tight inset and follows desktop scroll", async ({
   await page.evaluate(() => scrollTo(0, 400));
   const sticky = await page.locator(".atelier-sidebar").boundingBox();
   expect(sticky!.y).toBe(8);
+});
+
+test("all desktop project sheets fit without page or nested scrolling", async ({
+  page,
+}) => {
+  const ids = [
+    "safee",
+    "brower",
+    "exo",
+    "amp",
+    "cashou",
+    "tvcal",
+    "travel-resolver",
+    "snake",
+    "tamanotchi",
+    "betterbattery",
+    "kubequest",
+    "removebg",
+    "exif-dates",
+    "geeft",
+  ];
+  for (const [width, height] of [
+    [1100, 680],
+    [1280, 680],
+    [1100, 720],
+    [1280, 720],
+    [1366, 768],
+    [1440, 900],
+    [1920, 1080],
+  ]) {
+    await page.setViewportSize({ width, height });
+    for (const id of ids) {
+      await page.goto(`/projets/${id}`);
+      await page.evaluate(() => document.fonts.ready);
+      const geometry = await page.evaluate(() => ({
+        doc: document.documentElement.scrollHeight,
+        viewport: innerHeight,
+        horizontal: document.documentElement.scrollWidth <= innerWidth,
+        bounds: [
+          ...document.querySelectorAll(
+            ".detail-metadata, .project-detail figure, .detail-heading, footer",
+          ),
+        ].map((el) => el.getBoundingClientRect().bottom),
+        overflow: [
+          ...document.querySelectorAll(
+            ".project-page, .project-detail, .detail-metadata",
+          ),
+        ].map((el) => ({ scroll: el.scrollHeight, client: el.clientHeight })),
+      }));
+      expect(geometry.doc, `${id} at ${width}x${height}`).toBeLessThanOrEqual(
+        height + 1,
+      );
+      expect(geometry.horizontal).toBe(true);
+      for (const bottom of geometry.bounds)
+        expect(bottom).toBeLessThanOrEqual(height + 1);
+      for (const box of geometry.overflow)
+        expect(box.scroll).toBeLessThanOrEqual(box.client + 1);
+      if (width === 1440 && ["safee", "exif-dates", "geeft"].includes(id))
+        await page.screenshot({
+          path: test.info().outputPath(`sheet-${id}.png`),
+        });
+    }
+  }
 });

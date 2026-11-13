@@ -35,7 +35,7 @@ export default async function ProjectPage({ params }: Props) {
     p = projects.find((p) => p.id === id);
   if (!p) notFound();
   return (
-    <>
+    <section className="project-page" aria-label={`Projet ${p.title}`}>
       <Link className="detail-back" href={collectionPaths[p.section]}>
         <Icon name="back" />
         {collectionNames[p.section]}
@@ -90,6 +90,6 @@ export default async function ProjectPage({ params }: Props) {
           </dl>
         </aside>
       </div>
-    </>
+    </section>
   );
 }

@@ -67,3 +67,11 @@ Page `/a-essayer` avec sept outils, destinations explicites, contraintes de plat
 Le test d’un nom long a également reproduit un débordement du crayon : colonne `minmax(0, 1fr)` et libellé flex rétractable, crayon réservé dans la largeur. Un seul bouton Se connecter reste dans le header. Footer sans filet, à droite et sous 48 px sur les quatre tailles vérifiées. L’accueil attend le choix entre les propositions de densification.
 
 Lint, TypeScript, build et six tests unitaires passent. Vingt tests navigateur passent en local (24,8 s), puis sur le domaine HTTPS (34,3 s). Les captures desktop, menu ouvert et mobile ont été inspectées. Égalité SHA-256 de l’index publié avec l’export, route À essayer en HTTP 200. Aucune nouvelle dépendance ni nouveau stockage local. Pas de nouvelle revue council.
+
+## Sidebar flottante et fiches sans scroll
+
+Essai de sidebar isolé dans le commit `0742aa8`, version de référence `eca9f6c`. Retrait de 8 px, rayon de 14 px, pas d’ombre. Le retrait est aussi vérifié après défilement du catalogue et sur mobile. Retour à la sidebar précédente sans annuler les fiches : retirer l’import de `floating-sidebar.css` dans `layout.tsx`, puis reconstruire et republier. La variable d’inset des fiches a une valeur de repli de 0 px.
+
+Les fiches desktop utilisent la hauteur du workspace à partir de 1100 × 680. Informations compactées en deux colonnes, descriptions complètes conservées et images entières au ratio natif ; aucun masquage du contenu ni défilement interne. Les quatorze fiches sont testées à 1100 × 680, 1280 × 680, 1100 × 720, 1280 × 720, 1366 × 768, 1440 × 900 et 1920 × 1080 (98 configurations). En dessous du seuil, le flux naturel est préservé. Captures Safee, EXIF Dates et Geeft inspectées.
+
+Lint, TypeScript, build et six tests unitaires passent. Les 22 tests navigateur passent en local (33,5 s) et en HTTPS (56,3 s). L’index publié correspond au hash de l’export. Ancienne release conservée. Pas de nouvelle revue council.
