@@ -272,6 +272,7 @@ export const projects: Project[] = [
   {
     id: "geeft",
     title: "Geeft",
+    shot: "/projects/geeft.webp",
     tagline: "Trouver le cadeau parfait",
     summary:
       "Une plateforme de recommandation de cadeaux, premier projet de fin de bootcamp. Arrêtée depuis.",
@@ -297,13 +298,15 @@ export const HERO_ORDER = [
   "amp",
 ] as const;
 
-export const heroProjects: Project[] = HERO_ORDER.map(
-  (id) => projects.find((p) => p.id === id)!,
+export const heroProjects: Project[] = HERO_ORDER.map((id) =>
+  projects.find((p) => p.id === id)!,
 );
 
 export const featuredProjects = projects.filter((p) => p.section === "projets");
 export const labProjects = projects.filter((p) => p.section === "labo");
-export const archivedProjects = projects.filter((p) => p.section === "archives");
+export const archivedProjects = projects.filter(
+  (p) => p.section === "archives",
+);
 
 /** Le parcours, du plus ancien au plus récent. */
 export const credits: CreditLine[] = [
@@ -322,7 +325,10 @@ export const credits: CreditLine[] = [
 export const technicalCredits: CreditLine[] = [
   { role: "Front", value: "React · Next.js · Vue · TypeScript · Tailwind" },
   { role: "Back", value: "NestJS · Ruby on Rails · FastAPI · tRPC · Node" },
-  { role: "Données", value: "PostgreSQL · SQLite · Prisma · Convex · Redis · SQL" },
+  {
+    role: "Données",
+    value: "PostgreSQL · SQLite · Prisma · Convex · Redis · SQL",
+  },
   { role: "Mobile & natif", value: "React Native · Expo · SwiftUI · Kotlin" },
   { role: "IA & ML", value: "Python · spaCy · PyTorch · NLP · LLM" },
   { role: "Automatisation", value: "n8n · MCP · GitHub Actions" },

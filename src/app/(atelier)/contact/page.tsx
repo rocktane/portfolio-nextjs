@@ -15,10 +15,7 @@ export default function ContactPage() {
         <h1>Contact</h1>
       </div>
       <section className="contact-page" aria-labelledby="contact-title">
-        <span className="contact-mark" aria-hidden="true">
-          ↗
-        </span>
-        <h2 id="contact-title">Faisons équipe.</h2>
+        <h2 id="contact-title">Un projet ? Une mission ?</h2>
         <a className="contact-email" href="mailto:dev@yohangouiran.com">
           dev@yohangouiran.com
         </a>

@@ -49,3 +49,9 @@ Verdict APPROVE, aucun constat bloquant ou matériel. Le reviewer a inspecté le
 Ces corrections mineures sont vérifiées localement, sans nouvelle délégation. Le retour à la ligne de « Le labo » à 320 px préexistait et reste hors du périmètre de cette passe.
 
 Validation finale des finitions : lint, TypeScript et six tests unitaires passent ; quatorze tests navigateur passent sur le site public HTTPS, exécutés sur abox avec son Chromium existant (1,3 minute, aucune installation). Les dernières répétitions sur le Mac ont été interrompues après des ralentissements et délais d’attente ; la suite complète distante couvre le même export et toutes les régressions. Le répertoire temporaire de tests distant a été supprimé. L’index servi a le même SHA-256 que `out/index.html`. Pages, assets et vraie 404 vérifiés ; météo réelle sans interception observée à Marseille : 9 °C, ciel dégagé. Release `/var/www/maquettes-portfolio-releases/atelier-zVXd97s2`, avec Caddy actif et configuration lisible par son utilisateur.
+
+## Corrections suivantes et propositions d’accueil
+
+Se connecter vers Contact restauré sur ordinateur et mobile ; Y retiré de la sidebar et conservé en favicon, réseaux retirés du footer, intitulé de Contact remplacé et pastille fléchée supprimée. Les cartes affichent toutes les technologies déjà présentes dans les données. Le visuel Geeft est raccordé et les fiches suivent le ratio natif des images, sans limite de hauteur arbitraire.
+
+Validation : build, lint, TypeScript et six tests unitaires passent. Seize tests navigateur passent contre le site HTTPS (Chromium sur abox, 1,6 minute), dont le contrôle des proportions et de l’absence de débordement sur douze fiches à 320, 768 et 1440 px. Quatre maquettes d’accueil indépendantes sont proposées dans le fil, sans intégration à l’application avant choix de Yohan. Aucun nouvel avis council sollicité pour cette passe.

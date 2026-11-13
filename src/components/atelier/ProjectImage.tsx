@@ -13,9 +13,13 @@ export default function ProjectImage({
       <Image
         className="project-capture"
         src={project.shot}
-        alt={`Capture d’écran de ${project.title}`}
-        width={1440}
-        height={900}
+        alt={
+          project.id === "geeft"
+            ? "Visuel de Geeft"
+            : `Capture d’écran de ${project.title}`
+        }
+        width={project.id === "geeft" ? 2000 : 1440}
+        height={project.id === "geeft" ? 1400 : 900}
         sizes="(max-width: 600px) 100vw, (max-width: 1499px) 45vw, 30vw"
         priority={priority}
       />

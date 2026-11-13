@@ -1,6 +1,6 @@
 # Atelier : intégration Next.js
 
-Identité : **yohan/atelier**, monogramme Y simple, fond menthe et point abricot. Alternatives proposées : **~/yohan**, **Le bureau de Yohan**. Le monogramme utilise un Y Newsreader, accompagné d’un point abricot, sans image générée.
+Identité : **yohan/atelier**, nom textuel dans la sidebar, monogramme Y réservé au favicon. Alternatives proposées : **~/yohan**, **Le bureau de Yohan**. Le monogramme utilise un Y Newsreader, accompagné d’un point abricot, sans image générée.
 
 Palette : papier `#f5f7f4`, menthe `#e5eee7`, texte `#193e32`, secondaire `#52695d`, action `#245b46`, accent `#e6ab69`. Manrope pour l’interface, Space Grotesk pour les titres et la température, Newsreader uniquement pour le Y ; fontes locales issues de la maquette validée. Pas de filtre ni de recoloration des captures.
 
@@ -27,3 +27,9 @@ Direction : conserver papier `#f5f7f4`, menthe `#e5eee7`, encre `#193e32`, secon
 Disposition : `marque | fil d’Ariane … contact`, puis `invité / navigation | contenu`, puis `réseaux / météo | pied de page`. Sur mobile, réseaux et météo occupent la barre compacte. Les captures remplissent leur cadre en vue liste ; les vues grille et détail conservent l’image entière.
 
 Révision du plan : la météo devient un relevé local sans carte ni décor : icône, ville, condition et température. Les boutons de réseaux restent sobres. Le focus vert suit les contours du champ de recherche au lieu de dessiner un rectangle autour du texte. Aucun mouvement décoratif.
+
+## Cartes, fiches et propositions d’accueil
+
+Le monogramme est réservé au favicon ; la sidebar conserve le nom textuel. Se connecter renvoie vers Contact, y compris sur mobile. Les réseaux ne sont plus répétés au footer. Contact affiche « Un projet ? Une mission ? », sans la pastille fléchée. Les cartes présentent toutes les technologies renseignées, sans en inventer de nouvelles. Les fiches adaptent leur cadre au ratio natif de chaque image ; le visuel Geeft présent dans les assets est raccordé.
+
+Quatre propositions d’accueil interactives, séparées de l’application, sont dans `design-explorations/accueil-propositions.html` : Vue d’ensemble, À la une, Votre visite et En ce moment. Elles utilisent papier #f5f7f4, menthe #e5eee7, encre #193e32, secondaire #52695d, forêt #245b46 et abricot #e6ab69 ; Manrope, alignement à gauche et contenus réels. La variation porte sur le point d’entrée, sans faux compteurs ni activité inventée. Aucune route d’accueil supplémentaire n’est intégrée avant le choix de Yohan.

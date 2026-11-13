@@ -69,7 +69,7 @@ export default function Shell({ children }: { children: ReactNode }) {
           <div className="sidebar-bottom">
             <SocialLinks />
             <Link className="outline-button sidebar-contact" href="/contact">
-              Parlons-en
+              Se connecter
               <Icon name="arrow" />
             </Link>
             <div className="sidebar-weather">
@@ -110,7 +110,7 @@ export default function Shell({ children }: { children: ReactNode }) {
                 tabIndex={pathname === "/contact" ? -1 : undefined}
                 aria-hidden={pathname === "/contact" ? true : undefined}
               >
-                Contacter Yohan
+                Se connecter
                 <Icon name="arrow" />
               </Link>
             </div>
@@ -120,24 +120,6 @@ export default function Shell({ children }: { children: ReactNode }) {
           </main>
           <footer className="workspace-footer">
             <span>© 2026 Yohan Gouiran</span>
-            <nav aria-label="Liens du pied de page">
-              <a
-                href="https://github.com/rocktane"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                GitHub
-                <Icon name="arrow" />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/yohan-g"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                LinkedIn
-                <Icon name="arrow" />
-              </a>
-            </nav>
           </footer>
         </div>
       </div>

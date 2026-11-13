@@ -149,9 +149,14 @@ function CatalogView({
               </div>
               <p>{p.tagline}</p>
               <div className="project-card-bottom">
-                <span>
-                  {projectPlatform(p)} / {p.stack[0]}
-                </span>
+                <ul
+                  className="project-technologies"
+                  aria-label={`Technologies de ${p.title}`}
+                >
+                  {p.stack.map((technology) => (
+                    <li key={technology}>{technology}</li>
+                  ))}
+                </ul>
                 {p.href && p.status !== "sunset" && (
                   <a href={p.href} target="_blank" rel="noopener noreferrer">
                     {p.hrefKind === "code" ? "Code" : "Ouvrir"}

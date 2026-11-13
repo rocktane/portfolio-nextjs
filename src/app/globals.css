@@ -136,32 +136,6 @@ input:focus-visible {
   flex-shrink: 0;
   color: var(--forest);
 }
-.brand-monogram {
-  position: relative;
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  width: 34px;
-  height: 34px;
-  padding-top: 3px;
-  border-radius: 10px;
-  background: var(--forest);
-  color: var(--paper);
-  font:
-    400 33px/1 "Newsreader",
-    Georgia,
-    serif;
-}
-.brand-monogram::after {
-  content: "";
-  position: absolute;
-  right: 3px;
-  bottom: 3px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--accent);
-}
 .brand-word {
   display: flex;
   align-items: baseline;
@@ -652,7 +626,7 @@ input:focus-visible {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 1.6;
+  aspect-ratio: auto;
   object-fit: contain;
 }
 .project-open {
@@ -879,7 +853,9 @@ input:focus-visible {
   background: #fff;
 }
 .project-detail .project-capture {
-  max-height: 570px;
+  height: auto;
+  max-height: none;
+  aspect-ratio: auto;
   object-fit: contain;
 }
 .detail-metadata > p {
@@ -979,19 +955,6 @@ input:focus-visible {
 .contact-page {
   max-width: 730px;
   padding-top: 22px;
-}
-.contact-mark {
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 15px;
-  background: #f3c08c;
-  color: #573c20;
-  font:
-    32px/1 "Space Grotesk",
-    sans-serif;
-  margin-bottom: 23px;
 }
 .contact-page h2 {
   font:
@@ -1147,12 +1110,6 @@ input:focus-visible {
     gap: 8px;
     height: 44px;
     min-height: 44px;
-  }
-  .brand-monogram {
-    width: 29px;
-    height: 29px;
-    font-size: 28px;
-    border-radius: 9px;
   }
   .brand-word {
     font-size: 17px;
@@ -1321,11 +1278,6 @@ input:focus-visible {
   .brand-word {
     font-size: 16px;
   }
-  .brand-monogram {
-    width: 27px;
-    height: 27px;
-    font-size: 27px;
-  }
   .atelier-brand {
     gap: 7px;
   }
@@ -1464,5 +1416,85 @@ input:focus-visible {
     scroll-behavior: auto !important;
     transition: none !important;
     animation: none !important;
+  }
+}
+
+.project-technologies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.project-technologies li {
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--secondary);
+  font-size: 10px;
+  line-height: 1.4;
+}
+.project-card-bottom {
+  align-items: flex-end;
+}
+.project-list .project-no-capture {
+  position: absolute;
+  inset: 0;
+  aspect-ratio: auto;
+  min-height: 0;
+  padding: 10px;
+  gap: 8px;
+}
+.project-no-capture > span {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  line-height: 1.2;
+}
+.project-no-capture > small {
+  max-width: 100%;
+  text-align: center;
+}
+.project-detail .project-no-capture {
+  aspect-ratio: auto;
+  min-height: 240px;
+  padding: 24px;
+}
+@media (max-width: 540px) {
+  .project-list .project-card-bottom {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .project-list .project-no-capture > svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+@media (max-width: 760px) {
+  .header-actions {
+    flex-direction: column;
+    gap: 0;
+    align-items: flex-end;
+  }
+  .header-actions .social-links-compact a {
+    width: 28px;
+    min-height: 26px;
+  }
+  .header-contact {
+    display: inline-flex;
+    min-height: 24px !important;
+    padding: 0;
+    border: 0;
+    font-size: 11px !important;
+    gap: 5px;
+  }
+  .header-contact svg {
+    width: 12px;
+    height: 12px;
+  }
+  .workspace-header {
+    gap: 12px;
   }
 }

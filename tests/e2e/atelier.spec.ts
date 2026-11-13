@@ -385,3 +385,60 @@ test("search focus follows its container and list screenshots fill their card", 
     });
   }
 });
+
+test("project details preserve every image ratio and the archive visual fits", async ({
+  page,
+}) => {
+  for (const width of [320, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const id of [
+      "safee",
+      "brower",
+      "exo",
+      "cashou",
+      "tvcal",
+      "snake",
+      "amp",
+      "tamanotchi",
+      "betterbattery",
+      "removebg",
+      "exif-dates",
+      "geeft",
+    ]) {
+      await page.goto(`/projets/${id}`);
+      const img = page.locator(".project-detail img");
+      await img.evaluate((el: HTMLImageElement) => el.decode());
+      const g = await img.evaluate((el: HTMLImageElement) => ({
+        ratio: el.naturalWidth / el.naturalHeight,
+        actual: el.clientWidth / el.clientHeight,
+        frame: el.parentElement!.clientHeight,
+        height: el.clientHeight,
+      }));
+      expect(Math.abs(g.ratio - g.actual)).toBeLessThan(0.015);
+      expect(Math.abs(g.frame - g.height)).toBeLessThanOrEqual(1);
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      ).toBe(true);
+    }
+  }
+  await page.goto("/archives");
+  await expect(page.getByAltText("Visuel de Geeft")).toBeVisible();
+});
+test("requested chrome and contact copy are present without duplicate footer links", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await expect(page.locator(".brand-monogram")).toHaveCount(0);
+  await expect(page.locator("footer a")).toHaveCount(0);
+  await expect(page.locator(".sidebar-contact")).toHaveText("Se connecter");
+  await expect(
+    page.locator(".project-technologies").first().locator("li"),
+  ).toHaveCount(5);
+  await page.locator(".sidebar-contact").click();
+  await expect(
+    page.getByRole("heading", { name: "Un projet ? Une mission ?" }),
+  ).toBeVisible();
+  await expect(page.locator(".contact-mark")).toHaveCount(0);
+});

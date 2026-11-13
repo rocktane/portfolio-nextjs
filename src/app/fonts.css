@@ -40,11 +40,3 @@
   font-display: swap;
   src: url("/fonts/atelier/space-grotesk-600.ttf") format("truetype");
 }
-
-@font-face {
-  font-family: "Newsreader";
-  font-style: normal;
-  font-weight: 400;
-  font-display: block;
-  src: url("/fonts/atelier/newsreader-400.ttf") format("truetype");
-}
