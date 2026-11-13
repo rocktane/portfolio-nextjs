@@ -16,8 +16,9 @@ const navigation: {
   icon: IconName;
   count?: number;
 }[] = [
+  { href: "/", label: "Accueil", icon: "home" },
   {
-    href: "/",
+    href: "/projets",
     label: "Projets",
     icon: "grid",
     count: projects.filter((p) => p.section === "projets").length,

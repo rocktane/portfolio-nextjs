@@ -1,6 +1,6 @@
 import type { Project, ProjectSection } from "@/types";
 export const collectionPaths: Record<ProjectSection, string> = {
-  projets: "/",
+  projets: "/projets",
   labo: "/labo",
   archives: "/archives",
 };

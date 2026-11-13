@@ -82,7 +82,10 @@ test("weather comes from live API data, uses the rain icon and persists across n
   );
   await expect(weather).toHaveAttribute("aria-label", /Pluie/);
   const count = urls.length;
-  await page.getByRole("link", { name: "Contact", exact: true }).click();
+  await page
+    .locator(".sidebar-nav")
+    .getByRole("link", { name: "Contact", exact: true })
+    .click();
   await expect(
     page.getByRole("heading", { name: "Contact", exact: true }),
   ).toBeVisible();
@@ -114,7 +117,7 @@ test("weather failure is honest, not a made-up temperature", async ({
 test("catalog filters, actual routes and query state survive a project round trip", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/projets");
   await page
     .getByRole("searchbox", { name: "Rechercher un projet" })
     .fill("Brower");
@@ -158,6 +161,7 @@ test("header size is invariant; footer stays at the bottom or after content at e
     let headerHeight: number | undefined;
     for (const path of [
       "/",
+      "/projets",
       "/contact",
       "/parcours",
       "/labo",
@@ -230,18 +234,14 @@ test("same-collection links clear both the URL and filtered results", async ({
   page,
 }) => {
   for (const entry of ["typed", "deep-link"]) {
-    for (const selector of [
-      '.sidebar-nav a[href="/"]',
-      ".atelier-brand",
-      '.breadcrumbs a[href="/"]',
-    ]) {
-      await page.goto(entry === "deep-link" ? "/?q=Brower" : "/");
+    for (const selector of ['.sidebar-nav a[href="/projets"]']) {
+      await page.goto(entry === "deep-link" ? "/projets?q=Brower" : "/projets");
       if (entry === "typed") await page.getByRole("searchbox").fill("Brower");
       await expect(page.locator(".project-card")).toHaveCount(1);
       await page.locator(selector).click();
       await expect(page.getByRole("searchbox")).toHaveValue("");
       await expect(page.locator(".project-card")).toHaveCount(7);
-      await expect(page).toHaveURL("/");
+      await expect(page).toHaveURL("/projets");
     }
   }
 });
@@ -279,7 +279,7 @@ test("a quota error still updates the displayed name for the visit", async ({
 test("editing a search in the middle preserves caret and character order", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/projets");
   const input = page.getByRole("searchbox");
   for (let attempt = 0; attempt < 5; attempt++) {
     await input.fill("abcdef");
@@ -289,7 +289,7 @@ test("editing a search in the middle preserves caret and character order", async
     await page.keyboard.type("XY");
     await expect(input).toHaveValue("abXYcdef");
   }
-  await page.locator('.sidebar-nav a[href="/"]').click();
+  await page.locator('.sidebar-nav a[href="/projets"]').click();
   await expect(input).toHaveValue("");
   await expect(page.locator(".project-card")).toHaveCount(7);
 });
@@ -359,7 +359,7 @@ test("search focus follows its container and list screenshots fill their card", 
 }) => {
   for (const width of [320, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto("/?vue=liste");
+    await page.goto("/projets?vue=liste");
     await page.getByRole("searchbox").focus();
     const focus = await page.locator(".project-search").evaluate((el) => ({
       outline: getComputedStyle(el.querySelector("input")!).outlineStyle,
@@ -429,7 +429,7 @@ test("project details preserve every image ratio and the archive visual fits", a
 test("requested chrome and contact copy are present without duplicate footer links", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/projets");
   await expect(page.locator(".brand-monogram")).toHaveCount(0);
   await expect(page.locator("footer a")).toHaveCount(0);
   await expect(page.locator(".sidebar-contact")).toHaveText("Se connecter");
@@ -441,4 +441,40 @@ test("requested chrome and contact copy are present without duplicate footer lin
     page.getByRole("heading", { name: "Un projet ? Une mission ?" }),
   ).toBeVisible();
   await expect(page.locator(".contact-mark")).toHaveCount(0);
+});
+
+test("home has three working paths and no duplicated project catalog", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await expect(page.locator(".sidebar-nav a[aria-current='page']")).toHaveText(
+    "Accueil",
+  );
+  await expect(page.locator(".home-page h1")).toContainText(
+    "fullstack & mobile.",
+  );
+  await expect(
+    page.locator(".home-page p, .home-page img, .home-page .project-card"),
+  ).toHaveCount(0);
+  const paths = page.getByRole("navigation", { name: "Explorer le portfolio" });
+  await expect(paths.getByRole("link")).toHaveCount(3);
+  for (const [label, url] of [
+    ["Projets", "/projets"],
+    ["Parcours", "/parcours"],
+    ["Contact", "/contact"],
+  ]) {
+    await paths.getByRole("link", { name: label, exact: true }).click();
+    await expect(page).toHaveURL(url);
+    await expect(
+      page.getByRole("heading", { name: label, exact: true }),
+    ).toBeVisible();
+    await page.locator(".atelier-brand").click();
+    await expect(page).toHaveURL("/");
+  }
+  await page.goto("/projets/safee");
+  await expect(
+    page.locator(".sidebar-nav a[aria-current='page']"),
+  ).toContainText("Projets");
+  await page.locator(".detail-back").click();
+  await expect(page).toHaveURL("/projets");
 });

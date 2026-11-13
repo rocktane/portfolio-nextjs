@@ -7,7 +7,7 @@ export default function Brand() {
       onClick={resetCollectionQuery}
       href="/"
       className="atelier-brand"
-      aria-label="yohan/atelier — Projets"
+      aria-label="yohan/atelier — Accueil"
     >
       <span className="brand-word">
         yohan<span className="brand-slash">/</span>
