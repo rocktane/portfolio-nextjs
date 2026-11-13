@@ -37,3 +37,9 @@ Quatre propositions d’accueil interactives, séparées de l’application, son
 ## Accueil retenu
 
 La proposition 1 est intégrée avec les trois chemins de la proposition 3. Palette conservée : papier #f5f7f4, menthe #e5eee7, encre #193e32, secondaire #52695d, forêt #245b46, abricot #e6ab69. Space Grotesk porte le métier et les trois entrées ; Manrope reste la police de l’interface. Composition à gauche : `métier / [Projets] [Parcours] [Contact]`. Aucun projet ni texte d’habillage sur l’accueil. Les aperçus et filtres restent dans `/projets`. La respiration et la taille typographique occupent l’espace, sans ajouter de panneaux ou de phrases. Marque et lien Portfolio reviennent à l’accueil `/` ; retour depuis une fiche vers sa collection. Navigation mobile défilante plutôt que libellés cassés sur deux lignes.
+
+## Outils et recherche
+
+Ajout de `/a-essayer` : sélection explicite des sept outils utilisables, liens exacts, contraintes visibles, copie de la commande BetterBattery avec solution de repli. La palette ⌘K / Ctrl K recherche pages, projets et technologies ; bouton visible aussi sur mobile, navigation par flèches et Entrée, fermeture Échap et retour du focus. CV et copie de l’e-mail dans la palette. Palette et liste gardent les couleurs existantes (papier #f5f7f4, menthe #e5eee7, encre #193e32, secondaire #52695d, forêt #245b46), Manrope et Space Grotesk. Une liste d’actions sobres remplace une seconde grille d’aperçus. Le bouton Se connecter est uniquement dans le header ; footer compact, aligné à droite et sans filet. Le nom et son crayon partagent une largeur contrainte, le texte se tronque avant le crayon.
+
+L’accueil n’est pas redessiné tant que Yohan n’a pas choisi entre une sélection d’outils à essayer, un projet unique mis en avant ou un aperçu de parcours.

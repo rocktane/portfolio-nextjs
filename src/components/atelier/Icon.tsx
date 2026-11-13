@@ -1,5 +1,6 @@
 import type { SVGProps } from "react";
 const paths = {
+  play: <path d="m8 4 12 8-12 8Z" />,
   home: <path d="m3 10 9-7 9 7v11h-6v-7H9v7H3Z" />,
   grid: (
     <>

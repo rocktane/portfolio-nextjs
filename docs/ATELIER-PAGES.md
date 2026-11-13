@@ -1,6 +1,6 @@
 # Atelier : idées de nouvelles pages
 
-Ce sont des idées de pages supplémentaires, rien de cette sélection n’est implémenté. L’avis d’idéation a été réalisé avant l’intégration Next.js ; ses réserves sur l’invité et la météo décrivent l’ancienne maquette. Yohan doit choisir avant tout développement.
+À essayer et la palette ⌘K sont désormais demandés et implémentés. Stack reste une idée. Historiquement, cette sélection a précédé l’intégration. L’avis d’idéation a été réalisé avant l’intégration Next.js ; ses réserves sur l’invité et la météo décrivent l’ancienne maquette. Les autres idées restent à choisir avant développement.
 Sources : `src/data/projects.ts` (14 projets : stack, statut, année, rôle, `hrefKind`, `platform` ; `technicalCredits` ; `credits`) et les maquettes de `design-explorations/`.
 
 ## Council

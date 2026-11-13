@@ -59,3 +59,11 @@ Validation : build, lint, TypeScript et six tests unitaires passent. Seize tests
 ## Accueil minimal retenu
 
 Accueil `/` avec un titre de métier et trois chemins Projets, Parcours, Contact ; aucun aperçu ni phrase d’habillage. Catalogue déplacé sur `/projets` avec sa métadonnée canonique ; navigation, sitemap, marque et retours depuis les fiches adaptés. Les captures à 390 et 1440 px ont été inspectées. Build, lint, TypeScript et six tests unitaires passent, ainsi que les dix-sept tests navigateur locaux (23,2 s) puis sur le site HTTPS (32,7 s). Le nouveau scénario exerce les trois chemins, le retour à l’accueil et le retour d’une fiche vers le catalogue. L’index publié correspond à l’export construit ; `/projets` répond directement 200 malgré son voisinage avec les routes de fiches. Aucun nouvel avis council demandé.
+
+## À essayer, recherche et finitions
+
+Page `/a-essayer` avec sept outils, destinations explicites, contraintes de plateforme, commande BetterBattery sélectionnable et copiable avec repli en cas de refus. Palette native dialog ⌘K / Ctrl K : pages, projets, recherche par technologie, CV et copie d’e-mail ; bouton visible, flèches, Entrée, Échap, retour du focus et aucun résultat. La vérification visuelle a révélé qu’Échap dans un champ search non vide effaçait d’abord le texte : la fermeture explicite est désormais testée.
+
+Le test d’un nom long a également reproduit un débordement du crayon : colonne `minmax(0, 1fr)` et libellé flex rétractable, crayon réservé dans la largeur. Un seul bouton Se connecter reste dans le header. Footer sans filet, à droite et sous 48 px sur les quatre tailles vérifiées. L’accueil attend le choix entre les propositions de densification.
+
+Lint, TypeScript, build et six tests unitaires passent. Vingt tests navigateur passent en local (24,8 s), puis sur le domaine HTTPS (34,3 s). Les captures desktop, menu ouvert et mobile ont été inspectées. Égalité SHA-256 de l’index publié avec l’export, route À essayer en HTTP 200. Aucune nouvelle dépendance ni nouveau stockage local. Pas de nouvelle revue council.

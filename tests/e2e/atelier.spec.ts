@@ -162,6 +162,7 @@ test("header size is invariant; footer stays at the bottom or after content at e
     for (const path of [
       "/",
       "/projets",
+      "/a-essayer",
       "/contact",
       "/parcours",
       "/labo",
@@ -432,11 +433,11 @@ test("requested chrome and contact copy are present without duplicate footer lin
   await page.goto("/projets");
   await expect(page.locator(".brand-monogram")).toHaveCount(0);
   await expect(page.locator("footer a")).toHaveCount(0);
-  await expect(page.locator(".sidebar-contact")).toHaveText("Se connecter");
+  await expect(page.locator(".header-contact")).toHaveText("Se connecter");
   await expect(
     page.locator(".project-technologies").first().locator("li"),
   ).toHaveCount(5);
-  await page.locator(".sidebar-contact").click();
+  await page.locator(".header-contact").click();
   await expect(
     page.getByRole("heading", { name: "Un projet ? Une mission ?" }),
   ).toBeVisible();
@@ -477,4 +478,121 @@ test("home has three working paths and no duplicated project catalog", async ({
   ).toContainText("Projets");
   await page.locator(".detail-back").click();
   await expect(page).toHaveURL("/projets");
+});
+
+test("guest label and pencil stay inside the sidebar; footer is compact and sign-in unique", async ({
+  page,
+}) => {
+  for (const width of [320, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    await expect(
+      page.getByRole("link", { name: "Se connecter", exact: true }),
+    ).toHaveCount(1);
+    for (const name of ["Boris", "Boris Ameldojfsojfndsojfnsdojnfs"]) {
+      await page.getByRole("button", { name: /Renommer l’invité/ }).click();
+      await page
+        .getByRole("textbox", { name: "Votre prénom ou pseudo" })
+        .fill(name);
+      await page
+        .getByRole("textbox", { name: "Votre prénom ou pseudo" })
+        .press("Enter");
+      const box = await page.locator(".guest-identity").boundingBox();
+      const pencil = await page.locator(".guest-name svg").boundingBox();
+      const span = await page.locator(".guest-name span").boundingBox();
+      expect(pencil!.x + pencil!.width).toBeLessThanOrEqual(
+        box!.x + box!.width + 1,
+      );
+      expect(pencil!.x - span!.x - span!.width).toBeLessThanOrEqual(7);
+      expect(pencil!.x - span!.x - span!.width).toBeGreaterThanOrEqual(0);
+    }
+    const footer = await page.locator("footer").evaluate((el) => ({
+      border: getComputedStyle(el).borderTopWidth,
+      height: el.getBoundingClientRect().height,
+      align: getComputedStyle(el).textAlign,
+    }));
+    expect(footer.border).toBe("0px");
+    expect(footer.align).toBe("right");
+    expect(footer.height).toBeLessThan(48);
+  }
+});
+test("try tools show precise destinations, constraints and a copyable install command", async ({
+  page,
+  context,
+}) => {
+  await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.goto("/a-essayer");
+  await expect(page.locator(".try-tools > li")).toHaveCount(7);
+  await expect(
+    page.getByRole("link", { name: /Composer son flux/ }),
+  ).toHaveAttribute("href", "https://tvcal.yohan.one");
+  const battery = page.locator(".try-tools > li").filter({
+    has: page.getByRole("heading", { name: "BetterBattery", exact: true }),
+  });
+  await expect(battery).toContainText("Apple Silicon");
+  await battery.getByRole("button", { name: "Copier la commande" }).click();
+  await expect(battery.getByRole("button")).toHaveText("Copié !");
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+    "brew install --cask rocktane/tap/betterbattery",
+  );
+  await page.evaluate(() =>
+    Object.defineProperty(navigator.clipboard, "writeText", {
+      value: () => Promise.reject(new Error("Denied")),
+    }),
+  );
+  await battery.getByRole("button").click();
+  await expect(page.locator(".tool-feedback")).toContainText(
+    "Copie indisponible",
+  );
+  await expect(battery.locator("code")).toBeVisible();
+});
+test("command search supports keyboard, empty states, focus return and navigation", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const trigger = page.getByRole("button", {
+    name: "Rechercher dans le portfolio",
+  });
+  await trigger.focus();
+  await page.keyboard.press("Meta+k");
+  const dialog = page.getByRole("dialog", { name: "Rechercher", exact: true });
+  const input = dialog.getByRole("combobox");
+  await expect(dialog).toBeVisible();
+  await expect(input).toBeFocused();
+  await input.fill("zzzz-no-results");
+  await expect(dialog.getByText("Aucun résultat.")).toBeVisible();
+  await input.fill("typescript");
+  await expect(dialog.getByRole("option")).not.toHaveCount(0);
+  await input.fill("Brower");
+  await input.press("Escape");
+  await expect(dialog).not.toBeVisible();
+  await expect(trigger).toBeFocused();
+  await trigger.click();
+  await input.fill("Brower");
+  await input.press("Enter");
+  await expect(page).toHaveURL("/projets/brower");
+  await expect(dialog).not.toBeVisible();
+  await trigger.click();
+  await input.press("ArrowDown");
+  await input.press("Enter");
+  await expect(page).toHaveURL("/projets");
+  await trigger.click();
+  await input.fill("a essayer");
+  await input.press("Enter");
+  await expect(page).toHaveURL("/a-essayer");
+  await trigger.focus();
+  await page.keyboard.press("Control+k");
+  await expect(input).toBeFocused();
+  await input.press("Escape");
+  await expect(trigger).toBeFocused();
+  await page.setViewportSize({ width: 320, height: 900 });
+  await trigger.click();
+  await expect(dialog).toBeVisible();
+  await dialog.getByRole("button", { name: "Fermer la recherche" }).click();
+  await expect(trigger).toBeFocused();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
 });

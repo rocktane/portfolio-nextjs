@@ -6,6 +6,7 @@ import { projects } from "@/data/projects";
 import { collectionNames, collectionPaths } from "@/lib/atelier";
 import { resetCollectionQuery } from "@/lib/collection-navigation";
 import Brand from "./Brand";
+import CommandPalette from "./CommandPalette";
 import GuestIdentity from "./GuestIdentity";
 import Icon, { type IconName } from "./Icon";
 import SocialLinks from "./SocialLinks";
@@ -29,6 +30,7 @@ const navigation: {
     icon: "flask",
     count: projects.filter((p) => p.section === "labo").length,
   },
+  { href: "/a-essayer", label: "À essayer", icon: "play" },
   { href: "/parcours", label: "Parcours", icon: "route" },
   { href: "/archives", label: "Archives", icon: "archive" },
   { href: "/contact", label: "Contact", icon: "mail" },
@@ -69,10 +71,7 @@ export default function Shell({ children }: { children: ReactNode }) {
           </nav>
           <div className="sidebar-bottom">
             <SocialLinks />
-            <Link className="outline-button sidebar-contact" href="/contact">
-              Se connecter
-              <Icon name="arrow" />
-            </Link>
+
             <div className="sidebar-weather">
               <MarseilleWeather />
             </div>
@@ -104,6 +103,7 @@ export default function Shell({ children }: { children: ReactNode }) {
               <MarseilleWeather />
             </div>
             <div className="header-actions">
+              <CommandPalette />
               <SocialLinks compact />
               <Link
                 href="/contact"
