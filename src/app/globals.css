@@ -2116,7 +2116,6 @@ body::before {
   height: 57%;
   object-fit: contain;
 }
-.floating-tool:is(:hover, :focus-visible),
 .floating-tool.is-held {
   z-index: 46;
 }
