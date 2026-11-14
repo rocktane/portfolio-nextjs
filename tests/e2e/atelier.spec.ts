@@ -1163,3 +1163,27 @@ test("scrollbars stay hidden while the sidebar folds, then come back", async ({
   await expect(html).not.toHaveAttribute("data-sidebar-animating");
   expect(await scrollbar()).not.toBe("none");
 });
+
+test("a folded sidebar can be reopened by its button in a short window", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 1440, height: 500 });
+  await page.goto("/projets");
+  await page.getByRole("button", { name: "Masquer la barre latérale" }).click();
+  const open = page.getByRole("button", { name: "Afficher la barre latérale" });
+  const box = await open.boundingBox();
+  // The button is really on top at its own centre, not clipped under the header.
+  expect(
+    await page.evaluate(
+      ([x, y]) =>
+        document.elementFromPoint(x, y)?.closest("#sidebar-toggle") !== null,
+      [box!.x + box!.width / 2, box!.y + box!.height / 2],
+    ),
+  ).toBe(true);
+  await open.click();
+  await expect(page.locator("html")).not.toHaveAttribute(
+    "data-sidebar",
+    "collapsed",
+  );
+});

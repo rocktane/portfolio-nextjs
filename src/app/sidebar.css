@@ -60,6 +60,8 @@
   /* The card is drawn by a layer so it can slide away while the title stays put. */
   .atelier-sidebar {
     z-index: 20;
+    /* Keeps its size while the grid column closes, so the card slides instead of shrinking. */
+    width: var(--sidebar-width);
     border-color: transparent;
     background: transparent;
     -webkit-backdrop-filter: none;
@@ -103,6 +105,8 @@
   :root[data-sidebar="collapsed"] .atelier-sidebar {
     /* Only the title row stays interactive; the empty column lets clicks through. */
     pointer-events: none;
+    /* Short windows make the sidebar scrollable; folded, that would clip the title row. */
+    overflow: visible;
   }
   :root[data-sidebar="collapsed"] .atelier-sidebar::before,
   :root[data-sidebar="collapsed"] .sidebar-panel > * {
