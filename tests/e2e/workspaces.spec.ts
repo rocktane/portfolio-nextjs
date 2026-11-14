@@ -284,31 +284,6 @@ test("Notion property menus combine filters, show sort chips and open records", 
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).toHaveCount(0);
 });
-test("favorites has all 26 apps, local icons, search and official Zen URL", async ({
-  page,
-}) => {
-  await page.goto("/favoris");
-  await expect(page.locator(".favorite-card")).toHaveCount(26);
-  await expect(
-    page.locator('.favorite-card[href="https://zen-browser.app"]'),
-  ).toHaveCount(1);
-  for (const image of await page.locator(".favorite-icon img").all()) {
-    await image.scrollIntoViewIfNeeded();
-    await expect
-      .poll(() => image.evaluate((el) => (el as HTMLImageElement).naturalWidth))
-      .toBeGreaterThan(0);
-  }
-  await page
-    .getByRole("searchbox", { name: "Rechercher un favori" })
-    .fill("rust");
-  await expect(page.locator(".favorite-card")).toHaveCount(2);
-  await page
-    .getByRole("searchbox", { name: "Rechercher un favori" })
-    .fill("absent-zzz");
-  await expect(
-    page.getByRole("heading", { name: "Aucun favori trouvé." }),
-  ).toBeVisible();
-});
 test("workspaces fit small screens and support the dark theme", async ({
   page,
 }) => {

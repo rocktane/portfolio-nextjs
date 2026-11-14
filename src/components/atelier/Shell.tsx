@@ -9,6 +9,7 @@ import Brand from "./Brand";
 import CommandPalette from "./CommandPalette";
 import GuestIdentity from "./GuestIdentity";
 import Icon, { type IconName } from "./Icon";
+import SidebarToggle, { useSidebar } from "./SidebarToggle";
 import ThemePicker from "./ThemePicker";
 import SocialLinks from "./SocialLinks";
 import { MarseilleWeather, WeatherProvider } from "./Weather";
@@ -41,6 +42,7 @@ export default function Shell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const navRef = useRef<HTMLElement>(null);
   const indicatorRef = useRef<HTMLSpanElement>(null);
+  const { hidden: sidebarHidden } = useSidebar();
   const [openPath, setOpenPath] = useState<string | null>(null);
   const menuOpen = openPath === pathname;
   const menuButton = useRef<HTMLButtonElement>(null);
@@ -97,7 +99,7 @@ export default function Shell({ children }: { children: ReactNode }) {
         >
           <div className="sidebar-brand-row">
             <Brand />
-            <ThemePicker />
+            <SidebarToggle />
           </div>
           <button
             ref={menuButton}
@@ -113,42 +115,48 @@ export default function Shell({ children }: { children: ReactNode }) {
               <span />
             </span>
           </button>
-          <GuestIdentity />
-          <nav
-            id="portfolio-navigation"
-            ref={navRef}
-            className="sidebar-nav"
-            aria-label="Navigation principale"
+          <div
+            id="sidebar-panel"
+            className="sidebar-panel"
+            inert={sidebarHidden}
           >
-            <span
-              ref={indicatorRef}
-              className="sidebar-active-indicator"
-              aria-hidden="true"
-            />
-            {navigation.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={(event) => {
-                  resetCollectionQuery(event);
-                  setOpenPath(null);
-                }}
-                aria-current={active === item.href ? "page" : undefined}
-              >
-                <Icon name={item.icon} />
-                <span>{item.label}</span>
-                {item.count !== undefined && (
-                  <span className="nav-count">{item.count}</span>
-                )}
-              </Link>
-            ))}
-            <SocialLinks compact embedded />
-          </nav>
-          <div className="sidebar-bottom">
-            <SocialLinks />
+            <GuestIdentity />
+            <nav
+              ref={navRef}
+              id="portfolio-navigation"
+              className="sidebar-nav"
+              aria-label="Navigation principale"
+            >
+              <span
+                ref={indicatorRef}
+                className="sidebar-active-indicator"
+                aria-hidden="true"
+              />
+              {navigation.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={(event) => {
+                    resetCollectionQuery(event);
+                    setOpenPath(null);
+                  }}
+                  aria-current={active === item.href ? "page" : undefined}
+                >
+                  <Icon name={item.icon} />
+                  <span>{item.label}</span>
+                  {item.count !== undefined && (
+                    <span className="nav-count">{item.count}</span>
+                  )}
+                </Link>
+              ))}
+              <SocialLinks compact embedded />
+            </nav>
+            <div className="sidebar-bottom">
+              <SocialLinks />
 
-            <div className="sidebar-weather">
-              <MarseilleWeather />
+              <div className="sidebar-weather">
+                <MarseilleWeather />
+              </div>
             </div>
           </div>
         </aside>
@@ -178,6 +186,7 @@ export default function Shell({ children }: { children: ReactNode }) {
               <MarseilleWeather />
             </div>
             <div className="header-actions">
+              <ThemePicker />
               <CommandPalette />
               <Link
                 href="/contact"

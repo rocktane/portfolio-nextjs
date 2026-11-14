@@ -1050,12 +1050,6 @@ input:focus-visible {
   .workspace-footer {
     margin-inline: 48px;
   }
-  .project-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .project-list {
-    grid-template-columns: 1fr;
-  }
 }
 @media (max-width: 1150px) {
   :root {
@@ -1410,6 +1404,18 @@ input:focus-visible {
   }
   .project-detail .project-capture {
     max-height: none;
+  }
+}
+@media (max-height: 760px) and (min-width: 761px) {
+  .sidebar-nav {
+    gap: 3px;
+  }
+  .sidebar-nav > a {
+    min-height: 42px;
+    padding-block: 9px;
+  }
+  .sidebar-bottom {
+    padding-top: 20px;
   }
 }
 @media (max-height: 600px) and (min-width: 761px) {

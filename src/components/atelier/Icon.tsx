@@ -107,6 +107,13 @@ const paths = {
       <path d="m15 4 5 5M4 20l5-1L21 7a2 2 0 0 0-5-5L4 14Z" />
     </>
   ),
+  sidebar: (
+    <>
+      <rect x="3" y="4" width="18" height="16" rx="3" />
+      <path d="M9.5 4v16" />
+      <path className="sidebar-chevron" d="m16 10-2 2 2 2" />
+    </>
+  ),
   file: (
     <>
       <path d="M14 2H5v20h14V7ZM14 2v6h5M8 12h8M8 16h8" />

@@ -96,61 +96,74 @@ export default function ThemePicker() {
       });
   }
   const selected = options.findIndex((option) => option.value === preference);
+  const current = options[selected] ?? options[1];
+  const next = options[(selected + 1) % options.length];
   return (
-    <div
-      ref={control}
-      className="theme-toggle"
-      role="radiogroup"
-      aria-label="Thème"
-      style={{ "--theme-position": selected } as CSSProperties}
-      onKeyDown={(event) => {
-        const keys = [
-          "ArrowLeft",
-          "ArrowRight",
-          "ArrowUp",
-          "ArrowDown",
-          "Home",
-          "End",
-        ];
-        if (!keys.includes(event.key)) return;
-        event.preventDefault();
-        const focused = Number(
-          (event.target as HTMLElement).closest("button")?.dataset.index ??
-            selected,
-        );
-        const next =
-          event.key === "Home"
-            ? 0
-            : event.key === "End"
-              ? 2
-              : (focused +
-                  (["ArrowLeft", "ArrowUp"].includes(event.key) ? -1 : 1) +
-                  3) %
-                3;
-        const button = control.current?.querySelector<HTMLButtonElement>(
-          `[data-index="${next}"]`,
-        );
-        if (button) {
-          button.focus();
-          choose(options[next].value, button);
-        }
-      }}
-    >
-      {options.map((option, index) => (
-        <button
-          key={option.value}
-          data-index={index}
-          type="button"
-          role="radio"
-          aria-label={option.label}
-          aria-checked={preference === option.value}
-          tabIndex={preference === option.value ? 0 : -1}
-          title={option.label}
-          onClick={(event) => choose(option.value, event.currentTarget)}
-        >
-          <Icon name={option.icon} />
-        </button>
-      ))}
-    </div>
+    <>
+      <button
+        type="button"
+        className="theme-cycle"
+        aria-label={`Thème : ${current.label}. Passer au thème ${next.label.toLowerCase()}`}
+        title={`Thème : ${current.label}`}
+        onClick={(event) => choose(next.value, event.currentTarget)}
+      >
+        <Icon name={current.icon} />
+      </button>
+      <div
+        ref={control}
+        className="theme-toggle"
+        role="radiogroup"
+        aria-label="Thème"
+        style={{ "--theme-position": selected } as CSSProperties}
+        onKeyDown={(event) => {
+          const keys = [
+            "ArrowLeft",
+            "ArrowRight",
+            "ArrowUp",
+            "ArrowDown",
+            "Home",
+            "End",
+          ];
+          if (!keys.includes(event.key)) return;
+          event.preventDefault();
+          const focused = Number(
+            (event.target as HTMLElement).closest("button")?.dataset.index ??
+              selected,
+          );
+          const next =
+            event.key === "Home"
+              ? 0
+              : event.key === "End"
+                ? 2
+                : (focused +
+                    (["ArrowLeft", "ArrowUp"].includes(event.key) ? -1 : 1) +
+                    3) %
+                  3;
+          const button = control.current?.querySelector<HTMLButtonElement>(
+            `[data-index="${next}"]`,
+          );
+          if (button) {
+            button.focus();
+            choose(options[next].value, button);
+          }
+        }}
+      >
+        {options.map((option, index) => (
+          <button
+            key={option.value}
+            data-index={index}
+            type="button"
+            role="radio"
+            aria-label={option.label}
+            aria-checked={preference === option.value}
+            tabIndex={preference === option.value ? 0 : -1}
+            title={option.label}
+            onClick={(event) => choose(option.value, event.currentTarget)}
+          >
+            <Icon name={option.icon} />
+          </button>
+        ))}
+      </div>
+    </>
   );
 }

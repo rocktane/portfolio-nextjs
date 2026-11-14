@@ -50,6 +50,6 @@ Le parcours est anti-chronologique, Safee en premier. Les fontes sont locales et
 - `src/data/projects.ts` : données existantes et captures dans `public/projects/`.
 - `src/lib/` : normalisation des noms, recherche et validation météo.
 - `tests/` : tests unitaires et navigateur.
-- [Vues interactives](docs/WORKSPACES.md), [configuration Spotify](docs/SPOTIFY.md).
+- [Vues interactives](docs/WORKSPACES.md).
 - [Décisions d’interface](docs/ATELIER.md), [idées de pages](docs/ATELIER-PAGES.md), [nettoyage Git](docs/REPOSITORY-CLEANUP.md).
 - `design-explorations/` : maquettes historiques conservées pour référence, distinctes de l’application livrée et exclues du lint applicatif.

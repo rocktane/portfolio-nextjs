@@ -38,8 +38,6 @@ Liens vérifiés pour les applications moins connues : [Desigma](https://github.
 
 Les tests unitaires couvrent les déplacements sans duplication, la validation des données locales, les filtres ET/OU, les valeurs absentes et les tris chronologiques et secondaires. Les tests navigateur couvrent les déplacements souris/clavier, la création, l’édition, le rechargement, l’annulation, la réinitialisation, le stockage refusé, les propriétés et filtres du parcours, les 26 icônes locales et l’absence de débordement sur mobile. Le build statique est conservé.
 
-Spotify fait l’objet d’un [guide séparé](SPOTIFY.md) ; aucun compte n’est connecté par ce changement.
-
 ## Boutons et sélecteur de vue
 
 Ajouter une colonne reprend le bouton vitré Se connecter. Ajouter une colonne, Rechercher et Se connecter partagent le fond de survol. Le sélecteur de vue utilise un indicateur persistant qui glisse vers la sélection, sans animation lorsque le mouvement réduit est demandé. Une infobulle apparaît après 70 ms et reste montée pendant le passage entre les icônes ; elle fonctionne aussi au focus et se ferme avec Échap.

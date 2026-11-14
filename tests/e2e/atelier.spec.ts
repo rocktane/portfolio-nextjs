@@ -718,28 +718,29 @@ test("icon-only theme toggle defaults to system, supports keyboard, and portfoli
   ).toBeVisible();
   for (const width of [320, 390, 760, 768, 900, 1100, 1150, 1151, 1440]) {
     await page.setViewportSize({ width, height: 900 });
-    await openMobileMenu(page);
-    await expect(toggle).toBeVisible();
-    const bounds = await toggle.boundingBox();
-    expect(bounds).toMatchObject(
-      width > 760 ? { width: 98, height: 32 } : { width: 132, height: 44 },
-    );
-    const sidebar = await page.locator(".atelier-sidebar").boundingBox();
-    const brand = await page.locator(".brand-word").boundingBox();
-    const guest = await page.locator(".guest-identity").boundingBox();
-    const nav = await page.locator(".sidebar-nav").boundingBox();
-    expect(bounds!.x).toBeGreaterThan(sidebar!.x);
-    expect(bounds!.x + bounds!.width).toBeLessThan(sidebar!.x + sidebar!.width);
-    expect(bounds!.y).toBeGreaterThan(sidebar!.y);
+    const header = await page.locator(".workspace-header").boundingBox();
+    const search = await page.locator(".command-trigger").boundingBox();
     if (width > 760) {
-      expect(brand!.x + brand!.width).toBeLessThanOrEqual(bounds!.x - 1);
+      await expect(toggle).toBeVisible();
+      const bounds = await toggle.boundingBox();
+      expect(bounds).toMatchObject({ width: 114, height: 42 });
+      // The theme choice sits in the header, just left of the search.
+      expect(bounds!.y).toBeGreaterThanOrEqual(header!.y);
+      expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(search!.x);
+      // The sidebar keeps its title and the fold button side by side.
+      const brand = await page.locator(".brand-word").boundingBox();
+      const fold = await page.locator(".sidebar-toggle").boundingBox();
+      expect(brand!.x + brand!.width).toBeLessThanOrEqual(fold!.x - 1);
       expect(
-        Math.abs(brand!.y + brand!.height / 2 - bounds!.y - bounds!.height / 2),
+        Math.abs(brand!.y + brand!.height / 2 - fold!.y - fold!.height / 2),
       ).toBeLessThan(1);
     } else {
-      expect(brand!.y + brand!.height).toBeLessThanOrEqual(bounds!.y);
-      expect(guest!.x + guest!.width).toBeLessThanOrEqual(bounds!.x);
-      expect(nav!.y + nav!.height).toBeLessThan(bounds!.y);
+      await expect(toggle).toBeHidden();
+      await expect(page.locator(".sidebar-toggle")).toBeHidden();
+      const cycle = page.locator(".workspace-header .theme-cycle");
+      await expect(cycle).toBeVisible();
+      const bounds = await cycle.boundingBox();
+      expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(search!.x);
     }
     expect(
       await page.evaluate(
@@ -757,8 +758,8 @@ test("icon-only theme toggle defaults to system, supports keyboard, and portfoli
       .evaluate((el) => el.scrollWidth > el.clientWidth),
   ).toBe(true);
   const clippedTitle = await page.locator(".brand-word").boundingBox();
-  const stableToggle = await toggle.boundingBox();
-  expect(clippedTitle!.x + clippedTitle!.width).toBeLessThan(stableToggle!.x);
+  const stableFold = await page.locator(".sidebar-toggle").boundingBox();
+  expect(clippedTitle!.x + clippedTitle!.width).toBeLessThan(stableFold!.x);
   await largerFallback.evaluate((el) => el.parentNode?.removeChild(el));
   await page.emulateMedia({ forcedColors: "active" });
   await expect(toggle.getByRole("radio", { name: "Système" })).toHaveCSS(
@@ -1008,9 +1009,10 @@ for (const viewport of [
   }) => {
     await page.setViewportSize(viewport);
     await page.goto("/");
-    await openMobileMenu(page);
     const nav = page.getByRole("navigation", { name: "Navigation principale" });
     const indicator = nav.locator(".sidebar-active-indicator");
+    // On mobile the navigation lives in the menu.
+    await openMobileMenu(page);
     await expect(indicator).toBeVisible();
     const original = await indicator.elementHandle();
     const start = await indicator.boundingBox();
@@ -1068,3 +1070,151 @@ for (const viewport of [
     await expect(indicator).toHaveCSS("transition-duration", "0s");
   });
 }
+
+test("the sidebar folds into its title with the button or ⌘B and pages take the room", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/projets?vue=grille");
+  const html = page.locator("html");
+  const fold = page.getByRole("button", { name: "Masquer la barre latérale" });
+  await expect(fold).toHaveAttribute("aria-expanded", "true");
+  const columns = () =>
+    page
+      .locator(".project-grid")
+      .evaluate(
+        (el) => getComputedStyle(el).gridTemplateColumns.split(" ").length,
+      );
+  expect(await columns()).toBe(2);
+  const mainBefore = await page.locator(".workspace-main").boundingBox();
+
+  await fold.click();
+  await expect(html).toHaveAttribute("data-sidebar", "collapsed");
+  const open = page.getByRole("button", { name: "Afficher la barre latérale" });
+  await expect(open).toHaveAttribute("aria-expanded", "false");
+  await expect(page.locator(".brand-word")).toBeVisible();
+  await expect(page.locator(".sidebar-nav")).toBeHidden();
+  await expect(page.locator("#sidebar-panel")).toHaveAttribute("inert", "");
+  // The card slides out left; the button ends up left of the title.
+  const button = await open.boundingBox();
+  const title = await page.locator(".brand-word").boundingBox();
+  const crumbs = await page.locator(".breadcrumbs").boundingBox();
+  expect(button!.x + button!.width).toBeLessThan(title!.x);
+  expect(crumbs!.x).toBeGreaterThan(title!.x + title!.width);
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          getComputedStyle(
+            document.querySelector(".atelier-sidebar")!,
+            "::before",
+          ).visibility,
+      ),
+    )
+    .toBe("hidden");
+  const mainAfter = await page.locator(".workspace-main").boundingBox();
+  expect(mainAfter!.width).toBeGreaterThan(mainBefore!.width + 200);
+  expect(await columns()).toBe(3);
+
+  // The choice survives a reload without flashing the sidebar open.
+  await page.reload();
+  await expect(html).toHaveAttribute("data-sidebar", "collapsed");
+  expect(
+    await page.evaluate(() => localStorage.getItem("atelier.sidebar")),
+  ).toBe("collapsed");
+
+  // The button alone works, for browsers that keep ⌘B for themselves.
+  await open.click();
+  await expect(html).not.toHaveAttribute("data-sidebar", "collapsed");
+  await expect(page.locator(".sidebar-nav")).toBeVisible();
+  const reopened = await fold.boundingBox();
+  const titleBack = await page.locator(".brand-word").boundingBox();
+  expect(reopened!.x).toBeGreaterThan(titleBack!.x + titleBack!.width);
+  await page.keyboard.press("ControlOrMeta+b");
+  await expect(html).toHaveAttribute("data-sidebar", "collapsed");
+  await page.keyboard.press("ControlOrMeta+b");
+  await expect(html).not.toHaveAttribute("data-sidebar", "collapsed");
+  await expect(page.locator(".sidebar-nav")).toBeVisible();
+  await page.keyboard.press("ControlOrMeta+b");
+  await expect(html).toHaveAttribute("data-sidebar", "collapsed");
+
+  // Mobile keeps its menu whatever the desktop choice.
+  await page.setViewportSize({ width: 390, height: 800 });
+  await openMobileMenu(page);
+  await expect(page.locator(".sidebar-nav")).toBeVisible();
+  await expect(page.locator("#sidebar-panel")).not.toHaveAttribute("inert", "");
+});
+
+test("scrollbars stay hidden while the sidebar folds, then come back", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/projets");
+  const html = page.locator("html");
+  const scrollbar = () =>
+    page
+      .locator(".workspace-main")
+      .evaluate((el) => getComputedStyle(el).scrollbarWidth);
+  expect(await scrollbar()).not.toBe("none");
+  await page.getByRole("button", { name: "Masquer la barre latérale" }).click();
+  await expect(html).toHaveAttribute("data-sidebar-animating", "");
+  expect(await scrollbar()).toBe("none");
+  await expect(html).not.toHaveAttribute("data-sidebar-animating");
+  expect(await scrollbar()).not.toBe("none");
+});
+
+test("a folded sidebar can be reopened by its button in a short window", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 1440, height: 500 });
+  await page.goto("/projets");
+  await page.getByRole("button", { name: "Masquer la barre latérale" }).click();
+  const open = page.getByRole("button", { name: "Afficher la barre latérale" });
+  const box = await open.boundingBox();
+  // The button is really on top at its own centre, not clipped under the header.
+  expect(
+    await page.evaluate(
+      ([x, y]) =>
+        document.elementFromPoint(x, y)?.closest("#sidebar-toggle") !== null,
+      [box!.x + box!.width / 2, box!.y + box!.height / 2],
+    ),
+  ).toBe(true);
+  await open.click();
+  await expect(page.locator("html")).not.toHaveAttribute(
+    "data-sidebar",
+    "collapsed",
+  );
+});
+
+test("short windows scroll the sidebar content inside a pinned card", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 500 });
+  await page.goto("/projets");
+  const sidebar = page.locator(".atelier-sidebar");
+  const metrics = await sidebar.evaluate((el) => ({
+    scrolls: el.scrollHeight > el.clientHeight,
+    sideways: el.scrollWidth > el.clientWidth,
+    card: getComputedStyle(el, "::before").position,
+  }));
+  expect(metrics).toEqual({ scrolls: true, sideways: false, card: "fixed" });
+});
+
+test("the folded title keeps a legible backing when motion is reduced", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/projets");
+  await page.getByRole("button", { name: "Masquer la barre latérale" }).click();
+  await page.mouse.wheel(0, 400);
+  await expect
+    .poll(() =>
+      page
+        .locator(".sidebar-brand-row")
+        .evaluate((el) => getComputedStyle(el, "::before").opacity),
+    )
+    .toBe("1");
+});
