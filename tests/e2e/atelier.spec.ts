@@ -980,3 +980,42 @@ test("theme transition expands a circle from its button like Exo and skips reduc
     ),
   ).toBe(1);
 });
+
+for (const viewport of [
+  { width: 1280, height: 800 },
+  { width: 390, height: 844 },
+]) {
+  test(`active sidebar indicator persists and slides at ${viewport.width}px`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    const nav = page.getByRole("navigation", { name: "Navigation principale" });
+    const indicator = nav.locator(".sidebar-active-indicator");
+    await expect(indicator).toBeVisible();
+    const original = await indicator.elementHandle();
+    const start = await indicator.boundingBox();
+    expect(start).not.toBeNull();
+
+    await nav.getByRole("link", { name: "Contact", exact: true }).click();
+    await expect(nav.getByRole("link", { name: "Contact", exact: true })).toHaveAttribute("aria-current", "page");
+    expect(await original!.evaluate((element) => element.isConnected)).toBe(true);
+    await expect(indicator).toBeVisible();
+    await expect.poll(async () => {
+      const target = await nav.locator('[aria-current="page"]').boundingBox();
+      const box = await indicator.boundingBox();
+      return !!box && !!target &&
+        Math.abs(box.x - target.x) < 1 && Math.abs(box.y - target.y) < 1 &&
+        Math.abs(box.width - target.width) < 1 && Math.abs(box.height - target.height) < 1;
+    }).toBe(true);
+    expect(await indicator.evaluate((element) => getComputedStyle(element).transitionProperty)).toContain("transform");
+
+    // The same indicator adapts when navigation changes from a column to a row.
+    await page.setViewportSize({ width: viewport.width === 390 ? 1280 : 390, height: 844 });
+    await expect.poll(async () => {
+      const target = await nav.locator('[aria-current="page"]').boundingBox();
+      const box = await indicator.boundingBox();
+      return !!box && !!target && Math.abs(box.x - target.x) < 1 && Math.abs(box.y - target.y) < 1;
+    }).toBe(true);
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await expect(indicator).toHaveCSS("transition-duration", "0s");
+  });
+}

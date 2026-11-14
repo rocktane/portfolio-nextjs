@@ -240,9 +240,27 @@ input:focus-visible {
   font-size: 13px;
 }
 .sidebar-nav {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+.sidebar-active-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 7px;
+  background: var(--action);
+  visibility: hidden;
+}
+.sidebar-nav[data-indicator-ready] .sidebar-active-indicator {
+  visibility: visible;
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    width 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 320ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .sidebar-nav > a {
   display: flex;
@@ -257,8 +275,13 @@ input:focus-visible {
 .sidebar-nav > a:hover {
   background: var(--hover);
 }
-.sidebar-nav > a[aria-current="page"] {
+.sidebar-nav:not([data-indicator-ready]) > a[aria-current="page"] {
   background: var(--action);
+}
+.sidebar-nav[data-indicator-ready] > a[aria-current="page"] {
+  background: transparent;
+}
+.sidebar-nav > a[aria-current="page"] {
   color: var(--on-action);
   font-weight: 600;
 }

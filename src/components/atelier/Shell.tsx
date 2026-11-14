@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { useLayoutEffect, useRef, type ReactNode } from "react";
 import { projects } from "@/data/projects";
 import { collectionNames, collectionPaths } from "@/lib/atelier";
 import { resetCollectionQuery } from "@/lib/collection-navigation";
@@ -38,6 +38,8 @@ const navigation: {
 ];
 export default function Shell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const navRef = useRef<HTMLElement>(null);
+  const indicatorRef = useRef<HTMLSpanElement>(null);
   const project = pathname.startsWith("/projets/")
     ? projects.find((p) => p.id === pathname.split("/")[2])
     : null;
@@ -45,6 +47,32 @@ export default function Shell({ children }: { children: ReactNode }) {
   const label = project
     ? collectionNames[project.section]
     : (navigation.find((n) => n.href === pathname)?.label ?? "Portfolio");
+  useLayoutEffect(() => {
+    const nav = navRef.current;
+    const indicator = indicatorRef.current;
+    if (!nav || !indicator) return;
+
+    const update = () => {
+      const link = nav.querySelector<HTMLElement>('a[aria-current="page"]');
+      // Garder la dernière position sur les pages hors navigation.
+      if (!link) return;
+      indicator.style.transform = `translate(${link.offsetLeft}px, ${link.offsetTop}px)`;
+      indicator.style.width = `${link.offsetWidth}px`;
+      indicator.style.height = `${link.offsetHeight}px`;
+      if (!nav.hasAttribute("data-indicator-ready")) {
+        // Poser l'indicateur avant d'activer les transitions au premier rendu.
+        indicator.getBoundingClientRect();
+        nav.setAttribute("data-indicator-ready", "");
+      }
+    };
+
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(nav);
+    nav.querySelectorAll(":scope > a").forEach((link) => observer.observe(link));
+    return () => observer.disconnect();
+  }, [active]);
+
   return (
     <WeatherProvider>
       <div className="atelier-layout">
@@ -57,7 +85,8 @@ export default function Shell({ children }: { children: ReactNode }) {
             <ThemePicker />
           </div>
           <GuestIdentity />
-          <nav className="sidebar-nav" aria-label="Navigation principale">
+          <nav ref={navRef} className="sidebar-nav" aria-label="Navigation principale">
+            <span ref={indicatorRef} className="sidebar-active-indicator" aria-hidden="true" />
             {navigation.map((item) => (
               <Link
                 key={item.href}
