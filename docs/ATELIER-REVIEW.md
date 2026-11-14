@@ -75,3 +75,9 @@ Essai de sidebar isolé dans le commit `0742aa8`, version de référence `eca9f6
 Les fiches desktop utilisent la hauteur du workspace à partir de 1100 × 680. Informations compactées en deux colonnes, descriptions complètes conservées et images entières au ratio natif ; aucun masquage du contenu ni défilement interne. Les quatorze fiches sont testées à 1100 × 680, 1280 × 680, 1100 × 720, 1280 × 720, 1366 × 768, 1440 × 900 et 1920 × 1080 (98 configurations). En dessous du seuil, le flux naturel est préservé. Captures Safee, EXIF Dates et Geeft inspectées.
 
 Lint, TypeScript, build et six tests unitaires passent. Les 22 tests navigateur passent en local (33,5 s) et en HTTPS (56,3 s). L’index publié correspond au hash de l’export. Ancienne release conservée. Pas de nouvelle revue council.
+
+## Fond topographique d’origine
+
+Le motif `public/images/topography.svg` était déjà référencé par le CSS de `v1` ; il est réutilisé sans modification, via un masque forêt à 6 % d’opacité et une maille de 720 px. Pas d’animation, pas de capture recolorée. Le header et les chemins d’accueil gardent un fond opaque. Captures desktop et mobile générées ; rendu desktop inspecté puis opacité réduite après la première passe.
+
+Lint, build et les 22 tests navigateur locaux passent (32,1 s). Vérification HTTPS ciblée : recherche clavier, sidebar sticky et les 98 configurations des fiches projet, trois tests réussis (23,4 s). Index et SVG publiés identiques aux fichiers locaux par SHA-256 ; HTTP 200. Aucune nouvelle revue council.

@@ -51,3 +51,7 @@ Essai isolé dans `src/app/floating-sidebar.css`, importé après les styles com
 ## Fiches projet sans scroll sur ordinateur
 
 À partir de 1100 px de large et 680 px de haut, la fiche utilise la hauteur disponible du workspace. Retour, titre et action restent au-dessus de deux colonnes ; les informations sont compactées en quatre champs sur deux colonnes. L’image garde son ratio, sa bordure suit ses dimensions, sans rognage ni défilement interne. Les descriptions complètes restent visibles. En-dessous de ces dimensions, le flux naturel conserve la lisibilité et tous les contenus. Cette correction est indépendante de l’essai de sidebar.
+
+## Fond topographique
+
+Le motif original `public/images/topography.svg`, déjà utilisé par la version `v1`, revient en masque CSS fixe sur le fond papier. Teinte forêt #245b46 à 6 % d’opacité, maille de 720 px ; ni nouvelle couleur, ni animation, ni modification des captures. Sidebar menthe et cartes opaques gardent leur contraste. Le décor ne capte aucun clic, n’affecte pas la géométrie et disparaît à l’impression.

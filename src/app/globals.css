@@ -372,6 +372,7 @@ input:focus-visible {
   min-height: 100dvh;
 }
 .workspace-header {
+  background: var(--paper);
   height: var(--header-height);
   min-height: var(--header-height);
   flex-shrink: 0;
@@ -1523,6 +1524,7 @@ input:focus-visible {
   gap: 16px;
 }
 .home-path {
+  background: var(--paper);
   min-height: 156px;
   padding: 24px;
   display: flex;
@@ -1927,5 +1929,30 @@ body:has(.command-dialog[open]) {
     font-size: 12px;
     line-height: 1.5;
     overflow-wrap: anywhere;
+  }
+}
+
+/* Original portfolio contours, tinted with the current palette. */
+body {
+  isolation: isolate;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--forest);
+  opacity: 0.06;
+  -webkit-mask-image: url("/images/topography.svg");
+  mask-image: url("/images/topography.svg");
+  -webkit-mask-size: 720px 720px;
+  mask-size: 720px 720px;
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+}
+@media print {
+  body::before {
+    display: none;
   }
 }
