@@ -26,6 +26,7 @@ export default function RotatingWords({ words }: Props) {
 
     let index = 0;
     let timer = 0;
+    let stopped = false;
     let current = pill.querySelector<HTMLSpanElement>(".word-pill-face")!;
 
     const turn = () => {
@@ -45,8 +46,8 @@ export default function RotatingWords({ words }: Props) {
       // one pushes it out to the left. Both words stay side by side (a small gap
       // apart) while the pill resizes to fit the new one.
       const gap = parseFloat(getComputedStyle(pill).paddingLeft) * 0.6;
-      const fromWidth = current.scrollWidth;
-      const toWidth = next.scrollWidth;
+      const fromWidth = current.getBoundingClientRect().width;
+      const toWidth = next.getBoundingClientRect().width;
       const longer = toWidth >= fromWidth;
       const shift = (longer ? toWidth : -fromWidth) + (longer ? gap : -gap);
       pill.style.width = `${toWidth + padding}px`;
@@ -68,7 +69,10 @@ export default function RotatingWords({ words }: Props) {
           options,
         )
         .finished.then(() => {
+          if (stopped) return;
           old.remove();
+          // Release the frozen width so the pill follows font or size changes.
+          pill.style.width = "";
           timer = window.setTimeout(turn, HOLD_MS);
         })
         .catch(() => {});
@@ -76,7 +80,11 @@ export default function RotatingWords({ words }: Props) {
     };
 
     timer = window.setTimeout(turn, HOLD_MS);
-    return () => clearTimeout(timer);
+    return () => {
+      stopped = true;
+      clearTimeout(timer);
+      pill.getAnimations({ subtree: true }).forEach((a) => a.cancel());
+    };
   }, [words]);
 
   return (
