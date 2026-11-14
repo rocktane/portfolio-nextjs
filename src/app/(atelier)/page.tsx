@@ -2,7 +2,7 @@ import Link from "next/link";
 import FloatingTools from "@/components/atelier/FloatingTools";
 import HomeProjectBackground from "@/components/atelier/HomeProjectBackground";
 import HomeCardArtwork from "@/components/atelier/HomeCardArtwork";
-import ScrambleWords from "@/components/atelier/ScrambleWords";
+import RotatingWords from "@/components/atelier/RotatingWords";
 
 const SPECIALTIES = ["web", "mobile", "automatisation", "agents IA"];
 
@@ -13,7 +13,7 @@ export default function HomePage() {
         <h1 id="home-title">
           Développeur fullstack.
           <br />
-          <ScrambleWords words={SPECIALTIES} />
+          <RotatingWords words={SPECIALTIES} />
         </h1>
         <FloatingTools />
       </div>
