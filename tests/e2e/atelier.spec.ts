@@ -1,4 +1,11 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
+
+async function openMobileMenu(page: Page) {
+  const menu = page.locator(".mobile-menu-toggle");
+  if (await menu.isVisible() && await menu.getAttribute("aria-expanded") === "false") {
+    await menu.click();
+  }
+}
 const current = {
   temperature_2m: 18.4,
   weather_code: 61,
@@ -299,6 +306,7 @@ test("editing the guest name does not move sidebar items", async ({ page }) => {
   for (const width of [320, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
+    await openMobileMenu(page);
     const before = await page.locator(".sidebar-nav").boundingBox();
     const profile = await page.locator(".guest-identity").boundingBox();
     for (const key of ["Escape", "Enter"]) {
@@ -316,6 +324,8 @@ test("editing the guest name does not move sidebar items", async ({ page }) => {
         Math.abs(editingProfile!.height - profile!.height),
       ).toBeLessThanOrEqual(0.5);
       await input.press(key);
+      // Escape also closes the mobile menu; compare the same expanded layout.
+      await openMobileMenu(page);
       const saved = await page.locator(".sidebar-nav").boundingBox();
       expect(Math.abs(saved!.y - before!.y)).toBeLessThanOrEqual(0.5);
     }
@@ -344,6 +354,7 @@ test("sidebar identity aligns with the header; networks and CV have their own pl
     ).toBeVisible();
   }
   await page.setViewportSize({ width: 320, height: 900 });
+  await openMobileMenu(page);
   for (const name of ["GitHub", "LinkedIn"]) {
     await expect(
       page.locator(".sidebar-nav").getByRole("link", { name, exact: true }),
@@ -484,6 +495,7 @@ test("guest label and pencil stay inside the sidebar; footer is compact and sign
   for (const width of [320, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
+    await openMobileMenu(page);
     await expect(
       page.getByRole("link", { name: "Se connecter", exact: true }),
     ).toHaveCount(1);
@@ -703,9 +715,10 @@ test("icon-only theme toggle defaults to system, supports keyboard, and portfoli
   ).toBeVisible();
   for (const width of [320, 390, 760, 768, 900, 1100, 1150, 1151, 1440]) {
     await page.setViewportSize({ width, height: 900 });
+    await openMobileMenu(page);
     await expect(toggle).toBeVisible();
     const bounds = await toggle.boundingBox();
-    expect(bounds).toMatchObject({ width: 98, height: 32 });
+    expect(bounds).toMatchObject(width > 760 ? { width: 98, height: 32 } : { width: 132, height: 44 });
     const sidebar = await page.locator(".atelier-sidebar").boundingBox();
     const brand = await page.locator(".brand-word").boundingBox();
     const guest = await page.locator(".guest-identity").boundingBox();
@@ -720,8 +733,8 @@ test("icon-only theme toggle defaults to system, supports keyboard, and portfoli
       ).toBeLessThan(1);
     } else {
       expect(brand!.y + brand!.height).toBeLessThanOrEqual(bounds!.y);
-      expect(bounds!.x + bounds!.width).toBeLessThan(guest!.x);
-      expect(bounds!.y + bounds!.height).toBeLessThan(nav!.y);
+      expect(guest!.x + guest!.width).toBeLessThanOrEqual(bounds!.x);
+      expect(nav!.y + nav!.height).toBeLessThan(bounds!.y);
     }
     expect(
       await page.evaluate(

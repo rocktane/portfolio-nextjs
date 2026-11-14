@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useLayoutEffect, useRef, type ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { projects } from "@/data/projects";
 import { collectionNames, collectionPaths } from "@/lib/atelier";
 import { resetCollectionQuery } from "@/lib/collection-navigation";
@@ -41,6 +41,9 @@ export default function Shell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const navRef = useRef<HTMLElement>(null);
   const indicatorRef = useRef<HTMLSpanElement>(null);
+  const [openPath, setOpenPath] = useState<string | null>(null);
+  const menuOpen = openPath === pathname;
+  const menuButton = useRef<HTMLButtonElement>(null);
   const project = pathname.startsWith("/projets/")
     ? projects.find((p) => p.id === pathname.split("/")[2])
     : null;
@@ -56,7 +59,7 @@ export default function Shell({ children }: { children: ReactNode }) {
     const update = () => {
       const link = nav.querySelector<HTMLElement>('a[aria-current="page"]');
       // Garder la dernière position sur les pages hors navigation.
-      if (!link) return;
+      if (!link || !link.getClientRects().length) return;
       indicator.style.transform = `translate(${link.offsetLeft}px, ${link.offsetTop}px)`;
       indicator.style.width = `${link.offsetWidth}px`;
       indicator.style.height = `${link.offsetHeight}px`;
@@ -74,7 +77,7 @@ export default function Shell({ children }: { children: ReactNode }) {
       .querySelectorAll(":scope > a")
       .forEach((link) => observer.observe(link));
     return () => observer.disconnect();
-  }, [active]);
+  }, [active, menuOpen]);
 
   return (
     <WeatherProvider>
@@ -82,13 +85,37 @@ export default function Shell({ children }: { children: ReactNode }) {
         <a className="skip-link" href="#main-content">
           Aller au contenu principal
         </a>
-        <aside className="atelier-sidebar">
+        <aside
+          className="atelier-sidebar"
+          data-menu-open={menuOpen}
+          onKeyDown={(event) => {
+            if (event.key === "Escape" && menuOpen) {
+              setOpenPath(null);
+              menuButton.current?.focus();
+            }
+          }}
+        >
           <div className="sidebar-brand-row">
             <Brand />
             <ThemePicker />
           </div>
+          <button
+            ref={menuButton}
+            className="mobile-menu-toggle"
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls="portfolio-navigation"
+            onClick={() => setOpenPath(menuOpen ? null : pathname)}
+          >
+            {menuOpen ? "Fermer" : "Menu"}
+            <span className="mobile-menu-glyph" aria-hidden="true">
+              <span />
+              <span />
+            </span>
+          </button>
           <GuestIdentity />
           <nav
+            id="portfolio-navigation"
             ref={navRef}
             className="sidebar-nav"
             aria-label="Navigation principale"
@@ -102,7 +129,10 @@ export default function Shell({ children }: { children: ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={resetCollectionQuery}
+                onClick={(event) => {
+                  resetCollectionQuery(event);
+                  setOpenPath(null);
+                }}
                 aria-current={active === item.href ? "page" : undefined}
               >
                 <Icon name={item.icon} />

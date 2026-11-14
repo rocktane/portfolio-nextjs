@@ -1547,6 +1547,8 @@ input:focus-visible {
   gap: 16px;
 }
 .home-path {
+  position: relative;
+  overflow: hidden;
   background: var(--paper);
   min-height: 156px;
   padding: 24px;
@@ -1561,7 +1563,7 @@ input:focus-visible {
     sans-serif;
   letter-spacing: -0.6px;
 }
-.home-path svg {
+.home-path > svg:not(.home-card-background) {
   align-self: flex-start;
   width: 21px;
   height: 21px;
@@ -1571,12 +1573,68 @@ input:focus-visible {
   border-color: var(--forest);
 }
 .home-path-primary {
+  position: relative;
+  overflow: hidden;
   background: var(--action);
   border-color: var(--forest);
   color: var(--on-action);
 }
 .home-path-primary:hover {
   background: var(--action-hover);
+}
+.home-path > span {
+  position: relative;
+  z-index: 1;
+}
+.home-path > .home-card-background {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mask-image: linear-gradient(90deg, transparent 25%, black 55%);
+}
+.home-path > .home-project-background {
+  mask-image: linear-gradient(90deg, transparent 38%, black 57%);
+}
+.home-path > .home-card-artwork {
+  --art-ochre: light-dark(#9c6324, #e1b67e);
+  --art-thermal: light-dark(#b94f45, #e7a297);
+  --art-green: light-dark(#357b59, #8fc5a7);
+  --art-blue: light-dark(#416e95, #90bad9);
+  --art-violet: light-dark(#76609c, #bca4dd);
+  mask-image:
+    radial-gradient(ellipse 200px 72px at 32px 100%, transparent 70%, black 100%),
+    linear-gradient(90deg, transparent 8%, black 48%);
+  mask-composite: intersect;
+}
+.home-card-artwork .home-stack-logo,
+.home-card-artwork .home-card-symbol {
+  opacity: 0.6;
+}
+.home-stack-logo {
+  fill: transparent;
+  opacity: 0.42;
+  transition: fill 220ms, stroke 220ms, opacity 220ms;
+}
+.home-path:is(:hover, :focus-visible) .home-stack-logo {
+  fill: var(--logo-color);
+  stroke: var(--logo-color);
+  opacity: 0.9;
+}
+.home-card-symbol {
+  opacity: 0.42;
+  transition: opacity 220ms, stroke 220ms;
+}
+.home-path:is(:hover, :focus-visible) .home-card-symbol {
+  opacity: 0.8;
+  stroke: var(--symbol-color, currentColor);
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-stack-logo,
+  .home-card-symbol {
+    transition: none;
+  }
 }
 @media (max-width: 760px) {
   .sidebar-nav {
@@ -1609,7 +1667,12 @@ input:focus-visible {
     align-items: center;
     font-size: 23px;
   }
-  .home-path svg {
+  .home-path > .home-card-artwork {
+    mask-image:
+      radial-gradient(ellipse 200px 72px at 22px 50%, transparent 70%, black 100%),
+      linear-gradient(90deg, transparent 8%, black 48%);
+  }
+  .home-path > svg:not(.home-card-background) {
     align-self: center;
   }
 }
@@ -1957,11 +2020,12 @@ body:has(.command-dialog[open]) {
 
 /* Original portfolio contours, tinted with the current palette. */
 body {
+  position: relative;
   isolation: isolate;
 }
 body::before {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: -1;
   pointer-events: none;
@@ -1978,4 +2042,227 @@ body::before {
   body::before {
     display: none;
   }
+}
+
+/* A floating tool constellation, suspended above the contour map. */
+.home-page {
+  max-width: none;
+  gap: 58px;
+}
+.home-hero {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: end;
+  gap: 24px;
+  min-height: 370px;
+}
+.home-hero h1 {
+  padding-bottom: 20px;
+  font-size: clamp(44px, 4.8vw, 80px);
+}
+.home-paths {
+  width: 100%;
+  max-width: 1120px;
+}
+.floating-tools {
+  position: relative;
+  height: 390px;
+  min-width: 0;
+}
+.floating-tool-marker {
+  position: absolute;
+  width: clamp(74px, 7vw, 110px);
+  aspect-ratio: 1;
+}
+.floating-tool {
+  position: absolute;
+  display: block;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  z-index: 45;
+}
+.floating-tool-bob {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  animation: tool-levitate var(--duration, 7s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+.floating-tool-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 24%;
+  rotate: var(--tilt, 0deg);
+  background: #245b46;
+  border: 1px solid var(--border-strong);
+  box-shadow:
+    0 3px 4px #193e3208,
+    0 18px 30px -12px #193e322e,
+    inset 0 1px 0 #ffffffb3;
+}
+.floating-tool img {
+  width: 57%;
+  height: 57%;
+  object-fit: contain;
+}
+.floating-tool:is(:hover, :focus-visible),
+.floating-tool.is-held {
+  z-index: 46;
+}
+.floating-tool.is-held {
+  cursor: grabbing;
+}
+.floating-tool.is-held .floating-tool-bob {
+  animation-play-state: paused;
+}
+.floating-tool .floating-logo-black {
+  display: none;
+}
+:root[data-theme="dark"] .floating-tool-tile {
+  background: #a4d7b5;
+}
+:root[data-theme="dark"] .floating-tool .floating-logo-white {
+  display: none;
+}
+:root[data-theme="dark"] .floating-tool .floating-logo-black {
+  display: block;
+}
+.floating-tool-marker.floating-tool-claude {
+  left: 12%;
+  top: 13%;
+  --tilt: -10deg;
+  --delay: -2s;
+}
+.floating-tool-marker.floating-tool-codex {
+  left: 57%;
+  top: 5%;
+  --tilt: 8deg;
+  --duration: 8s;
+  --delay: -5s;
+}
+.floating-tool-marker.floating-tool-t3 {
+  left: 37%;
+  top: 40%;
+  --tilt: -7deg;
+  --duration: 7.5s;
+  --delay: -3s;
+}
+.floating-tool-marker.floating-tool-hermes {
+  left: 77%;
+  top: 43%;
+  --tilt: 11deg;
+  --duration: 9s;
+  --delay: -1s;
+}
+.floating-tool-marker.floating-tool-openclaw {
+  left: 7%;
+  top: 69%;
+  --tilt: -6deg;
+  --duration: 8.5s;
+  --delay: -6s;
+}
+.floating-tool-marker.floating-tool-n8n {
+  left: 56%;
+  top: 77%;
+  --tilt: 6deg;
+  --duration: 7s;
+  --delay: -4s;
+}
+.floating-tool-n8n img {
+  width: 68%;
+}
+@keyframes tool-levitate {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+@media (max-width: 1100px) {
+  .home-hero {
+    grid-template-columns: 1.2fr 1fr;
+    gap: 12px;
+  }
+  .home-hero h1 {
+    font-size: clamp(40px, 4.8vw, 60px);
+  }
+  .floating-tools {
+    height: 340px;
+  }
+  .floating-tool-marker {
+    width: 72px;
+  }
+}
+@media (max-width: 760px) {
+  .home-page {
+    gap: 34px;
+  }
+  .home-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+    min-height: 0;
+  }
+  .home-hero h1 {
+    font-size: clamp(39px, 7vw, 58px);
+    padding-bottom: 0;
+  }
+  .floating-tools {
+    height: 285px;
+    width: 100%;
+    max-width: 480px;
+    align-self: center;
+  }
+  .floating-tool-marker {
+    width: 68px;
+  }
+  .floating-tool-marker.floating-tool-n8n {
+    top: 70%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .floating-tool-bob {
+    animation: none;
+  }
+  .floating-tool-tile {
+    transition: none;
+  }
+}
+
+.floating-tool-claude {
+  --tilt: -10deg;
+  --delay: -2s;
+}
+.floating-tool-codex {
+  --tilt: 8deg;
+  --duration: 8s;
+  --delay: -5s;
+}
+.floating-tool-t3 {
+  --tilt: -7deg;
+  --duration: 7.5s;
+  --delay: -3s;
+}
+.floating-tool-hermes {
+  --tilt: 11deg;
+  --duration: 9s;
+  --delay: -1s;
+}
+.floating-tool-openclaw {
+  --tilt: -6deg;
+  --duration: 8.5s;
+  --delay: -6s;
+}
+.floating-tool-n8n {
+  --tilt: 6deg;
+  --duration: 7s;
+  --delay: -4s;
 }
