@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { projects } from "@/data/projects";
 import { collectionNames, collectionPaths } from "@/lib/atelier";
 import { resetCollectionQuery } from "@/lib/collection-navigation";
@@ -38,6 +38,9 @@ const navigation: {
 ];
 export default function Shell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const [openPath, setOpenPath] = useState<string | null>(null);
+  const menuOpen = openPath === pathname;
+  const menuButton = useRef<HTMLButtonElement>(null);
   const project = pathname.startsWith("/projets/")
     ? projects.find((p) => p.id === pathname.split("/")[2])
     : null;
@@ -51,18 +54,41 @@ export default function Shell({ children }: { children: ReactNode }) {
         <a className="skip-link" href="#main-content">
           Aller au contenu principal
         </a>
-        <aside className="atelier-sidebar">
+        <aside
+          className="atelier-sidebar"
+          data-menu-open={menuOpen}
+          onKeyDown={(event) => {
+            if (event.key === "Escape" && menuOpen) {
+              setOpenPath(null);
+              menuButton.current?.focus();
+            }
+          }}
+        >
           <div className="sidebar-brand-row">
             <Brand />
             <ThemePicker />
           </div>
+          <button
+            ref={menuButton}
+            className="mobile-menu-toggle"
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls="portfolio-navigation"
+            onClick={() => setOpenPath(menuOpen ? null : pathname)}
+          >
+            {menuOpen ? "Fermer" : "Menu"}
+            <span className="mobile-menu-glyph" aria-hidden="true"><span /><span /></span>
+          </button>
           <GuestIdentity />
-          <nav className="sidebar-nav" aria-label="Navigation principale">
+          <nav id="portfolio-navigation" className="sidebar-nav" aria-label="Navigation principale">
             {navigation.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={resetCollectionQuery}
+                onClick={(event) => {
+                  resetCollectionQuery(event);
+                  setOpenPath(null);
+                }}
                 aria-current={active === item.href ? "page" : undefined}
               >
                 <Icon name={item.icon} />
