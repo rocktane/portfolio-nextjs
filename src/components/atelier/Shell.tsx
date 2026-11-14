@@ -9,6 +9,7 @@ import Brand from "./Brand";
 import CommandPalette from "./CommandPalette";
 import GuestIdentity from "./GuestIdentity";
 import Icon, { type IconName } from "./Icon";
+import SidebarToggle, { useSidebar } from "./SidebarToggle";
 import ThemePicker from "./ThemePicker";
 import SocialLinks from "./SocialLinks";
 import { MarseilleWeather, WeatherProvider } from "./Weather";
@@ -40,6 +41,7 @@ export default function Shell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const navRef = useRef<HTMLElement>(null);
   const indicatorRef = useRef<HTMLSpanElement>(null);
+  const { hidden: sidebarHidden } = useSidebar();
   const project = pathname.startsWith("/projets/")
     ? projects.find((p) => p.id === pathname.split("/")[2])
     : null;
@@ -69,7 +71,9 @@ export default function Shell({ children }: { children: ReactNode }) {
     update();
     const observer = new ResizeObserver(update);
     observer.observe(nav);
-    nav.querySelectorAll(":scope > a").forEach((link) => observer.observe(link));
+    nav
+      .querySelectorAll(":scope > a")
+      .forEach((link) => observer.observe(link));
     return () => observer.disconnect();
   }, [active]);
 
@@ -82,32 +86,46 @@ export default function Shell({ children }: { children: ReactNode }) {
         <aside className="atelier-sidebar">
           <div className="sidebar-brand-row">
             <Brand />
-            <ThemePicker />
+            <SidebarToggle />
           </div>
-          <GuestIdentity />
-          <nav ref={navRef} className="sidebar-nav" aria-label="Navigation principale">
-            <span ref={indicatorRef} className="sidebar-active-indicator" aria-hidden="true" />
-            {navigation.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={resetCollectionQuery}
-                aria-current={active === item.href ? "page" : undefined}
-              >
-                <Icon name={item.icon} />
-                <span>{item.label}</span>
-                {item.count !== undefined && (
-                  <span className="nav-count">{item.count}</span>
-                )}
-              </Link>
-            ))}
-            <SocialLinks compact embedded />
-          </nav>
-          <div className="sidebar-bottom">
-            <SocialLinks />
+          <div
+            id="sidebar-panel"
+            className="sidebar-panel"
+            inert={sidebarHidden}
+          >
+            <GuestIdentity />
+            <nav
+              ref={navRef}
+              className="sidebar-nav"
+              aria-label="Navigation principale"
+            >
+              <span
+                ref={indicatorRef}
+                className="sidebar-active-indicator"
+                aria-hidden="true"
+              />
+              {navigation.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={resetCollectionQuery}
+                  aria-current={active === item.href ? "page" : undefined}
+                >
+                  <Icon name={item.icon} />
+                  <span>{item.label}</span>
+                  {item.count !== undefined && (
+                    <span className="nav-count">{item.count}</span>
+                  )}
+                </Link>
+              ))}
+              <SocialLinks compact embedded />
+            </nav>
+            <div className="sidebar-bottom">
+              <SocialLinks />
 
-            <div className="sidebar-weather">
-              <MarseilleWeather />
+              <div className="sidebar-weather">
+                <MarseilleWeather />
+              </div>
             </div>
           </div>
         </aside>
@@ -137,6 +155,7 @@ export default function Shell({ children }: { children: ReactNode }) {
               <MarseilleWeather />
             </div>
             <div className="header-actions">
+              <ThemePicker />
               <CommandPalette />
               <Link
                 href="/contact"

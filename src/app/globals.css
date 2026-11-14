@@ -1050,12 +1050,6 @@ input:focus-visible {
   .workspace-footer {
     margin-inline: 48px;
   }
-  .project-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .project-list {
-    grid-template-columns: 1fr;
-  }
 }
 @media (max-width: 1150px) {
   :root {
