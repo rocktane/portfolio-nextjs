@@ -23,7 +23,7 @@ const navigation: {
     href: "/projets",
     label: "Projets",
     icon: "grid",
-    count: projects.filter((p) => p.section === "projets").length,
+    count: projects.length,
   },
   {
     href: "/labo",
@@ -32,6 +32,7 @@ const navigation: {
     count: projects.filter((p) => p.section === "labo").length,
   },
   { href: "/a-essayer", label: "À essayer", icon: "play" },
+  { href: "/favoris", label: "Favoris", icon: "heart" },
   { href: "/parcours", label: "Parcours", icon: "route" },
   { href: "/archives", label: "Archives", icon: "archive" },
   { href: "/contact", label: "Contact", icon: "mail" },
@@ -69,7 +70,9 @@ export default function Shell({ children }: { children: ReactNode }) {
     update();
     const observer = new ResizeObserver(update);
     observer.observe(nav);
-    nav.querySelectorAll(":scope > a").forEach((link) => observer.observe(link));
+    nav
+      .querySelectorAll(":scope > a")
+      .forEach((link) => observer.observe(link));
     return () => observer.disconnect();
   }, [active]);
 
@@ -85,8 +88,16 @@ export default function Shell({ children }: { children: ReactNode }) {
             <ThemePicker />
           </div>
           <GuestIdentity />
-          <nav ref={navRef} className="sidebar-nav" aria-label="Navigation principale">
-            <span ref={indicatorRef} className="sidebar-active-indicator" aria-hidden="true" />
+          <nav
+            ref={navRef}
+            className="sidebar-nav"
+            aria-label="Navigation principale"
+          >
+            <span
+              ref={indicatorRef}
+              className="sidebar-active-indicator"
+              aria-hidden="true"
+            />
             {navigation.map((item) => (
               <Link
                 key={item.href}

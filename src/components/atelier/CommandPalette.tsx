@@ -8,6 +8,7 @@ const pages = [
   ["Accueil", "/"],
   ["Projets", "/projets"],
   ["À essayer", "/a-essayer"],
+  ["Favoris", "/favoris"],
   ["Le labo", "/labo"],
   ["Parcours", "/parcours"],
   ["Archives", "/archives"],

@@ -6,6 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "",
     "/projets",
     "/a-essayer",
+    "/favoris",
     "/labo",
     "/parcours",
     "/contact",
