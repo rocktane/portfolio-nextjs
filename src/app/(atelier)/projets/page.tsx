@@ -6,5 +6,5 @@ export const metadata: Metadata = {
   alternates: { canonical: "/projets" },
 };
 export default function ProjectsPage() {
-  return <ProjectCatalog title="Projets" items={featuredProjects} />;
+  return <ProjectCatalog title="Projets" items={featuredProjects} kanban />;
 }

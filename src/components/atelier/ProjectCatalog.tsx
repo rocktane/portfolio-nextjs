@@ -6,7 +6,9 @@ import type { Project } from "@/types";
 import { normalizeSearch, projectPlatform, statusLabels } from "@/lib/atelier";
 import Icon from "./Icon";
 import ProjectImage from "./ProjectImage";
-type CatalogProps = { items: Project[]; title: string };
+import ProjectBoard from "./ProjectBoard";
+import ProjectViewSwitch from "./ProjectViewSwitch";
+type CatalogProps = { items: Project[]; title: string; kanban?: boolean };
 export default function ProjectCatalog(props: CatalogProps) {
   return (
     <Suspense fallback={<CatalogView {...props} search="" />}>
@@ -22,10 +24,18 @@ function CatalogView({
   items,
   title,
   search,
+  kanban = false,
 }: CatalogProps & { search: string }) {
   const params = new URLSearchParams(search),
     query = params.get("q") ?? "",
-    view = params.get("vue") === "liste" ? "liste" : "grille";
+    view =
+      params.get("vue") === "liste"
+        ? "liste"
+        : params.get("vue") === "grille"
+          ? "grille"
+          : kanban
+            ? "kanban"
+            : "grille";
   // URL updates are transitions; keep typing synchronous so React never resets the caret.
   const [text, setText] = useState(query);
   const [observedQuery, setObservedQuery] = useState(query);
@@ -63,124 +73,134 @@ function CatalogView({
     <>
       <div className="page-heading">
         <h1>{title}</h1>
-        <div
-          className="view-switch"
-          role="group"
-          aria-label="Présentation des projets"
-        >
-          {(["grille", "liste"] as const).map((mode) => (
-            <button
-              key={mode}
-              type="button"
-              aria-label={`Vue ${mode}`}
-              aria-pressed={view === mode}
-              onClick={() => update("vue", mode === "grille" ? "" : mode)}
-            >
-              <Icon name={mode === "grille" ? "grid" : "list"} />
-            </button>
-          ))}
-        </div>
+        <ProjectViewSwitch
+          view={view}
+          kanban={kanban}
+          onChange={(mode) => update("vue", mode)}
+        />
       </div>
-      <div className="catalog-toolbar">
-        {platforms.length > 1 && (
-          <div
-            className="catalog-filters"
-            role="group"
-            aria-label="Filtrer par plateforme"
-          >
-            {["Tous", ...platforms].map((platform) => (
-              <button
-                key={platform}
-                type="button"
-                aria-pressed={category === platform}
-                onClick={() =>
-                  update("plateforme", platform === "Tous" ? "" : platform)
-                }
+      {view === "kanban" ? (
+        <ProjectBoard
+          query={text}
+          onQueryChange={(value) => {
+            setText(value);
+            update("q", value);
+          }}
+        />
+      ) : (
+        <>
+          <div className="catalog-toolbar">
+            {platforms.length > 1 && (
+              <div
+                className="catalog-filters"
+                role="group"
+                aria-label="Filtrer par plateforme"
               >
-                {platform}
-                <span>
-                  {platform === "Tous"
-                    ? items.length
-                    : items.filter((p) => projectPlatform(p) === platform)
-                        .length}
-                </span>
-              </button>
-            ))}
-          </div>
-        )}
-        <label className="project-search">
-          <Icon name="search" />
-          <input
-            type="search"
-            aria-label="Rechercher un projet"
-            placeholder="Rechercher un projet…"
-            value={text}
-            onChange={(e) => {
-              setText(e.target.value);
-              update("q", e.target.value);
-            }}
-          />
-        </label>
-      </div>
-      <p className="results-meta" role="status" aria-live="polite">
-        {filtered.length} projet{filtered.length > 1 ? "s" : ""}
-      </p>
-      <div className={`project-grid${view === "liste" ? " project-list" : ""}`}>
-        {filtered.map((p, index) => (
-          <article className="project-card" key={p.id}>
-            <Link
-              className="project-shot"
-              href={`/projets/${p.id}`}
-              aria-label={`Voir le projet ${p.title}`}
-            >
-              <ProjectImage project={p} priority={index < 2} />
-              <span className="project-open" aria-hidden="true">
-                <Icon name="arrow" />
-              </span>
-            </Link>
-            <div className="project-card-info">
-              <div className="project-card-heading">
-                <h2>
-                  <Link href={`/projets/${p.id}`}>{p.title}</Link>
-                </h2>
-                <span className={`project-status status-${p.status}`}>
-                  {statusLabels[p.status]}
-                </span>
-              </div>
-              <p>{p.tagline}</p>
-              <div className="project-card-bottom">
-                <ul
-                  className="project-technologies"
-                  aria-label={`Technologies de ${p.title}`}
-                >
-                  {p.stack.map((technology) => (
-                    <li key={technology}>{technology}</li>
-                  ))}
-                </ul>
-                {p.href && p.status !== "sunset" && (
-                  <a href={p.href} target="_blank" rel="noopener noreferrer">
-                    {p.hrefKind === "code" ? "Code" : "Ouvrir"}
-                    <Icon name="arrow" />
-                    <span className="sr-only">
-                      {" "}
-                      {p.title} dans un nouvel onglet
+                {["Tous", ...platforms].map((platform) => (
+                  <button
+                    key={platform}
+                    type="button"
+                    aria-pressed={category === platform}
+                    onClick={() =>
+                      update("plateforme", platform === "Tous" ? "" : platform)
+                    }
+                  >
+                    {platform}
+                    <span>
+                      {platform === "Tous"
+                        ? items.length
+                        : items.filter((p) => projectPlatform(p) === platform)
+                            .length}
                     </span>
-                  </a>
-                )}
+                  </button>
+                ))}
               </div>
-            </div>
-          </article>
-        ))}
-        {!filtered.length && (
-          <div className="empty-results">
-            <Icon name="search" />
-            <h2>Aucun projet trouvé.</h2>
-            <button className="outline-button" type="button" onClick={reset}>
-              Réinitialiser la recherche
-            </button>
+            )}
+            <label className="project-search">
+              <Icon name="search" />
+              <input
+                type="search"
+                aria-label="Rechercher un projet"
+                placeholder="Rechercher un projet…"
+                value={text}
+                onChange={(e) => {
+                  setText(e.target.value);
+                  update("q", e.target.value);
+                }}
+              />
+            </label>
           </div>
-        )}
-      </div>
+          <p className="results-meta" role="status" aria-live="polite">
+            {filtered.length} projet{filtered.length > 1 ? "s" : ""}
+          </p>
+          <div
+            className={`project-grid${view === "liste" ? " project-list" : ""}`}
+          >
+            {filtered.map((p, index) => (
+              <article className="project-card" key={p.id}>
+                <Link
+                  className="project-shot"
+                  href={`/projets/${p.id}`}
+                  aria-label={`Voir le projet ${p.title}`}
+                >
+                  <ProjectImage project={p} priority={index < 2} />
+                  <span className="project-open" aria-hidden="true">
+                    <Icon name="arrow" />
+                  </span>
+                </Link>
+                <div className="project-card-info">
+                  <div className="project-card-heading">
+                    <h2>
+                      <Link href={`/projets/${p.id}`}>{p.title}</Link>
+                    </h2>
+                    <span className={`project-status status-${p.status}`}>
+                      {statusLabels[p.status]}
+                    </span>
+                  </div>
+                  <p>{p.tagline}</p>
+                  <div className="project-card-bottom">
+                    <ul
+                      className="project-technologies"
+                      aria-label={`Technologies de ${p.title}`}
+                    >
+                      {p.stack.map((technology) => (
+                        <li key={technology}>{technology}</li>
+                      ))}
+                    </ul>
+                    {p.href && p.status !== "sunset" && (
+                      <a
+                        href={p.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {p.hrefKind === "code" ? "Code" : "Ouvrir"}
+                        <Icon name="arrow" />
+                        <span className="sr-only">
+                          {" "}
+                          {p.title} dans un nouvel onglet
+                        </span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </article>
+            ))}
+            {!filtered.length && (
+              <div className="empty-results">
+                <Icon name="search" />
+                <h2>Aucun projet trouvé.</h2>
+                <button
+                  className="outline-button"
+                  type="button"
+                  onClick={reset}
+                >
+                  Réinitialiser la recherche
+                </button>
+              </div>
+            )}
+          </div>
+        </>
+      )}
     </>
   );
 }

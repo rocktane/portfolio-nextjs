@@ -6,9 +6,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "",
     "/projets",
     "/a-essayer",
+    "/favoris",
     "/labo",
     "/parcours",
     "/contact",
+    "/favoris",
     "/archives",
     ...projects.map((p) => `/projets/${p.id}`),
   ].map((path) => ({
