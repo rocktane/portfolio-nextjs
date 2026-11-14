@@ -1,18 +1,22 @@
 import type { MetadataRoute } from "next";
-
+import { projects } from "@/data/projects";
 export const dynamic = "force-static";
-
-// Use a fixed date to ensure consistent builds
-// Update this date when making significant content changes
-const LAST_CONTENT_UPDATE = "2026-04-02";
-
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
-    {
-      url: "https://yohangouiran.com",
-      lastModified: new Date(LAST_CONTENT_UPDATE),
-      changeFrequency: "monthly",
-      priority: 1,
-    },
-  ];
+    "",
+    "/projets",
+    "/a-essayer",
+    "/favoris",
+    "/labo",
+    "/parcours",
+    "/contact",
+    "/favoris",
+    "/archives",
+    ...projects.map((p) => `/projets/${p.id}`),
+  ].map((path) => ({
+    url: `https://yohangouiran.com${path}`,
+    lastModified: new Date("2026-11-13"),
+    changeFrequency: "monthly",
+    priority: path ? 0.6 : 1,
+  }));
 }

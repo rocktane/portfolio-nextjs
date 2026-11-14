@@ -22,7 +22,7 @@ export const projects: Project[] = [
     tagline: "Protéger ceux qui travaillent seuls",
     summary:
       "Une solution de sécurité B2B pour les collaborateurs mobiles et les travailleurs isolés : application mobile, bouton d'alarme et supervision temps réel.",
-    year: "2024–aujourd'hui",
+    year: "2024–2026",
     role: "Développeur fullstack",
     stack: ["React Native", "NestJS", "TypeScript", "AWS", "Prisma"],
     status: "live",
@@ -272,6 +272,7 @@ export const projects: Project[] = [
   {
     id: "geeft",
     title: "Geeft",
+    shot: "/projects/geeft.webp",
     tagline: "Trouver le cadeau parfait",
     summary:
       "Une plateforme de recommandation de cadeaux, premier projet de fin de bootcamp. Arrêtée depuis.",
@@ -297,21 +298,23 @@ export const HERO_ORDER = [
   "amp",
 ] as const;
 
-export const heroProjects: Project[] = HERO_ORDER.map(
-  (id) => projects.find((p) => p.id === id)!,
+export const heroProjects: Project[] = HERO_ORDER.map((id) =>
+  projects.find((p) => p.id === id)!,
 );
 
 export const featuredProjects = projects.filter((p) => p.section === "projets");
 export const labProjects = projects.filter((p) => p.section === "labo");
-export const archivedProjects = projects.filter((p) => p.section === "archives");
+export const archivedProjects = projects.filter(
+  (p) => p.section === "archives",
+);
 
 /** Le parcours, du plus ancien au plus récent. */
 export const credits: CreditLine[] = [
   { role: "Formation", value: "ESTP Paris — Ingénieur" },
   { role: "Avant", value: "5 ans — Construction durable" },
   { role: "Reconversion", value: "Le Wagon — 2023" },
-  { role: "Aujourd'hui", value: "Safee — Alternance" },
-  { role: "En cours", value: "Epitech — Architecte SI, 2026" },
+  { role: "Expérience", value: "Safee — Alternance, 2024–2026" },
+  { role: "Formation", value: "Epitech — Architecte SI, diplômé en 2026" },
 ];
 
 /**
@@ -322,7 +325,10 @@ export const credits: CreditLine[] = [
 export const technicalCredits: CreditLine[] = [
   { role: "Front", value: "React · Next.js · Vue · TypeScript · Tailwind" },
   { role: "Back", value: "NestJS · Ruby on Rails · FastAPI · tRPC · Node" },
-  { role: "Données", value: "PostgreSQL · SQLite · Prisma · Convex · Redis · SQL" },
+  {
+    role: "Données",
+    value: "PostgreSQL · SQLite · Prisma · Convex · Redis · SQL",
+  },
   { role: "Mobile & natif", value: "React Native · Expo · SwiftUI · Kotlin" },
   { role: "IA & ML", value: "Python · spaCy · PyTorch · NLP · LLM" },
   { role: "Automatisation", value: "n8n · MCP · GitHub Actions" },

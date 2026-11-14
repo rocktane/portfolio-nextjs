@@ -87,3 +87,7 @@ skills-lock.json
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+
+# Browser verification outputs
+/test-results/
+/playwright-report/
