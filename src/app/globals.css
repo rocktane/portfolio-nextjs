@@ -2020,3 +2020,226 @@ body::before {
     display: none;
   }
 }
+
+/* A floating tool constellation, suspended above the contour map. */
+.home-page {
+  max-width: none;
+  gap: 58px;
+}
+.home-hero {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: end;
+  gap: 24px;
+  min-height: 370px;
+}
+.home-hero h1 {
+  padding-bottom: 20px;
+  font-size: clamp(44px, 4.8vw, 80px);
+}
+.home-paths {
+  width: 100%;
+  max-width: 1120px;
+}
+.floating-tools {
+  position: relative;
+  height: 390px;
+  min-width: 0;
+}
+.floating-tool-marker {
+  position: absolute;
+  width: clamp(74px, 7vw, 110px);
+  aspect-ratio: 1;
+}
+.floating-tool {
+  position: absolute;
+  display: block;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  z-index: 45;
+}
+.floating-tool-bob {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  animation: tool-levitate var(--duration, 7s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+.floating-tool-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 24%;
+  rotate: var(--tilt, 0deg);
+  background: #245b46;
+  border: 1px solid var(--border-strong);
+  box-shadow:
+    0 3px 4px #193e3208,
+    0 18px 30px -12px #193e322e,
+    inset 0 1px 0 #ffffffb3;
+}
+.floating-tool img {
+  width: 57%;
+  height: 57%;
+  object-fit: contain;
+}
+.floating-tool:is(:hover, :focus-visible),
+.floating-tool.is-held {
+  z-index: 46;
+}
+.floating-tool.is-held {
+  cursor: grabbing;
+}
+.floating-tool.is-held .floating-tool-bob {
+  animation-play-state: paused;
+}
+.floating-tool .floating-logo-black {
+  display: none;
+}
+:root[data-theme="dark"] .floating-tool-tile {
+  background: #a4d7b5;
+}
+:root[data-theme="dark"] .floating-tool .floating-logo-white {
+  display: none;
+}
+:root[data-theme="dark"] .floating-tool .floating-logo-black {
+  display: block;
+}
+.floating-tool-marker.floating-tool-claude {
+  left: 12%;
+  top: 13%;
+  --tilt: -10deg;
+  --delay: -2s;
+}
+.floating-tool-marker.floating-tool-codex {
+  left: 57%;
+  top: 5%;
+  --tilt: 8deg;
+  --duration: 8s;
+  --delay: -5s;
+}
+.floating-tool-marker.floating-tool-t3 {
+  left: 37%;
+  top: 40%;
+  --tilt: -7deg;
+  --duration: 7.5s;
+  --delay: -3s;
+}
+.floating-tool-marker.floating-tool-hermes {
+  left: 77%;
+  top: 43%;
+  --tilt: 11deg;
+  --duration: 9s;
+  --delay: -1s;
+}
+.floating-tool-marker.floating-tool-openclaw {
+  left: 7%;
+  top: 69%;
+  --tilt: -6deg;
+  --duration: 8.5s;
+  --delay: -6s;
+}
+.floating-tool-marker.floating-tool-n8n {
+  left: 56%;
+  top: 77%;
+  --tilt: 6deg;
+  --duration: 7s;
+  --delay: -4s;
+}
+.floating-tool-n8n img {
+  width: 68%;
+}
+@keyframes tool-levitate {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+@media (max-width: 1100px) {
+  .home-hero {
+    grid-template-columns: 1.2fr 1fr;
+    gap: 12px;
+  }
+  .home-hero h1 {
+    font-size: clamp(40px, 4.8vw, 60px);
+  }
+  .floating-tools {
+    height: 340px;
+  }
+  .floating-tool-marker {
+    width: 72px;
+  }
+}
+@media (max-width: 760px) {
+  .home-page {
+    gap: 34px;
+  }
+  .home-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+    min-height: 0;
+  }
+  .home-hero h1 {
+    font-size: clamp(39px, 7vw, 58px);
+    padding-bottom: 0;
+  }
+  .floating-tools {
+    height: 285px;
+    width: 100%;
+    max-width: 480px;
+    align-self: center;
+  }
+  .floating-tool-marker {
+    width: 68px;
+  }
+  .floating-tool-marker.floating-tool-n8n {
+    top: 70%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .floating-tool-bob {
+    animation: none;
+  }
+  .floating-tool-tile {
+    transition: none;
+  }
+}
+
+.floating-tool-claude {
+  --tilt: -10deg;
+  --delay: -2s;
+}
+.floating-tool-codex {
+  --tilt: 8deg;
+  --duration: 8s;
+  --delay: -5s;
+}
+.floating-tool-t3 {
+  --tilt: -7deg;
+  --duration: 7.5s;
+  --delay: -3s;
+}
+.floating-tool-hermes {
+  --tilt: 11deg;
+  --duration: 9s;
+  --delay: -1s;
+}
+.floating-tool-openclaw {
+  --tilt: -6deg;
+  --duration: 8.5s;
+  --delay: -6s;
+}
+.floating-tool-n8n {
+  --tilt: 6deg;
+  --duration: 7s;
+  --delay: -4s;
+}
