@@ -1524,6 +1524,8 @@ input:focus-visible {
   gap: 16px;
 }
 .home-path {
+  position: relative;
+  overflow: hidden;
   background: var(--paper);
   min-height: 156px;
   padding: 24px;
@@ -1538,7 +1540,7 @@ input:focus-visible {
     sans-serif;
   letter-spacing: -0.6px;
 }
-.home-path svg {
+.home-path > svg:not(.home-card-background) {
   align-self: flex-start;
   width: 21px;
   height: 21px;
@@ -1548,12 +1550,68 @@ input:focus-visible {
   border-color: var(--forest);
 }
 .home-path-primary {
+  position: relative;
+  overflow: hidden;
   background: var(--action);
   border-color: var(--forest);
   color: var(--on-action);
 }
 .home-path-primary:hover {
   background: var(--action-hover);
+}
+.home-path > span {
+  position: relative;
+  z-index: 1;
+}
+.home-path > .home-card-background {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mask-image: linear-gradient(90deg, transparent 25%, black 55%);
+}
+.home-path > .home-project-background {
+  mask-image: linear-gradient(90deg, transparent 38%, black 57%);
+}
+.home-path > .home-card-artwork {
+  --art-ochre: light-dark(#9c6324, #e1b67e);
+  --art-thermal: light-dark(#b94f45, #e7a297);
+  --art-green: light-dark(#357b59, #8fc5a7);
+  --art-blue: light-dark(#416e95, #90bad9);
+  --art-violet: light-dark(#76609c, #bca4dd);
+  mask-image:
+    radial-gradient(ellipse 200px 72px at 32px 100%, transparent 70%, black 100%),
+    linear-gradient(90deg, transparent 8%, black 48%);
+  mask-composite: intersect;
+}
+.home-card-artwork .home-stack-logo,
+.home-card-artwork .home-card-symbol {
+  opacity: 0.6;
+}
+.home-stack-logo {
+  fill: transparent;
+  opacity: 0.42;
+  transition: fill 220ms, stroke 220ms, opacity 220ms;
+}
+.home-path:is(:hover, :focus-visible) .home-stack-logo {
+  fill: var(--logo-color);
+  stroke: var(--logo-color);
+  opacity: 0.9;
+}
+.home-card-symbol {
+  opacity: 0.42;
+  transition: opacity 220ms, stroke 220ms;
+}
+.home-path:is(:hover, :focus-visible) .home-card-symbol {
+  opacity: 0.8;
+  stroke: var(--symbol-color, currentColor);
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-stack-logo,
+  .home-card-symbol {
+    transition: none;
+  }
 }
 @media (max-width: 760px) {
   .sidebar-nav {
@@ -1586,7 +1644,12 @@ input:focus-visible {
     align-items: center;
     font-size: 23px;
   }
-  .home-path svg {
+  .home-path > .home-card-artwork {
+    mask-image:
+      radial-gradient(ellipse 200px 72px at 22px 50%, transparent 70%, black 100%),
+      linear-gradient(90deg, transparent 8%, black 48%);
+  }
+  .home-path > svg:not(.home-card-background) {
     align-self: center;
   }
 }

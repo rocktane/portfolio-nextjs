@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Icon from "@/components/atelier/Icon";
+import HomeProjectBackground from "@/components/atelier/HomeProjectBackground";
+import HomeCardArtwork from "@/components/atelier/HomeCardArtwork";
 
 export default function HomePage() {
   return (
@@ -11,16 +12,16 @@ export default function HomePage() {
       </h1>
       <nav className="home-paths" aria-label="Explorer le portfolio">
         <Link href="/projets" className="home-path home-path-primary">
+          <HomeProjectBackground />
           <span>Projets</span>
-          <Icon name="arrow" />
         </Link>
         <Link href="/parcours" className="home-path">
+          <HomeCardArtwork composition="ribbon" />
           <span>Parcours</span>
-          <Icon name="arrow" />
         </Link>
         <Link href="/contact" className="home-path">
+          <HomeCardArtwork composition="contact" />
           <span>Contact</span>
-          <Icon name="arrow" />
         </Link>
       </nav>
     </section>
