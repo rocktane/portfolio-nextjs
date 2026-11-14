@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import Icon from "./Icon";
 
 type View = "kanban" | "grille" | "liste";
@@ -19,7 +19,6 @@ export default function ProjectViewSwitch({
   onChange: (view: View) => void;
 }) {
   const group = useRef<HTMLDivElement>(null);
-  const indicator = useRef<HTMLSpanElement>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [tooltip, setTooltip] = useState<{ mode: View; center: number } | null>(
     null,
@@ -29,30 +28,6 @@ export default function ProjectViewSwitch({
     ? ["kanban", "grille", "liste"]
     : ["grille", "liste"];
 
-  useLayoutEffect(() => {
-    const root = group.current!,
-      highlight = indicator.current!;
-    const update = () => {
-      const active = root.querySelector<HTMLButtonElement>(
-        '[aria-pressed="true"]',
-      );
-      if (!active) return;
-      highlight.style.transform = `translate(${active.offsetLeft}px, ${active.offsetTop}px)`;
-      highlight.style.width = `${active.offsetWidth}px`;
-      highlight.style.height = `${active.offsetHeight}px`;
-      if (!root.hasAttribute("data-indicator-ready")) {
-        highlight.getBoundingClientRect();
-        root.setAttribute("data-indicator-ready", "");
-      }
-    };
-    update();
-    const observer = new ResizeObserver(update);
-    observer.observe(root);
-    root
-      .querySelectorAll("button")
-      .forEach((button) => observer.observe(button));
-    return () => observer.disconnect();
-  }, [view, kanban]);
   useEffect(
     () => () => {
       if (timer.current) clearTimeout(timer.current);
@@ -92,11 +67,6 @@ export default function ProjectViewSwitch({
         if (event.key === "Escape") hideTooltip();
       }}
     >
-      <span
-        ref={indicator}
-        className="view-switch-indicator"
-        aria-hidden="true"
-      />
       {modes.map((mode) => (
         <button
           key={mode}
