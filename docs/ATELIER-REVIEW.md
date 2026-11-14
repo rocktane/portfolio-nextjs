@@ -87,3 +87,13 @@ Lint, build et les 22 tests navigateur locaux passent (32,1 s). Vérification HT
 Sidebar menthe à 42 % et backdrop-filter de 2 px, avec préfixe WebKit ; aucune modification de dimensions. Les courbes d’origine restent perceptibles et adoucies, comme confirmé par les captures. Build, TypeScript du build, lint et quatre tests ciblés passent en local (12,6 s) puis en HTTPS (16,6 s) : géométrie multi-pages, nom/crayon, recherche clavier, sidebar sticky. Index publié identique à l’export par SHA-256.
 
 Trois headers sont montrés dans `design-explorations/header-variants.html` : sans bandeau, barre vitrée et deux îlots. Aperçus détaillés et captures en contexte, vérifiés à 728 px et 390 px ; les trois variantes ont été inspectées. Fichier autonome et sans route applicative, aucun remplacement du header publié avant choix de Yohan. Pas de nouvelle revue council.
+
+## Header 1 et thèmes
+
+Header sans bandeau intégré, textes en graisse 600 et boutons Recherche / Se connecter de 42 px à toutes les tailles. Thèmes clair/système/sombre via un sélecteur proche de la marque ; réseaux mobiles déplacés dans la navigation horizontale pour garder les contrôles lisibles et de hauteur identique.
+
+Palette sombre vert forêt #0c2018, texte ivoire et accents menthe ; les couleurs de tous les composants passent par des tokens, y compris sidebar vitrée, cartes, palette de commandes, champs, statuts et relief topographique. Captures desktop et mobile inspectées. Captures des projets non filtrées et non recolorées.
+
+Source de l’animation : `~/code/exp/exo/components/AppShell.tsx` et `app/globals.css`. Même View Transition circulaire de 450 ms partant du bouton. Sans API ou en reduced-motion, changement immédiat ; changement système automatique sans animation. Préférence locale `atelier.theme`, repli mémoire si écriture refusée et script d’initialisation avant hydratation. Anciennes transitions invalidées pour garder le dernier choix.
+
+Lint, build, typecheck et six tests unitaires passent. Les 26 tests navigateur passent localement (37,4 s) puis en HTTPS (1,2 minute). Nouveaux scénarios : modes et persistance, changement d’OS et priorité explicite, stockage indisponible, démarrage sombre alors que les scripts Next sont bloqués, synchronisation storage, API absente, Échap, animation réelle et reduced-motion. L’index publié correspond à l’export par SHA-256. Aucun ajout de dépendance ni de service. Pas de nouvelle revue council.

@@ -9,9 +9,9 @@
 .atelier-sidebar {
   top: 8px;
   height: calc(100dvh - 16px);
-  border: 1px solid #d1dfd4;
+  border: 1px solid var(--border);
   border-radius: 14px;
-  background: rgb(229 238 231 / 42%);
+  background: var(--sidebar-glass);
   -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
 }

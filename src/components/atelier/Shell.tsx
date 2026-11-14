@@ -9,6 +9,7 @@ import Brand from "./Brand";
 import CommandPalette from "./CommandPalette";
 import GuestIdentity from "./GuestIdentity";
 import Icon, { type IconName } from "./Icon";
+import ThemePicker from "./ThemePicker";
 import SocialLinks from "./SocialLinks";
 import { MarseilleWeather, WeatherProvider } from "./Weather";
 const navigation: {
@@ -51,7 +52,10 @@ export default function Shell({ children }: { children: ReactNode }) {
           Aller au contenu principal
         </a>
         <aside className="atelier-sidebar">
-          <Brand />
+          <div className="sidebar-brand-row">
+            <Brand />
+            <ThemePicker />
+          </div>
           <GuestIdentity />
           <nav className="sidebar-nav" aria-label="Navigation principale">
             {navigation.map((item) => (
@@ -68,6 +72,7 @@ export default function Shell({ children }: { children: ReactNode }) {
                 )}
               </Link>
             ))}
+            <SocialLinks compact embedded />
           </nav>
           <div className="sidebar-bottom">
             <SocialLinks />
@@ -104,7 +109,6 @@ export default function Shell({ children }: { children: ReactNode }) {
             </div>
             <div className="header-actions">
               <CommandPalette />
-              <SocialLinks compact />
               <Link
                 href="/contact"
                 className={`outline-button header-contact${pathname === "/contact" ? " header-contact-hidden" : ""}`}

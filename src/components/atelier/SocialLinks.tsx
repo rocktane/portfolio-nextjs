@@ -13,12 +13,16 @@ const networks = [
 
 export default function SocialLinks({
   compact = false,
+  embedded = false,
 }: {
   compact?: boolean;
+  embedded?: boolean;
 }) {
+  const Wrapper = embedded ? "span" : "nav";
   return (
-    <nav
+    <Wrapper
       className={`social-links${compact ? " social-links-compact" : ""}`}
+      role={embedded ? "group" : undefined}
       aria-label="Réseaux professionnels"
     >
       {networks.map(({ name, href, path }) => (
@@ -36,6 +40,6 @@ export default function SocialLinks({
           <span>{name}</span>
         </a>
       ))}
-    </nav>
+    </Wrapper>
   );
 }

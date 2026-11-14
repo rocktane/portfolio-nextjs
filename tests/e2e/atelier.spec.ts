@@ -346,9 +346,7 @@ test("sidebar identity aligns with the header; networks and CV have their own pl
   await page.setViewportSize({ width: 320, height: 900 });
   for (const name of ["GitHub", "LinkedIn"]) {
     await expect(
-      page
-        .locator(".workspace-header")
-        .getByRole("link", { name, exact: true }),
+      page.locator(".sidebar-nav").getByRole("link", { name, exact: true }),
     ).toBeVisible();
   }
   await page.goto("/parcours");
@@ -680,4 +678,206 @@ test("all desktop project sheets fit without page or nested scrolling", async ({
         });
     }
   }
+});
+
+async function pickTheme(page: import("@playwright/test").Page, name: string) {
+  await page.getByRole("button", { name: "Choisir le thème" }).click();
+  await page
+    .getByRole("group", { name: "Thème", exact: true })
+    .getByRole("button", { name, exact: true })
+    .click();
+}
+test("header is transparent and controls have equal height; dark theme covers every page", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce", colorScheme: "light" });
+  await page.goto("/");
+  for (const width of [320, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    const search = await page.locator(".command-trigger").boundingBox();
+    const login = await page.locator(".header-contact").boundingBox();
+    expect(search!.height).toBe(42);
+    expect(login!.height).toBe(42);
+    expect(
+      await page
+        .locator(".workspace-header")
+        .evaluate((el) => getComputedStyle(el).backgroundColor),
+    ).toBe("rgba(0, 0, 0, 0)");
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+  }
+  await pickTheme(page, "Sombre");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  expect(await page.evaluate(() => localStorage.getItem("atelier.theme"))).toBe(
+    "dark",
+  );
+  for (const path of [
+    "/",
+    "/projets",
+    "/a-essayer",
+    "/labo",
+    "/parcours",
+    "/contact",
+    "/archives",
+    "/projets/safee",
+  ]) {
+    await page.goto(path);
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    expect(
+      await page
+        .locator("body")
+        .evaluate((el) => getComputedStyle(el).backgroundColor),
+    ).toBe("rgb(12, 32, 24)");
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+  }
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/projets");
+  await expect(page.locator(".project-card").first()).toHaveCSS(
+    "background-color",
+    "rgb(18, 43, 32)",
+  );
+  await expect(page.locator(".project-capture").first()).toHaveCSS(
+    "filter",
+    "none",
+  );
+  await page.screenshot({ path: test.info().outputPath("dark-desktop.png") });
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto("/");
+  await page.screenshot({ path: test.info().outputPath("dark-mobile.png") });
+  await page
+    .getByRole("button", { name: "Rechercher dans le portfolio" })
+    .click();
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await expect(page.getByRole("dialog")).toHaveCSS(
+    "background-color",
+    "rgb(12, 32, 24)",
+  );
+});
+test("system theme follows OS, explicit choice overrides it, and storage failures stay usable", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce", colorScheme: "dark" });
+  await page.goto("/");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-theme-preference",
+    "system",
+  );
+  expect(
+    await page.evaluate(() => localStorage.getItem("atelier.theme")),
+  ).toBeNull();
+  await page.emulateMedia({ colorScheme: "light" });
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await pickTheme(page, "Sombre");
+  await page.emulateMedia({ colorScheme: "dark" });
+  await page.emulateMedia({ colorScheme: "light" });
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await pickTheme(page, "Système");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.emulateMedia({ colorScheme: "dark" });
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.evaluate(() =>
+    Object.defineProperty(Storage.prototype, "setItem", {
+      value: () => {
+        throw new DOMException("Quota exceeded", "QuotaExceededError");
+      },
+    }),
+  );
+  await pickTheme(page, "Clair");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.locator('.sidebar-nav a[href="/projets"]').click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+});
+test("theme starts before hydration; unsupported/reduced animation and cross-tab changes work", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("atelier.theme", "dark");
+    Object.defineProperty(document, "startViewTransition", {
+      value: undefined,
+      configurable: true,
+    });
+  });
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.route(/_next\/static\/.*\.js/, (route) => route.abort());
+  await page.goto("/");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.unroute(/_next\/static\/.*\.js/);
+  await page.reload();
+  await pickTheme(page, "Clair");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await page.evaluate(() => {
+    localStorage.setItem("atelier.theme", "dark");
+    window.dispatchEvent(
+      new StorageEvent("storage", { key: "atelier.theme", newValue: "dark" }),
+    );
+  });
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.getByRole("button", { name: "Choisir le thème" }).click();
+  await page.keyboard.press("Escape");
+  await expect(page.locator(".theme-picker")).not.toHaveAttribute("open", "");
+});
+test("theme transition expands a circle from its button like Exo and skips reduced motion", async ({
+  page,
+}) => {
+  await page.emulateMedia({
+    colorScheme: "light",
+    reducedMotion: "no-preference",
+  });
+  await page.goto("/");
+  await page.evaluate(() => {
+    const animate = document.documentElement.animate.bind(
+      document.documentElement,
+    );
+    (window as unknown as { themeAnimations: unknown[] }).themeAnimations = [];
+    document.documentElement.animate = ((frames, options) => {
+      (
+        window as unknown as { themeAnimations: unknown[] }
+      ).themeAnimations.push({ frames, options });
+      return animate(frames, options);
+    }) as typeof document.documentElement.animate;
+  });
+  await pickTheme(page, "Sombre");
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          (window as unknown as { themeAnimations: unknown[] }).themeAnimations
+            .length,
+      ),
+    )
+    .toBe(1);
+  const animation = await page.evaluate(
+    () =>
+      (
+        window as unknown as {
+          themeAnimations: {
+            frames: { clipPath: string[] };
+            options: { duration: number; pseudoElement: string };
+          }[];
+        }
+      ).themeAnimations[0],
+  );
+  expect(animation.frames.clipPath[0]).toContain("circle(0px");
+  expect(animation.options.duration).toBe(450);
+  expect(animation.options.pseudoElement).toBe("::view-transition-new(root)");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await pickTheme(page, "Clair");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  expect(
+    await page.evaluate(
+      () =>
+        (window as unknown as { themeAnimations: unknown[] }).themeAnimations
+          .length,
+    ),
+  ).toBe(1);
 });

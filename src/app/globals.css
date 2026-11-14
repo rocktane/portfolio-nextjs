@@ -80,8 +80,8 @@ input:focus-visible {
   outline-offset: 3px;
 }
 ::selection {
-  background: #c4dfca;
-  color: #123f32;
+  background: var(--selection);
+  color: var(--selection-ink);
 }
 [hidden] {
   display: none !important;
@@ -103,8 +103,8 @@ input:focus-visible {
   left: 12px;
   transform: translateY(-200%);
   z-index: 100;
-  background: var(--forest);
-  color: white;
+  background: var(--action);
+  color: var(--on-action);
   padding: 12px 18px;
   border-radius: 7px;
 }
@@ -124,7 +124,7 @@ input:focus-visible {
   height: 100dvh;
   min-height: 540px;
   padding: 0 18px 22px;
-  border-right: 1px solid #d1dfd4;
+  border-right: 1px solid var(--border);
   background: var(--surface);
 }
 .atelier-brand {
@@ -145,13 +145,13 @@ input:focus-visible {
   white-space: nowrap;
 }
 .brand-slash {
-  color: #8aa18d;
+  color: var(--slash);
   font-weight: 400;
   margin: 0 2px;
 }
 .brand-name {
   font-weight: 500;
-  color: #466552;
+  color: var(--brand-muted);
 }
 .guest-identity {
   display: flex;
@@ -170,8 +170,8 @@ input:focus-visible {
   width: 40px;
   height: 40px;
   flex-shrink: 0;
-  background: #f3c08c;
-  color: #533d24;
+  background: var(--avatar-bg);
+  color: var(--avatar-ink);
   border-radius: 13px;
   font:
     600 19px "Space Grotesk",
@@ -208,10 +208,10 @@ input:focus-visible {
 .guest-name > svg {
   width: 13px;
   height: 13px;
-  color: #647d6c;
+  color: var(--subtle-ink);
 }
 .guest-name:hover {
-  color: #2a6a4e;
+  color: var(--link-hover);
 }
 .guest-role {
   display: block;
@@ -233,7 +233,7 @@ input:focus-visible {
   min-height: 22px;
   padding: 0 5px;
   line-height: 20px;
-  border: 1px solid #a1b7a5;
+  border: 1px solid var(--border-strong);
   border-radius: 4px;
   background: var(--paper);
   font-weight: 600;
@@ -255,11 +255,11 @@ input:focus-visible {
   font-size: 13px;
 }
 .sidebar-nav > a:hover {
-  background: #d6e5da;
+  background: var(--hover);
 }
 .sidebar-nav > a[aria-current="page"] {
-  background: var(--forest);
-  color: #fff;
+  background: var(--action);
+  color: var(--on-action);
   font-weight: 600;
 }
 .nav-count {
@@ -269,13 +269,13 @@ input:focus-visible {
   display: grid;
   place-items: center;
   border-radius: 5px;
-  background: #cfdfd3;
-  color: #345b42;
+  background: var(--muted-chip);
+  color: var(--muted-chip-ink);
   font-size: 11px;
 }
 .sidebar-nav > a[aria-current="page"] .nav-count {
-  background: #42745a;
-  color: white;
+  background: var(--action-chip);
+  color: var(--on-action);
 }
 .sidebar-bottom {
   display: flex;
@@ -295,15 +295,15 @@ input:focus-visible {
   justify-content: center;
   gap: 7px;
   min-height: 39px;
-  border: 1px solid #bed0c2;
+  border: 1px solid var(--border);
   border-radius: 7px;
-  background: #edf3ee;
+  background: var(--button-surface);
   font-size: 12px;
   font-weight: 600;
 }
 .social-links > a:hover {
-  border-color: #8cae96;
-  background: #f5f8f4;
+  border-color: var(--border-hover);
+  background: var(--button-hover);
 }
 .social-links svg {
   width: 15px;
@@ -324,7 +324,7 @@ input:focus-visible {
   align-items: center;
   gap: 0 9px;
   padding: 15px 3px 0;
-  border-top: 1px solid #c3d5c8;
+  border-top: 1px solid var(--border);
   color: var(--forest);
 }
 .marseille-weather:hover {
@@ -397,7 +397,7 @@ input:focus-visible {
   text-underline-offset: 4px;
 }
 .breadcrumbs > span[aria-hidden] {
-  color: #a1b4a5;
+  color: var(--slash);
 }
 .breadcrumbs > [aria-current="page"] {
   color: var(--ink);
@@ -488,19 +488,19 @@ input:focus-visible {
 }
 .solid-button {
   border: 1px solid var(--forest);
-  background: var(--forest);
-  color: #fff;
+  background: var(--action);
+  color: var(--on-action);
 }
 .solid-button:hover {
-  background: #184b35;
+  background: var(--action-hover);
 }
 .outline-button {
-  border: 1px solid #b6cbbd;
+  border: 1px solid var(--border-strong);
   background: transparent;
   color: var(--ink);
 }
 .outline-button:hover {
-  background: #e3ece4;
+  background: var(--hover);
 }
 .solid-button svg,
 .outline-button svg {
@@ -512,7 +512,7 @@ input:focus-visible {
   align-items: center;
   gap: 2px;
   padding: 3px;
-  border: 1px solid #cddbd0;
+  border: 1px solid var(--border);
   border-radius: 8px;
 }
 .view-switch > button {
@@ -523,10 +523,10 @@ input:focus-visible {
   border: 0;
   border-radius: 5px;
   background: transparent;
-  color: #718675;
+  color: var(--soft-ink);
 }
 .view-switch > button[aria-pressed="true"] {
-  background: #dfeae2;
+  background: var(--selected);
   color: var(--ink);
 }
 .catalog-toolbar {
@@ -557,7 +557,7 @@ input:focus-visible {
   font-size: 13px;
 }
 .catalog-filters > button[aria-pressed="true"] {
-  background: #dfeae2;
+  background: var(--selected);
   color: var(--ink);
   font-weight: 700;
 }
@@ -571,8 +571,8 @@ input:focus-visible {
   min-height: 41px;
   width: min(270px, 100%);
   padding: 0 11px;
-  background: #fafcf9;
-  border: 1px solid #cbd8ce;
+  background: var(--input);
+  border: 1px solid var(--border);
   border-radius: 7px;
 }
 .project-search > svg {
@@ -592,7 +592,7 @@ input:focus-visible {
 }
 .project-search:focus-within {
   border-color: var(--forest);
-  box-shadow: 0 0 0 2px #245b4640;
+  box-shadow: 0 0 0 2px var(--ring);
 }
 .project-search input:focus-visible {
   outline: none;
@@ -613,8 +613,8 @@ input:focus-visible {
 .project-card {
   min-width: 0;
   overflow: hidden;
-  background: #fff;
-  border: 1px solid #d3dfd6;
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 9px;
 }
 .project-shot {
@@ -638,9 +638,9 @@ input:focus-visible {
   place-items: center;
   width: 32px;
   height: 32px;
-  background: #f5f7f4;
+  background: var(--paper);
   color: var(--ink);
-  border: 1px solid #c3d5c5;
+  border: 1px solid var(--border);
   border-radius: 7px;
   opacity: 0;
 }
@@ -655,7 +655,7 @@ input:focus-visible {
   justify-content: center;
   flex-direction: column;
   gap: 12px;
-  background: #eaf0e9;
+  background: var(--placeholder);
   color: var(--forest);
 }
 .project-no-capture > svg {
@@ -674,7 +674,7 @@ input:focus-visible {
 }
 .project-card-info {
   padding: 15px 17px 16px;
-  border-top: 1px solid #e3ebe4;
+  border-top: 1px solid var(--border);
 }
 .project-card-heading {
   display: flex;
@@ -702,7 +702,7 @@ input:focus-visible {
   align-items: center;
   gap: 5px;
   white-space: nowrap;
-  border: 1px solid #d3dfd6;
+  border: 1px solid var(--border);
   border-radius: 100px;
   padding: 3px 7px;
   font-size: 11px;
@@ -713,15 +713,15 @@ input:focus-visible {
   display: block;
   width: 5px;
   height: 5px;
-  background: #568562;
+  background: var(--success);
   border-radius: 50%;
 }
 .status-wip:before,
 .status-unreleased:before {
-  background: #b77b33;
+  background: var(--warning);
 }
 .status-sunset:before {
-  background: #8b948e;
+  background: var(--archived);
 }
 .project-card-info > p {
   font-size: 14px;
@@ -770,7 +770,7 @@ input:focus-visible {
   min-height: 136px;
 }
 .project-list .project-shot {
-  border-right: 1px solid #e3ebe4;
+  border-right: 1px solid var(--border);
   border-radius: 0;
 }
 .project-list .project-capture {
@@ -802,7 +802,7 @@ input:focus-visible {
   grid-column: 1/-1;
   padding: 55px 24px;
   text-align: center;
-  border: 1px dashed #bccfc0;
+  border: 1px dashed var(--border);
   border-radius: 9px;
 }
 .empty-results > svg {
@@ -849,9 +849,9 @@ input:focus-visible {
 .project-detail figure {
   margin: 0;
   overflow: hidden;
-  border: 1px solid #d3dfd6;
+  border: 1px solid var(--border);
   border-radius: 9px;
-  background: #fff;
+  background: var(--card);
 }
 .project-detail .project-capture {
   height: auto;
@@ -945,8 +945,8 @@ input:focus-visible {
 }
 .technology-list > span {
   padding: 4px 8px;
-  background: #e5eee7;
-  color: #466352;
+  background: var(--surface);
+  color: var(--tag-ink);
   border-radius: 5px;
   font-size: 11px;
 }
@@ -969,7 +969,7 @@ input:focus-visible {
   font-size: clamp(17px, 2vw, 23px);
   text-decoration: underline;
   text-underline-offset: 6px;
-  text-decoration-color: #9bb8a4;
+  text-decoration-color: var(--underline);
   overflow-wrap: anywhere;
 }
 .contact-actions {
@@ -1001,7 +1001,7 @@ input:focus-visible {
   margin-top: 4px;
 }
 .contact-option:hover {
-  color: #2c7050;
+  color: var(--link-strong);
 }
 .error-page {
   padding: 35px 0;
@@ -1105,7 +1105,7 @@ input:focus-visible {
     grid-template-rows: 44px 40px;
     gap: 12px;
     border-right: 0;
-    border-bottom: 1px solid #cbdacf;
+    border-bottom: 1px solid var(--border);
   }
   .atelier-brand {
     gap: 8px;
@@ -1531,7 +1531,7 @@ input:focus-visible {
   align-items: flex-end;
   justify-content: space-between;
   gap: 12px;
-  border: 1px solid #b6cbbd;
+  border: 1px solid var(--border-strong);
   border-radius: 9px;
   font:
     500 25px/1.2 "Space Grotesk",
@@ -1548,12 +1548,12 @@ input:focus-visible {
   border-color: var(--forest);
 }
 .home-path-primary {
-  background: var(--forest);
+  background: var(--action);
   border-color: var(--forest);
-  color: white;
+  color: var(--on-action);
 }
 .home-path-primary:hover {
-  background: #184b35;
+  background: var(--action-hover);
 }
 @media (max-width: 760px) {
   .sidebar-nav {
@@ -1648,13 +1648,13 @@ input:focus-visible {
   max-height: calc(100dvh - 48px);
   margin: 64px auto;
   padding: 20px;
-  border: 1px solid #b6cbbd;
+  border: 1px solid var(--border-strong);
   border-radius: 12px;
   background: var(--paper);
   color: var(--ink);
 }
 .command-dialog::backdrop {
-  background: #193e3259;
+  background: var(--overlay);
 }
 body:has(.command-dialog[open]) {
   overflow: hidden;
@@ -1682,13 +1682,13 @@ body:has(.command-dialog[open]) {
   align-items: center;
   gap: 10px;
   padding: 0 10px;
-  border: 1px solid #b6cbbd;
+  border: 1px solid var(--border-strong);
   border-radius: 7px;
-  background: white;
+  background: var(--card);
 }
 .command-search:focus-within {
   border-color: var(--forest);
-  box-shadow: 0 0 0 2px #245b4640;
+  box-shadow: 0 0 0 2px var(--ring);
 }
 .command-search input {
   width: 100%;
@@ -1897,7 +1897,7 @@ body:has(.command-dialog[open]) {
     height: auto;
     max-width: 100%;
     max-height: 100%;
-    border: 1px solid #d3dfd6;
+    border: 1px solid var(--border);
     border-radius: 9px;
   }
   .project-detail .project-no-capture {

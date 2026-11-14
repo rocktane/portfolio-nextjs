@@ -1,5 +1,18 @@
 import type { SVGProps } from "react";
 const paths = {
+  sun: (
+    <>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" />
+    </>
+  ),
+  moon: <path d="M20 14A8.5 8.5 0 0 1 10 4a8.5 8.5 0 1 0 10 10Z" />,
+  monitor: (
+    <>
+      <rect x="2" y="3" width="20" height="14" rx="2" />
+      <path d="M12 17v4M8 21h8" />
+    </>
+  ),
   play: <path d="m8 4 12 8-12 8Z" />,
   home: <path d="m3 10 9-7 9 7v11h-6v-7H9v7H3Z" />,
   grid: (

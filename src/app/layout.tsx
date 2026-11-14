@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
+import { THEME_INIT } from "@/lib/theme";
 import Shell from "@/components/atelier/Shell";
 import "./fonts.css";
 import "./globals.css";
 import "./floating-sidebar.css";
+import "./themes.css";
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -47,7 +49,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr">
+    <html lang="fr" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
+      </head>
       <body>
         <Shell>{children}</Shell>
         {process.env.VERCEL === "1" && <Analytics />}

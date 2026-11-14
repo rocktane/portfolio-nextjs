@@ -58,4 +58,14 @@ Le motif original `public/images/topography.svg`, déjà utilisé par la version
 
 ## Sidebar translucide et recherche de header
 
-La sidebar flottante devient translucide : menthe #e5eee7 à 42 %, flou de fond de 2 px pour garder un léger tracé des courbes. Même palette, polices et retrait ; aucun changement de géométrie. Trois propositions de header indépendantes de l’application comparent une barre transparente, une barre vitrée et deux îlots, avec un aperçu lisible à taille réelle et le contexte complet. Le header du site attend le choix de Yohan.
+La sidebar flottante devient translucide : menthe #e5eee7 à 42 %, flou de fond de 2 px pour garder un léger tracé des courbes. Même palette, polices et retrait ; aucun changement de géométrie. Trois propositions de header indépendantes de l’application comparent une barre transparente, une barre vitrée et deux îlots, avec un aperçu lisible à taille réelle et le contexte complet. Le header 1 (sans bandeau) a ensuite été retenu, avec des textes renforcés et des contrôles de même hauteur.
+
+## Thèmes et header retenu
+
+Header transparent sans filet, textes en graisse 600 et contrôles Recherche / Se connecter de 42 px, sur ordinateur comme sur mobile. Les réseaux mobiles passent à la fin de la navigation horizontale ; le sélecteur de thème est près du nom du site.
+
+Clair / Système / Sombre, sans dépendance supplémentaire. Système est le choix par défaut et suit les changements de l’OS. Les choix explicites sont stockés dans `atelier.theme`, le choix Système retire cette préférence ; rien d’autre n’est envoyé à un service. Le nom invité garde sa propre clé. Une initialisation dans le head évite un flash avant hydratation ; le thème reste utilisable pour la visite si le stockage est bloqué.
+
+Palette sombre : fond forêt #0c2018, surfaces #19392b / #122b20, texte ivoire #e5f0e8, secondaire #afc6b8, action #286347, accent menthe #a4d7b5. Contours topographiques et sidebar vitrée adaptés, captures de projets inchangées. Les couleurs de l’interface reposent sur des tokens communs.
+
+Animation reprise du mécanisme de `~/code/exp/exo/components/AppShell.tsx` : View Transition circulaire de 450 ms partant du bouton. Elle est désactivée avec prefers-reduced-motion et remplacée par un changement immédiat si l’API n’est pas disponible ; les changements automatiques du système ne déclenchent pas d’animation. Les changements rapides invalident une transition précédente pour conserver le dernier choix.
