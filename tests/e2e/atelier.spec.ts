@@ -1187,3 +1187,34 @@ test("a folded sidebar can be reopened by its button in a short window", async (
     "collapsed",
   );
 });
+
+test("short windows scroll the sidebar content inside a pinned card", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 500 });
+  await page.goto("/projets");
+  const sidebar = page.locator(".atelier-sidebar");
+  const metrics = await sidebar.evaluate((el) => ({
+    scrolls: el.scrollHeight > el.clientHeight,
+    sideways: el.scrollWidth > el.clientWidth,
+    card: getComputedStyle(el, "::before").position,
+  }));
+  expect(metrics).toEqual({ scrolls: true, sideways: false, card: "fixed" });
+});
+
+test("the folded title keeps a legible backing when motion is reduced", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/projets");
+  await page.getByRole("button", { name: "Masquer la barre latérale" }).click();
+  await page.mouse.wheel(0, 400);
+  await expect
+    .poll(() =>
+      page
+        .locator(".sidebar-brand-row")
+        .evaluate((el) => getComputedStyle(el, "::before").opacity),
+    )
+    .toBe("1");
+});

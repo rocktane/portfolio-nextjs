@@ -148,19 +148,33 @@
     background: color-mix(in srgb, var(--paper) 80%, transparent);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
-    opacity: 0;
   }
+  /* Where scroll-linked animation runs, the backing only fades in once the page scrolls. */
   @supports (animation-timeline: scroll()) {
-    :root[data-sidebar="collapsed"] .sidebar-brand-row::before {
-      animation: sidebar-title-backing linear both;
-      animation-timeline: scroll(root);
-      animation-range: 0 48px;
+    @media (prefers-reduced-motion: no-preference) {
+      :root[data-sidebar="collapsed"] .sidebar-brand-row::before {
+        animation: sidebar-title-backing linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 48px;
+      }
     }
   }
 }
 @keyframes sidebar-title-backing {
+  from {
+    opacity: 0;
+  }
   to {
     opacity: 1;
+  }
+}
+/* Short windows scroll the sidebar itself; the card stays pinned behind its content. */
+@media (max-height: 600px) and (min-width: 761px) {
+  .atelier-sidebar::before {
+    position: fixed;
+    inset: 8px auto auto 8px;
+    width: var(--sidebar-width);
+    height: calc(100dvh - 16px);
   }
 }
 @media (min-width: 761px) and (max-width: 1150px) {
