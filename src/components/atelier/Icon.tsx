@@ -1,5 +1,52 @@
 import type { SVGProps } from "react";
 const paths = {
+  panel: (
+    <>
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <path d="M10 4v16" />
+      <path d="M5 6h3v12H5Z" fill="currentColor" stroke="none" />
+    </>
+  ),
+  briefcase: (
+    <>
+      <rect x="3" y="7" width="18" height="14" rx="2" />
+      <path d="M8 7V4h8v3M3 12a23 23 0 0 0 18 0M10 13h4" />
+    </>
+  ),
+  graduation: (
+    <>
+      <path d="m2 9 10-6 10 6-10 6ZM6 12v6c4 3 8 3 12 0v-6M22 9v8" />
+    </>
+  ),
+  table: (
+    <>
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <path d="M3 9h18M3 15h18M9 3v18" />
+    </>
+  ),
+  filter: <path d="M4 6h16M7 12h10M10 18h4" />,
+  sort: (
+    <>
+      <path d="M8 4v16m-4-4 4 4 4-4M16 20V4m-4 4 4-4 4 4" />
+    </>
+  ),
+  sliders: (
+    <>
+      <path d="M3 6h4m4 0h10M3 18h10m4 0h4" />
+      <circle cx="9" cy="6" r="2" />
+      <circle cx="15" cy="18" r="2" />
+    </>
+  ),
+  heart: (
+    <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" />
+  ),
+  kanban: (
+    <>
+      <rect x="3" y="3" width="5" height="15" rx="1" />
+      <rect x="10" y="3" width="5" height="10" rx="1" />
+      <rect x="17" y="3" width="4" height="18" rx="1" />
+    </>
+  ),
   sun: (
     <>
       <circle cx="12" cy="12" r="4" />
@@ -49,9 +96,6 @@ const paths = {
   ),
   arrow: <path d="M5 19 19 5M7 5h12v12" />,
   back: <path d="M20 12H4m6-6-6 6 6 6" />,
-  heart: (
-    <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" />
-  ),
   archive: (
     <>
       <path d="M4 8v13h16V8M9 12h6" />

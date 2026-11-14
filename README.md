@@ -32,7 +32,10 @@ Prévisualisation de `dev` : https://portfolio-nextjs-git-dev-yohans-projects-95
 ## Interface
 
 - Vraies routes `/`, `/labo`, `/archives`, `/parcours`, `/contact`, `/projets/[id]` ; les 14 projets existants sont conservés.
-- Recherche, filtres et vue liste/grille dans l’URL ; aucune authentification simulée.
+- Projets : Kanban interactif par défaut sur les 14 projets, avec déplacements souris/tactile/clavier, cartes et colonnes modifiables, annulation et réinitialisation. Les modifications restent locales au visiteur. Vues grille/liste conservées.
+- Parcours : table façon Notion, 10 entrées, 14 propriétés, filtres ET/OU, tris multiples et fiches détaillées.
+- Favoris : 26 applications sélectionnées, icônes locales, catégories, recherche et tri.
+- Recherche, filtres du catalogue et choix de vue dans l’URL ; aucune authentification simulée.
 - Compte invité : cliquer le nom pour le modifier, Entrée ou clic extérieur pour valider, Escape pour annuler. Le nom est conservé dans localStorage, sur cet appareil ; aucun envoi au serveur.
 - Météo Marseille : conditions courantes et température d’[Open-Meteo](https://open-meteo.com/en/docs), rafraîchies toutes les 15 minutes. Icônes SVG selon le code WMO et le jour/la nuit ; attribution au fournisseur. Échec ou réponse dépassée : indisponibilité explicite. Pas de clé, compte ou géolocalisation du visiteur.
 - Thème clair / système / sombre : toggle à trois icônes dans la sidebar, système par défaut ; le choix explicite est conservé localement.
@@ -47,5 +50,6 @@ Le parcours est anti-chronologique, Safee en premier. Les fontes sont locales et
 - `src/data/projects.ts` : données existantes et captures dans `public/projects/`.
 - `src/lib/` : normalisation des noms, recherche et validation météo.
 - `tests/` : tests unitaires et navigateur.
+- [Vues interactives](docs/WORKSPACES.md).
 - [Décisions d’interface](docs/ATELIER.md), [idées de pages](docs/ATELIER-PAGES.md), [nettoyage Git](docs/REPOSITORY-CLEANUP.md).
 - `design-explorations/` : maquettes historiques conservées pour référence, distinctes de l’application livrée et exclues du lint applicatif.

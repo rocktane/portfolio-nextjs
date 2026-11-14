@@ -22,7 +22,7 @@ export const projects: Project[] = [
     tagline: "Protéger ceux qui travaillent seuls",
     summary:
       "Une solution de sécurité B2B pour les collaborateurs mobiles et les travailleurs isolés : application mobile, bouton d'alarme et supervision temps réel.",
-    year: "2024–aujourd'hui",
+    year: "2024–2026",
     role: "Développeur fullstack",
     stack: ["React Native", "NestJS", "TypeScript", "AWS", "Prisma"],
     status: "live",
@@ -313,8 +313,8 @@ export const credits: CreditLine[] = [
   { role: "Formation", value: "ESTP Paris — Ingénieur" },
   { role: "Avant", value: "5 ans — Construction durable" },
   { role: "Reconversion", value: "Le Wagon — 2023" },
-  { role: "Aujourd'hui", value: "Safee — Alternance" },
-  { role: "En cours", value: "Epitech — Architecte SI, 2026" },
+  { role: "Expérience", value: "Safee — Alternance, 2024–2026" },
+  { role: "Formation", value: "Epitech — Architecte SI, diplômé en 2026" },
 ];
 
 /**

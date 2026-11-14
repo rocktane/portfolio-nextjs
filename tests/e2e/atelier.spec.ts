@@ -127,7 +127,7 @@ test("weather failure is honest, not a made-up temperature", async ({
 test("catalog filters, actual routes and query state survive a project round trip", async ({
   page,
 }) => {
-  await page.goto("/projets");
+  await page.goto("/projets?vue=grille");
   await page
     .getByRole("searchbox", { name: "Rechercher un projet" })
     .fill("Brower");
@@ -155,12 +155,12 @@ test("catalog filters, actual routes and query state survive a project round tri
     .click();
   await expect(page.locator(".project-card")).not.toHaveCount(0);
 });
-test("Safee is first in the reverse-chronological career", async ({ page }) => {
+test("career initially highlights Safee", async ({ page }) => {
   await page.goto("/parcours");
-  const first = page.locator(".career-list li").first();
+  const first = page.locator(".notion-table tbody tr").first();
   await expect(first).toContainText("Safee");
-  await expect(first.getByRole("heading")).toHaveText(
-    "Développeur Fullstack / mobile",
+  await expect(first.getByRole("button")).toContainText(
+    "Développeur fullstack web et mobile",
   );
 });
 test("header size is invariant; footer stays at the bottom or after content at every size", async ({
@@ -248,10 +248,10 @@ test("same-collection links clear both the URL and filtered results", async ({
     for (const selector of ['.sidebar-nav a[href="/projets"]']) {
       await page.goto(entry === "deep-link" ? "/projets?q=Brower" : "/projets");
       if (entry === "typed") await page.getByRole("searchbox").fill("Brower");
-      await expect(page.locator(".project-card")).toHaveCount(1);
+      await expect(page.locator(".kb-card")).toHaveCount(1);
       await page.locator(selector).click();
       await expect(page.getByRole("searchbox")).toHaveValue("");
-      await expect(page.locator(".project-card")).toHaveCount(7);
+      await expect(page.locator(".kb-card")).toHaveCount(14);
       await expect(page).toHaveURL("/projets");
     }
   }
@@ -302,7 +302,7 @@ test("editing a search in the middle preserves caret and character order", async
   }
   await page.locator('.sidebar-nav a[href="/projets"]').click();
   await expect(input).toHaveValue("");
-  await expect(page.locator(".project-card")).toHaveCount(7);
+  await expect(page.locator(".kb-card")).toHaveCount(14);
 });
 
 test("editing the guest name does not move sidebar items", async ({ page }) => {
@@ -442,7 +442,7 @@ test("project details preserve every image ratio and the archive visual fits", a
 test("requested chrome and contact copy are present without duplicate footer links", async ({
   page,
 }) => {
-  await page.goto("/projets");
+  await page.goto("/projets?vue=grille");
   await expect(page.locator(".brand-monogram")).toHaveCount(0);
   await expect(page.locator("footer a")).toHaveCount(0);
   await expect(page.locator(".header-contact")).toHaveText("Se connecter");
@@ -855,7 +855,7 @@ test("header is transparent and controls have equal height; dark theme covers ev
     ).toBe(true);
   }
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/projets");
+  await page.goto("/projets?vue=grille");
   await expect(page.locator(".project-card").first()).toHaveCSS(
     "background-color",
     "rgb(18, 43, 32)",
@@ -1019,7 +1019,7 @@ for (const viewport of [
     expect(start).not.toBeNull();
 
     await nav.getByRole("link", { name: "Contact", exact: true }).click();
-    await expect(page).toHaveURL(/\/contact$/);
+    await expect(page).toHaveURL(/\/contact\/?$/);
     await openMobileMenu(page);
     await expect(
       nav.getByRole("link", { name: "Contact", exact: true }),
@@ -1076,7 +1076,7 @@ test("the sidebar folds into its title with the button or ⌘B and pages take th
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/projets");
+  await page.goto("/projets?vue=grille");
   const html = page.locator("html");
   const fold = page.getByRole("button", { name: "Masquer la barre latérale" });
   await expect(fold).toHaveAttribute("aria-expanded", "true");

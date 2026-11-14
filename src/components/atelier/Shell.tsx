@@ -24,7 +24,7 @@ const navigation: {
     href: "/projets",
     label: "Projets",
     icon: "grid",
-    count: projects.filter((p) => p.section === "projets").length,
+    count: projects.length,
   },
   {
     href: "/labo",
@@ -61,7 +61,7 @@ export default function Shell({ children }: { children: ReactNode }) {
     const update = () => {
       const link = nav.querySelector<HTMLElement>('a[aria-current="page"]');
       // Garder la dernière position sur les pages hors navigation.
-      if (!link) return;
+      if (!link || !link.getClientRects().length) return;
       indicator.style.transform = `translate(${link.offsetLeft}px, ${link.offsetTop}px)`;
       indicator.style.width = `${link.offsetWidth}px`;
       indicator.style.height = `${link.offsetHeight}px`;
@@ -79,7 +79,7 @@ export default function Shell({ children }: { children: ReactNode }) {
       .querySelectorAll(":scope > a")
       .forEach((link) => observer.observe(link));
     return () => observer.disconnect();
-  }, [active]);
+  }, [active, menuOpen]);
 
   return (
     <WeatherProvider>
