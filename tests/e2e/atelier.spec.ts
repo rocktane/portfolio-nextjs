@@ -1,4 +1,14 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
+
+async function openMobileMenu(page: Page) {
+  const menu = page.locator(".mobile-menu-toggle");
+  if (
+    (await menu.isVisible()) &&
+    (await menu.getAttribute("aria-expanded")) === "false"
+  ) {
+    await menu.click();
+  }
+}
 const current = {
   temperature_2m: 18.4,
   weather_code: 61,
@@ -299,6 +309,7 @@ test("editing the guest name does not move sidebar items", async ({ page }) => {
   for (const width of [320, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
+    await openMobileMenu(page);
     const before = await page.locator(".sidebar-nav").boundingBox();
     const profile = await page.locator(".guest-identity").boundingBox();
     for (const key of ["Escape", "Enter"]) {
@@ -316,6 +327,8 @@ test("editing the guest name does not move sidebar items", async ({ page }) => {
         Math.abs(editingProfile!.height - profile!.height),
       ).toBeLessThanOrEqual(0.5);
       await input.press(key);
+      // Escape also closes the mobile menu; compare the same expanded layout.
+      await openMobileMenu(page);
       const saved = await page.locator(".sidebar-nav").boundingBox();
       expect(Math.abs(saved!.y - before!.y)).toBeLessThanOrEqual(0.5);
     }
@@ -344,6 +357,7 @@ test("sidebar identity aligns with the header; networks and CV have their own pl
     ).toBeVisible();
   }
   await page.setViewportSize({ width: 320, height: 900 });
+  await openMobileMenu(page);
   for (const name of ["GitHub", "LinkedIn"]) {
     await expect(
       page.locator(".sidebar-nav").getByRole("link", { name, exact: true }),
@@ -484,6 +498,7 @@ test("guest label and pencil stay inside the sidebar; footer is compact and sign
   for (const width of [320, 390, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
+    await openMobileMenu(page);
     await expect(
       page.getByRole("link", { name: "Se connecter", exact: true }),
     ).toHaveCount(1);
@@ -996,12 +1011,16 @@ for (const viewport of [
     await page.goto("/");
     const nav = page.getByRole("navigation", { name: "Navigation principale" });
     const indicator = nav.locator(".sidebar-active-indicator");
+    // On mobile the navigation lives in the menu.
+    await openMobileMenu(page);
     await expect(indicator).toBeVisible();
     const original = await indicator.elementHandle();
     const start = await indicator.boundingBox();
     expect(start).not.toBeNull();
 
     await nav.getByRole("link", { name: "Contact", exact: true }).click();
+    await expect(page).toHaveURL(/\/contact$/);
+    await openMobileMenu(page);
     await expect(
       nav.getByRole("link", { name: "Contact", exact: true }),
     ).toHaveAttribute("aria-current", "page");
@@ -1034,6 +1053,7 @@ for (const viewport of [
       width: viewport.width === 390 ? 1280 : 390,
       height: 844,
     });
+    await openMobileMenu(page);
     await expect
       .poll(async () => {
         const target = await nav.locator('[aria-current="page"]').boundingBox();
@@ -1119,8 +1139,9 @@ test("the sidebar folds into its title with the button or ⌘B and pages take th
   await page.keyboard.press("ControlOrMeta+b");
   await expect(html).toHaveAttribute("data-sidebar", "collapsed");
 
-  // Mobile keeps its navigation band whatever the desktop choice.
+  // Mobile keeps its menu whatever the desktop choice.
   await page.setViewportSize({ width: 390, height: 800 });
+  await openMobileMenu(page);
   await expect(page.locator(".sidebar-nav")).toBeVisible();
   await expect(page.locator("#sidebar-panel")).not.toHaveAttribute("inert", "");
 });
