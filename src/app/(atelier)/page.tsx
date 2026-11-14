@@ -2,15 +2,18 @@ import Link from "next/link";
 import FloatingTools from "@/components/atelier/FloatingTools";
 import HomeProjectBackground from "@/components/atelier/HomeProjectBackground";
 import HomeCardArtwork from "@/components/atelier/HomeCardArtwork";
+import ScrambleWords from "@/components/atelier/ScrambleWords";
+
+const SPECIALTIES = ["web", "mobile", "automatisation", "agents IA"];
 
 export default function HomePage() {
   return (
     <section className="home-page" aria-labelledby="home-title">
       <div className="home-hero">
         <h1 id="home-title">
-          Développeur
+          Développeur fullstack.
           <br />
-          fullstack &amp; mobile.
+          <ScrambleWords words={SPECIALTIES} />
         </h1>
         <FloatingTools />
       </div>

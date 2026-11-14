@@ -2037,6 +2037,12 @@ body::before {
   padding-bottom: 20px;
   font-size: clamp(44px, 4.8vw, 80px);
 }
+.scramble-words {
+  color: var(--accent);
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-weight: 400;
+  white-space: nowrap;
+}
 .home-paths {
   width: 100%;
   max-width: 1120px;

@@ -461,7 +461,7 @@ test("home has three working paths and no duplicated project catalog", async ({
     "Accueil",
   );
   await expect(page.locator(".home-page h1")).toContainText(
-    "fullstack & mobile.",
+    "Développeur fullstack.",
   );
   await expect(
     page.locator(".home-page p, .home-page img, .home-page .project-card"),
