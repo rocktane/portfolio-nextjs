@@ -1,8 +1,8 @@
 # Portfolio : intégration Next.js
 
-Identité : **yohan/portfolio**, nom textuel dans la sidebar, monogramme Y réservé au favicon. Alternatives proposées : **~/yohan**, **Le bureau de Yohan**. Le monogramme utilise un Y Newsreader, accompagné d’un point abricot, sans image générée.
+Identité : **yohan/portfolio**, nom textuel dans la sidebar, monogramme `y/` réservé au favicon. Alternatives proposées : **~/yohan**, **Le bureau de Yohan**. Le favicon est le monogramme `y/` : y blanc JetBrains Mono et barre ambre `#f5a623` sur fond forêt `#245b46`.
 
-Palette : papier `#f5f7f4`, menthe `#e5eee7`, texte `#193e32`, secondaire `#52695d`, action `#245b46`, accent `#e6ab69`. Manrope pour l’interface, Space Grotesk pour les titres et la température, Newsreader uniquement pour le Y ; fontes locales issues de la maquette validée. Pas de filtre ni de recoloration des captures.
+Palette : papier `#f5f7f4`, menthe `#e5eee7`, texte `#193e32`, secondaire `#52695d`, action `#245b46`, accent `#e6ab69`. Manrope pour l’interface, Space Grotesk pour les titres et la température ; fontes locales issues de la maquette validée. Pas de filtre ni de recoloration des captures.
 
 La structure conserve la sidebar et le catalogue de la maquette. Le header a une hauteur fixe partagée par toutes les routes ; le footer participe à une colonne flex occupant au moins la hauteur de l’écran. Sur mobile la navigation et le header restent compacts. Projets, labo, archives, parcours, contact et les fiches utilisent de vraies routes statiques Next.js. Les filtres sont dans l’URL, sans stockage local supplémentaire.
 
