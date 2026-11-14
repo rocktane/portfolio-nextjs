@@ -1,6 +1,6 @@
 # Portfolio : intégration Next.js
 
-Identité : **yohan/portfolio**, nom textuel dans la sidebar, monogramme `y/` réservé au favicon. Alternatives proposées : **~/yohan**, **Le bureau de Yohan**. Le favicon est le monogramme `y/` : y blanc JetBrains Mono et barre ambre `#f5a623` sur fond encre `#193e32`.
+Identité : **yohan/portfolio**, nom textuel dans la sidebar, monogramme `y/` réservé au favicon. Alternatives proposées : **~/yohan**, **Le bureau de Yohan**. Le favicon est le monogramme `y/` : y blanc JetBrains Mono et barre ambre `#f5a623` sur fond pétrole `#01383f`.
 
 Palette : papier `#f5f7f4`, menthe `#e5eee7`, texte `#193e32`, secondaire `#52695d`, action `#245b46`, accent `#e6ab69`. Manrope pour l’interface, Space Grotesk pour les titres et la température ; fontes locales issues de la maquette validée. Pas de filtre ni de recoloration des captures.
 
