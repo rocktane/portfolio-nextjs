@@ -681,12 +681,110 @@ test("all desktop project sheets fit without page or nested scrolling", async ({
 });
 
 async function pickTheme(page: import("@playwright/test").Page, name: string) {
-  await page.getByRole("button", { name: "Choisir le thème" }).click();
   await page
-    .getByRole("group", { name: "Thème", exact: true })
-    .getByRole("button", { name, exact: true })
+    .getByRole("radiogroup", { name: "Thème", exact: true })
+    .getByRole("radio", { name, exact: true })
     .click();
 }
+test("icon-only theme toggle defaults to system, supports keyboard, and portfolio branding is consistent", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce", colorScheme: "light" });
+  await page.goto("/");
+  const toggle = page.getByRole("radiogroup", { name: "Thème", exact: true });
+  await expect(toggle.getByRole("radio")).toHaveCount(3);
+  await expect(toggle).toHaveText("");
+  await expect(toggle.getByRole("radio", { name: "Système" })).toHaveAttribute(
+    "aria-checked",
+    "true",
+  );
+  await expect(
+    page.getByRole("link", { name: "yohan/portfolio — Accueil" }),
+  ).toBeVisible();
+  for (const width of [320, 390, 760, 768, 900, 1100, 1150, 1151, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expect(toggle).toBeVisible();
+    const bounds = await toggle.boundingBox();
+    expect(bounds).toMatchObject({ width: 98, height: 32 });
+    const sidebar = await page.locator(".atelier-sidebar").boundingBox();
+    const brand = await page.locator(".brand-word").boundingBox();
+    const guest = await page.locator(".guest-identity").boundingBox();
+    const nav = await page.locator(".sidebar-nav").boundingBox();
+    expect(bounds!.x).toBeGreaterThan(sidebar!.x);
+    expect(bounds!.x + bounds!.width).toBeLessThan(sidebar!.x + sidebar!.width);
+    expect(bounds!.y).toBeGreaterThan(sidebar!.y);
+    if (width > 760) {
+      expect(brand!.x + brand!.width).toBeLessThanOrEqual(bounds!.x - 1);
+      expect(
+        Math.abs(brand!.y + brand!.height / 2 - bounds!.y - bounds!.height / 2),
+      ).toBeLessThan(1);
+    } else {
+      expect(brand!.y + brand!.height).toBeLessThanOrEqual(bounds!.y);
+      expect(bounds!.x + bounds!.width).toBeLessThan(guest!.x);
+      expect(bounds!.y + bounds!.height).toBeLessThan(nav!.y);
+    }
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+  }
+  await page.setViewportSize({ width: 900, height: 900 });
+  const largerFallback = await page.addStyleTag({
+    content: ".sidebar-brand-row .brand-word { font: 22px monospace; }",
+  });
+  expect(
+    await page
+      .locator(".brand-word")
+      .evaluate((el) => el.scrollWidth > el.clientWidth),
+  ).toBe(true);
+  const clippedTitle = await page.locator(".brand-word").boundingBox();
+  const stableToggle = await toggle.boundingBox();
+  expect(clippedTitle!.x + clippedTitle!.width).toBeLessThan(stableToggle!.x);
+  await largerFallback.evaluate((el) => el.parentNode?.removeChild(el));
+  await page.emulateMedia({ forcedColors: "active" });
+  await expect(toggle.getByRole("radio", { name: "Système" })).toHaveCSS(
+    "outline-style",
+    "solid",
+  );
+  await expect(toggle.getByRole("radio", { name: "Système" })).toHaveCSS(
+    "outline-width",
+    "2px",
+  );
+  await page.emulateMedia({ forcedColors: "none" });
+  await toggle.getByRole("radio", { name: "Système" }).focus();
+  await page.keyboard.press("Home");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(toggle.getByRole("radio", { name: "Clair" })).toBeFocused();
+  await page.keyboard.press("End");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(toggle.getByRole("radio", { name: "Sombre" })).toHaveAttribute(
+    "aria-checked",
+    "true",
+  );
+  await page.keyboard.press("ArrowLeft");
+  await expect(toggle.getByRole("radio", { name: "Système" })).toBeFocused();
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-theme-preference",
+    "system",
+  );
+  expect(
+    await page.evaluate(() => localStorage.getItem("atelier.theme")),
+  ).toBeNull();
+  for (const path of [
+    "/",
+    "/projets",
+    "/a-essayer",
+    "/labo",
+    "/parcours",
+    "/contact",
+    "/archives",
+    "/404",
+  ]) {
+    await page.goto(path);
+    await expect(page.locator("body")).not.toContainText(/atelier/i);
+  }
+});
 test("header is transparent and controls have equal height; dark theme covers every page", async ({
   page,
 }) => {
@@ -822,9 +920,10 @@ test("theme starts before hydration; unsupported/reduced animation and cross-tab
     );
   });
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await page.getByRole("button", { name: "Choisir le thème" }).click();
-  await page.keyboard.press("Escape");
-  await expect(page.locator(".theme-picker")).not.toHaveAttribute("open", "");
+  await expect(page.getByRole("radio", { name: "Sombre" })).toHaveAttribute(
+    "aria-checked",
+    "true",
+  );
 });
 test("theme transition expands a circle from its button like Exo and skips reduced motion", async ({
   page,
