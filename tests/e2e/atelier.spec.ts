@@ -729,6 +729,29 @@ test("icon-only theme toggle defaults to system, supports keyboard, and portfoli
       ),
     ).toBe(true);
   }
+  await page.setViewportSize({ width: 900, height: 900 });
+  const largerFallback = await page.addStyleTag({
+    content: ".sidebar-brand-row .brand-word { font: 22px monospace; }",
+  });
+  expect(
+    await page
+      .locator(".brand-word")
+      .evaluate((el) => el.scrollWidth > el.clientWidth),
+  ).toBe(true);
+  const clippedTitle = await page.locator(".brand-word").boundingBox();
+  const stableToggle = await toggle.boundingBox();
+  expect(clippedTitle!.x + clippedTitle!.width).toBeLessThan(stableToggle!.x);
+  await largerFallback.evaluate((el) => el.parentNode?.removeChild(el));
+  await page.emulateMedia({ forcedColors: "active" });
+  await expect(toggle.getByRole("radio", { name: "Système" })).toHaveCSS(
+    "outline-style",
+    "solid",
+  );
+  await expect(toggle.getByRole("radio", { name: "Système" })).toHaveCSS(
+    "outline-width",
+    "2px",
+  );
+  await page.emulateMedia({ forcedColors: "none" });
   await toggle.getByRole("radio", { name: "Système" }).focus();
   await page.keyboard.press("Home");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");

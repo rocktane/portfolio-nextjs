@@ -25,7 +25,7 @@ bun run test:e2e
 
 Les tests navigateur construisent l’export statique puis le servent sur le port 3100 avec les headers de sécurité Vercel. Ils utilisent Chrome s’il est installé sur macOS. Sinon : `bunx playwright install chromium`, ou définir `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH`.
 
-Le serveur `scripts/serve-export.mjs` est réservé aux vérifications locales et n’écoute que sur loopback. L’export de production se trouve dans `out/`. Vercel publie la branche principale ; la branche `dev` publie une prévisualisation Vercel de cette interface. La branche de travail est `feat/atelier-dashboard`.
+Le serveur `scripts/serve-export.mjs` est réservé aux vérifications locales et n’écoute que sur loopback. L’export de production se trouve dans `out/`. Vercel publie la branche principale ; la branche `dev` publie une prévisualisation Vercel de cette interface. Les évolutions rejoignent `dev` par des pull requests.
 
 Prévisualisation de `dev` : https://portfolio-nextjs-git-dev-yohans-projects-9535d618.vercel.app. Prévisualisation publique Caddy : https://maquettes-portfolio.23o.dev.
 
