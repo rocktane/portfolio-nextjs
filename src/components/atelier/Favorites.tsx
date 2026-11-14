@@ -99,16 +99,6 @@ export default function Favorites() {
           </button>
         </div>
       )}
-      <p className="favorites-brower">
-        Pour explorer d’autres applications :{" "}
-        <a
-          href="https://bro.yohan.one"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Brower <Icon name="arrow" />
-        </a>
-      </p>
     </section>
   );
 }
