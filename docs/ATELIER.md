@@ -1,12 +1,12 @@
-# Portfolio : intégration Next.js
+# Atelier : intégration Next.js
 
-Identité : **yohan/portfolio**, nom textuel dans la sidebar, monogramme Y réservé au favicon. Alternatives proposées : **~/yohan**, **Le bureau de Yohan**. Le monogramme utilise un Y Newsreader, accompagné d’un point abricot, sans image générée.
+Identité : **yohan/atelier**, nom textuel dans la sidebar, monogramme Y réservé au favicon. Alternatives proposées : **~/yohan**, **Le bureau de Yohan**. Le monogramme utilise un Y Newsreader, accompagné d’un point abricot, sans image générée.
 
 Palette : papier `#f5f7f4`, menthe `#e5eee7`, texte `#193e32`, secondaire `#52695d`, action `#245b46`, accent `#e6ab69`. Manrope pour l’interface, Space Grotesk pour les titres et la température, Newsreader uniquement pour le Y ; fontes locales issues de la maquette validée. Pas de filtre ni de recoloration des captures.
 
 La structure conserve la sidebar et le catalogue de la maquette. Le header a une hauteur fixe partagée par toutes les routes ; le footer participe à une colonne flex occupant au moins la hauteur de l’écran. Sur mobile la navigation et le header restent compacts. Projets, labo, archives, parcours, contact et les fiches utilisent de vraies routes statiques Next.js. Les filtres sont dans l’URL, sans stockage local supplémentaire.
 
-L’invité peut cliquer son nom pour le modifier. Entrée ou perte de focus valide, Escape annule, nom vide rétablit Invité. Ce nom est enregistré dans localStorage (`atelier.guest-name`), jamais transmis à un service. Le stockage bloqué reste utilisable pour la visite.
+L’invité peut cliquer son nom pour le modifier. Entrée ou perte de focus valide, Escape annule, nom vide rétablit Invité. Seul ce nom est enregistré dans localStorage (`atelier.guest-name`), jamais transmis à un service. Le stockage bloqué reste utilisable pour la visite.
 
 La météo est lue directement depuis Open-Meteo pour les coordonnées de Marseille. Conditions actuelles, température Celsius, code WMO, jour/nuit ; rafraîchissement toutes les 15 minutes, pas de clé ou de compte, pas de géolocalisation. Une icône SVG représente le code renvoyé par l’API. Les données sont attribuées à Open-Meteo. Échec, réponse invalide ou données dépassées affichent une indisponibilité, pas une météo inventée.
 
@@ -62,18 +62,10 @@ La sidebar flottante devient translucide : menthe #e5eee7 à 42 %, flou de fond 
 
 ## Thèmes et header retenu
 
-Header transparent sans filet, textes en graisse 600 et contrôles Recherche / Se connecter de 42 px, sur ordinateur comme sur mobile. Les réseaux mobiles passent à la fin de la navigation horizontale ; le sélecteur de thème est dans la sidebar.
+Header transparent sans filet, textes en graisse 600 et contrôles Recherche / Se connecter de 42 px, sur ordinateur comme sur mobile. Les réseaux mobiles passent à la fin de la navigation horizontale ; le sélecteur de thème est près du nom du site.
 
 Clair / Système / Sombre, sans dépendance supplémentaire. Système est le choix par défaut et suit les changements de l’OS. Les choix explicites sont stockés dans `atelier.theme`, le choix Système retire cette préférence ; rien d’autre n’est envoyé à un service. Le nom invité garde sa propre clé. Une initialisation dans le head évite un flash avant hydratation ; le thème reste utilisable pour la visite si le stockage est bloqué.
 
 Palette sombre : fond forêt #0c2018, surfaces #19392b / #122b20, texte ivoire #e5f0e8, secondaire #afc6b8, action #286347, accent menthe #a4d7b5. Contours topographiques et sidebar vitrée adaptés, captures de projets inchangées. Les couleurs de l’interface reposent sur des tokens communs.
 
 Animation reprise du mécanisme de `~/code/exp/exo/components/AppShell.tsx` : View Transition circulaire de 450 ms partant du bouton. Elle est désactivée avec prefers-reduced-motion et remplacée par un changement immédiat si l’API n’est pas disponible ; les changements automatiques du système ne déclenchent pas d’animation. Les changements rapides invalident une transition précédente pour conserver le dernier choix.
-
-## Nom et toggle trois positions
-
-Le nom affiché devient yohan/portfolio, ainsi que son libellé accessible et le fil d’Ariane de repli (pages inconnues). Les autres occurrences « atelier » du code sont des noms techniques (dossiers, classes CSS, fontes, clés de stockage et événements) ; elles sont conservées pour garder les préférences et le nom invité. Les maquettes historiques restent identifiées comme telles.
-
-Le menu de thème est remplacé par un toggle à trois positions, composé uniquement de soleil, écran et lune. Un curseur indique le choix courant. Système reste la valeur par défaut en l’absence de préférence explicite. Le toggle est dans la sidebar à côté du titre (juste sous le titre sur mobile), accessible au clavier (flèches, Home/End), avec noms accessibles et infobulles. L’animation circulaire part de l’icône choisie.
-
-Le padding horizontal de la sidebar passe à 8 px sur grand écran, 6 px entre 761 et 1150 px et 12 px sur mobile. Cela permet de garder le toggle à sa largeur initiale de 98 px. Le titre utilise 17 px sur grand écran et 15 px sur les écrans plus étroits ; les contrôles ne se chevauchent pas aux points de rupture.

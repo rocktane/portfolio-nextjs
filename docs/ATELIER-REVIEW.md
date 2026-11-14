@@ -97,11 +97,3 @@ Palette sombre vert forêt #0c2018, texte ivoire et accents menthe ; les couleur
 Source de l’animation : `~/code/exp/exo/components/AppShell.tsx` et `app/globals.css`. Même View Transition circulaire de 450 ms partant du bouton. Sans API ou en reduced-motion, changement immédiat ; changement système automatique sans animation. Préférence locale `atelier.theme`, repli mémoire si écriture refusée et script d’initialisation avant hydratation. Anciennes transitions invalidées pour garder le dernier choix.
 
 Lint, build, typecheck et six tests unitaires passent. Les 26 tests navigateur passent localement (37,4 s) puis en HTTPS (1,2 minute). Nouveaux scénarios : modes et persistance, changement d’OS et priorité explicite, stockage indisponible, démarrage sombre alors que les scripts Next sont bloqués, synchronisation storage, API absente, Échap, animation réelle et reduced-motion. L’index publié correspond à l’export par SHA-256. Aucun ajout de dépendance ni de service. Pas de nouvelle revue council.
-
-## Portfolio et toggle à trois positions
-
-Identité affichée `yohan/portfolio` ; nom accessible de la marque et libellé de repli des pages inconnues adaptés. Aucun texte visible « Atelier » sur les huit routes contrôlées. Les noms techniques et clés de stockage sont conservés pour préserver les préférences existantes.
-
-Toggle soleil / écran / lune de 98 × 32 px avec curseur animé, système au centre par défaut ; navigation par flèches et Home/End, noms accessibles et infobulles. Il reste en haut de la sidebar, à côté du titre sur ordinateur et juste sous le titre sur mobile. Le padding horizontal est réduit à 8 px (6 px sur les ordinateurs étroits, 12 px sur mobile). Footer inchangé. La transition circulaire d’Exo et la palette sombre verte sont conservées.
-
-Lint, typecheck, build et six tests unitaires passent. Les 27 tests navigateur passent en local (36,5 s), dont neuf largeurs pour la position du toggle, les deux points de rupture à 760 et 1150 px, le clavier, la préférence système, la persistance et les 98 configurations des fiches projet sans scroll. Captures à 390 et 1440 px inspectées. Pas de nouvelle revue council.

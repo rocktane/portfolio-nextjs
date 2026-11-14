@@ -1,10 +1,5 @@
 "use client";
-import {
-  useEffect,
-  useRef,
-  useSyncExternalStore,
-  type CSSProperties,
-} from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 import { flushSync } from "react-dom";
 import { usePathname } from "next/navigation";
 import {
@@ -27,17 +22,29 @@ export default function ThemePicker() {
     readThemePreference,
     serverPreference,
   );
-  const control = useRef<HTMLDivElement>(null);
+  const menu = useRef<HTMLDetailsElement>(null);
+  const trigger = useRef<HTMLElement>(null);
   const transition = useRef<ViewTransition | null>(null);
   const generation = useRef(0);
   const pathname = usePathname();
   useEffect(() => {
+    if (menu.current) menu.current.open = false;
     applyTheme(readThemePreference());
   }, [pathname]);
-  function choose(next: ThemePreference, origin: HTMLElement) {
+  useEffect(() => {
+    const outside = (event: PointerEvent) => {
+      if (menu.current && !menu.current.contains(event.target as Node))
+        menu.current.open = false;
+    };
+    document.addEventListener("pointerdown", outside);
+    return () => document.removeEventListener("pointerdown", outside);
+  }, []);
+  function choose(next: ThemePreference) {
+    if (menu.current) menu.current.open = false;
+    trigger.current?.focus();
     const version = ++generation.current;
     const root = document.documentElement;
-    const rect = origin.getBoundingClientRect();
+    const rect = trigger.current?.getBoundingClientRect();
     const apply = () => {
       if (version === generation.current)
         flushSync(() => saveThemePreference(next));
@@ -95,62 +102,43 @@ export default function ThemePicker() {
         if (transition.current === view) transition.current = null;
       });
   }
-  const selected = options.findIndex((option) => option.value === preference);
+  const current = options.find((option) => option.value === preference)!;
   return (
-    <div
-      ref={control}
-      className="theme-toggle"
-      role="radiogroup"
-      aria-label="Thème"
-      style={{ "--theme-position": selected } as CSSProperties}
+    <details
+      className="theme-picker"
+      ref={menu}
       onKeyDown={(event) => {
-        const keys = [
-          "ArrowLeft",
-          "ArrowRight",
-          "ArrowUp",
-          "ArrowDown",
-          "Home",
-          "End",
-        ];
-        if (!keys.includes(event.key)) return;
-        event.preventDefault();
-        const focused = Number(
-          (event.target as HTMLElement).closest("button")?.dataset.index ??
-            selected,
-        );
-        const next =
-          event.key === "Home"
-            ? 0
-            : event.key === "End"
-              ? 2
-              : (focused +
-                  (["ArrowLeft", "ArrowUp"].includes(event.key) ? -1 : 1) +
-                  3) %
-                3;
-        const button = control.current?.querySelector<HTMLButtonElement>(
-          `[data-index="${next}"]`,
-        );
-        if (button) {
-          button.focus();
-          choose(options[next].value, button);
+        if (event.key === "Escape") {
+          event.preventDefault();
+          if (menu.current) menu.current.open = false;
+          trigger.current?.focus();
         }
       }}
     >
-      {options.map((option, index) => (
-        <button
-          key={option.value}
-          data-index={index}
-          type="button"
-          role="radio"
-          aria-label={option.label}
-          aria-checked={preference === option.value}
-          tabIndex={preference === option.value ? 0 : -1}
-          title={option.label}
-          onClick={(event) => choose(option.value, event.currentTarget)}
-        >
-          <Icon name={option.icon} />
-        </button>
-      ))}
-    </div>
+      <summary
+        ref={trigger}
+        role="button"
+        aria-label="Choisir le thème"
+        title={`Thème : ${current.label}`}
+      >
+        <Icon name={current.icon} />
+      </summary>
+      <div className="theme-menu" role="group" aria-label="Thème">
+        {options.map((option) => (
+          <button
+            key={option.value}
+            type="button"
+            aria-pressed={preference === option.value}
+            onClick={() => choose(option.value)}
+          >
+            <Icon name={option.icon} />
+            <span>{option.label}</span>
+            <span className="theme-check" aria-hidden="true">
+              {preference === option.value ? "✓" : ""}
+            </span>
+          </button>
+        ))}
+      </div>
+    </details>
   );
 }

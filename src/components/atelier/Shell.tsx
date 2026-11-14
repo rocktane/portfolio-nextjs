@@ -44,7 +44,7 @@ export default function Shell({ children }: { children: ReactNode }) {
   const active = project ? collectionPaths[project.section] : pathname;
   const label = project
     ? collectionNames[project.section]
-    : (navigation.find((n) => n.href === pathname)?.label ?? "Portfolio");
+    : (navigation.find((n) => n.href === pathname)?.label ?? "Atelier");
   return (
     <WeatherProvider>
       <div className="atelier-layout">

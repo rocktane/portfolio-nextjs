@@ -110,13 +110,10 @@
   font-weight: 600;
   color: var(--ink);
 }
-.atelier-sidebar {
-  padding-inline: 8px;
-}
 .sidebar-brand-row {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   min-width: 0;
   flex-shrink: 0;
 }
@@ -124,91 +121,84 @@
   flex: 1;
   min-width: 0;
 }
-.sidebar-brand-row .brand-word {
-  font-size: 17px;
-}
-.theme-toggle {
-  --theme-position: 1;
+.theme-picker {
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  width: 98px;
-  height: 32px;
   flex-shrink: 0;
-  padding: 3px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--paper) 85%, transparent);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
+  z-index: 5;
 }
-.theme-toggle::before {
-  content: "";
-  position: absolute;
-  left: 3px;
-  top: 3px;
-  bottom: 3px;
-  width: calc((100% - 6px) / 3);
-  border-radius: 5px;
-  background: var(--selected);
-  transform: translateX(calc(var(--theme-position) * 100%));
-  transition: transform 180ms ease;
-  pointer-events: none;
-}
-.theme-toggle button {
-  position: relative;
+.theme-picker summary {
   display: grid;
   place-items: center;
-  min-width: 0;
-  padding: 0;
-  border: 0;
-  border-radius: 5px;
-  background: transparent;
-  color: var(--secondary);
-}
-.theme-toggle button[aria-checked="true"] {
+  width: 32px;
+  height: 36px;
+  cursor: pointer;
+  border-radius: 7px;
+  list-style: none;
   color: var(--ink);
 }
-.theme-toggle button:hover {
-  color: var(--forest);
+.theme-picker summary::-webkit-details-marker {
+  display: none;
 }
-.theme-toggle svg {
-  width: 15px;
-  height: 15px;
+.theme-picker summary:hover {
+  background: var(--hover);
+}
+.theme-picker summary:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 2px;
+}
+.theme-picker summary svg {
+  width: 18px;
+  height: 18px;
+}
+.theme-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 168px;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--card);
+  box-shadow: 0 8px 24px #001d1412;
+}
+.theme-menu button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  background: transparent;
+  border-radius: 5px;
+  font-size: 12px;
+  text-align: left;
+}
+.theme-menu button[aria-pressed="true"],
+.theme-menu button:hover {
+  background: var(--surface);
+}
+.theme-menu svg {
+  width: 16px;
+  height: 16px;
+}
+.theme-check {
+  margin-left: auto;
 }
 .sidebar-nav .social-links-compact {
   display: none;
 }
-@media (min-width: 761px) and (max-width: 1150px) {
-  .atelier-sidebar {
-    padding-inline: 6px;
-  }
-  .sidebar-brand-row {
-    gap: 2px;
-  }
-  .sidebar-brand-row .brand-word {
-    font-size: 15px;
-  }
-}
 @media (max-width: 760px) {
-  .atelier-sidebar {
-    padding-inline: 12px;
-  }
   .sidebar-brand-row {
-    flex-direction: column;
-    align-items: flex-start;
-    align-self: center;
-    gap: 2px;
-    height: 52px;
+    gap: 4px;
   }
-  .sidebar-brand-row .atelier-brand {
-    flex: none;
-    height: 18px;
-    min-height: 18px;
-    line-height: 18px;
+  .theme-picker summary {
+    width: 26px;
+    height: 32px;
   }
-  .sidebar-brand-row .brand-word {
-    font-size: 15px;
+  .theme-menu {
+    left: -80px;
+    right: auto;
+    width: 160px;
   }
   .header-actions {
     display: flex;
