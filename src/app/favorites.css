@@ -1,0 +1,100 @@
+/* Favorites: App Store-style filled cards; only the "Ouvrir" button reacts. */
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.favorite-card {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--card);
+}
+.favorite-icon {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+.favorite-info {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+.favorite-info h2 {
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.favorite-info p {
+  color: var(--secondary);
+  font-size: 13px;
+  line-height: 1.35;
+}
+.favorite-get {
+  min-width: 72px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--selected);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 650;
+  text-align: center;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+.favorite-get:hover {
+  background: var(--action);
+  color: var(--on-action);
+}
+.favorite-get:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 2px;
+}
+.favorites-brower {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 40px;
+  color: var(--secondary);
+  font-size: 13px;
+}
+.favorites-brower a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--forest);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.favorites-brower svg {
+  width: 12px;
+  height: 12px;
+}
+
+@media (max-width: 1280px) {
+  .favorites-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  .favorites-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .favorite-get {
+    transition: none;
+  }
+}

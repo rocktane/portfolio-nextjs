@@ -1406,6 +1406,18 @@ input:focus-visible {
     max-height: none;
   }
 }
+@media (max-height: 760px) and (min-width: 761px) {
+  .sidebar-nav {
+    gap: 3px;
+  }
+  .sidebar-nav > a {
+    min-height: 42px;
+    padding-block: 9px;
+  }
+  .sidebar-bottom {
+    padding-top: 20px;
+  }
+}
 @media (max-height: 600px) and (min-width: 761px) {
   .atelier-sidebar {
     min-height: 0;

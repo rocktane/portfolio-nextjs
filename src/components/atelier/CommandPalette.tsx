@@ -9,6 +9,7 @@ const pages = [
   ["Projets", "/projets"],
   ["À essayer", "/a-essayer"],
   ["Le labo", "/labo"],
+  ["Favoris", "/favoris"],
   ["Parcours", "/parcours"],
   ["Archives", "/archives"],
   ["Contact", "/contact"],
