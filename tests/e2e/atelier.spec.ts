@@ -464,7 +464,7 @@ test("home has three working paths and no duplicated project catalog", async ({
     "Accueil",
   );
   await expect(page.locator(".home-page h1")).toContainText(
-    "fullstack & mobile.",
+    "Développeur fullstack.",
   );
   await expect(
     page.locator(".home-page p, .home-page img, .home-page .project-card"),
@@ -1217,4 +1217,26 @@ test("the folded title keeps a legible backing when motion is reduced", async ({
         .evaluate((el) => getComputedStyle(el, "::before").opacity),
     )
     .toBe("1");
+});
+
+test("home keyword pill pushes in the next specialty and resizes", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const pill = page.locator(".word-pill-drum");
+  const faces = pill.locator(".word-pill-face");
+  await expect(page.locator(".word-pill .sr-only")).toHaveText(
+    "web, mobile, automatisation, agents IA",
+  );
+  await expect(faces).toHaveText(["web"]);
+  const before = (await pill.boundingBox())!.width;
+  await expect(faces).toHaveText(["mobile"], { timeout: 6000 });
+  expect((await pill.boundingBox())!.width).toBeGreaterThan(before);
+});
+
+test("home keyword pill stays still with reduced motion", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await page.waitForTimeout(4000);
+  await expect(page.locator(".word-pill-face")).toHaveText(["web"]);
 });
