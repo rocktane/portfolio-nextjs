@@ -2,7 +2,10 @@ import { test, expect, type Page } from "@playwright/test";
 
 async function openMobileMenu(page: Page) {
   const menu = page.locator(".mobile-menu-toggle");
-  if (await menu.isVisible() && await menu.getAttribute("aria-expanded") === "false") {
+  if (
+    (await menu.isVisible()) &&
+    (await menu.getAttribute("aria-expanded")) === "false"
+  ) {
     await menu.click();
   }
 }
@@ -718,7 +721,9 @@ test("icon-only theme toggle defaults to system, supports keyboard, and portfoli
     await openMobileMenu(page);
     await expect(toggle).toBeVisible();
     const bounds = await toggle.boundingBox();
-    expect(bounds).toMatchObject(width > 760 ? { width: 98, height: 32 } : { width: 132, height: 44 });
+    expect(bounds).toMatchObject(
+      width > 760 ? { width: 98, height: 32 } : { width: 132, height: 44 },
+    );
     const sidebar = await page.locator(".atelier-sidebar").boundingBox();
     const brand = await page.locator(".brand-word").boundingBox();
     const guest = await page.locator(".guest-identity").boundingBox();
@@ -998,9 +1003,12 @@ for (const viewport of [
   { width: 1280, height: 800 },
   { width: 390, height: 844 },
 ]) {
-  test(`active sidebar indicator persists and slides at ${viewport.width}px`, async ({ page }) => {
+  test(`active sidebar indicator persists and slides at ${viewport.width}px`, async ({
+    page,
+  }) => {
     await page.setViewportSize(viewport);
     await page.goto("/");
+    await openMobileMenu(page);
     const nav = page.getByRole("navigation", { name: "Navigation principale" });
     const indicator = nav.locator(".sidebar-active-indicator");
     await expect(indicator).toBeVisible();
@@ -1009,25 +1017,53 @@ for (const viewport of [
     expect(start).not.toBeNull();
 
     await nav.getByRole("link", { name: "Contact", exact: true }).click();
-    await expect(nav.getByRole("link", { name: "Contact", exact: true })).toHaveAttribute("aria-current", "page");
-    expect(await original!.evaluate((element) => element.isConnected)).toBe(true);
+    await expect(page).toHaveURL(/\/contact\/?$/);
+    await openMobileMenu(page);
+    await expect(
+      nav.getByRole("link", { name: "Contact", exact: true }),
+    ).toHaveAttribute("aria-current", "page");
+    expect(await original!.evaluate((element) => element.isConnected)).toBe(
+      true,
+    );
     await expect(indicator).toBeVisible();
-    await expect.poll(async () => {
-      const target = await nav.locator('[aria-current="page"]').boundingBox();
-      const box = await indicator.boundingBox();
-      return !!box && !!target &&
-        Math.abs(box.x - target.x) < 1 && Math.abs(box.y - target.y) < 1 &&
-        Math.abs(box.width - target.width) < 1 && Math.abs(box.height - target.height) < 1;
-    }).toBe(true);
-    expect(await indicator.evaluate((element) => getComputedStyle(element).transitionProperty)).toContain("transform");
+    await expect
+      .poll(async () => {
+        const target = await nav.locator('[aria-current="page"]').boundingBox();
+        const box = await indicator.boundingBox();
+        return (
+          !!box &&
+          !!target &&
+          Math.abs(box.x - target.x) < 1 &&
+          Math.abs(box.y - target.y) < 1 &&
+          Math.abs(box.width - target.width) < 1 &&
+          Math.abs(box.height - target.height) < 1
+        );
+      })
+      .toBe(true);
+    expect(
+      await indicator.evaluate(
+        (element) => getComputedStyle(element).transitionProperty,
+      ),
+    ).toContain("transform");
 
     // The same indicator adapts when navigation changes from a column to a row.
-    await page.setViewportSize({ width: viewport.width === 390 ? 1280 : 390, height: 844 });
-    await expect.poll(async () => {
-      const target = await nav.locator('[aria-current="page"]').boundingBox();
-      const box = await indicator.boundingBox();
-      return !!box && !!target && Math.abs(box.x - target.x) < 1 && Math.abs(box.y - target.y) < 1;
-    }).toBe(true);
+    await page.setViewportSize({
+      width: viewport.width === 390 ? 1280 : 390,
+      height: 844,
+    });
+    await openMobileMenu(page);
+    await expect
+      .poll(async () => {
+        const target = await nav.locator('[aria-current="page"]').boundingBox();
+        const box = await indicator.boundingBox();
+        return (
+          !!box &&
+          !!target &&
+          Math.abs(box.x - target.x) < 1 &&
+          Math.abs(box.y - target.y) < 1
+        );
+      })
+      .toBe(true);
     await page.emulateMedia({ reducedMotion: "reduce" });
     await expect(indicator).toHaveCSS("transition-duration", "0s");
   });
