@@ -1,11 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { THEME_INIT } from "@/lib/theme";
+import { SIDEBAR_INIT } from "@/lib/sidebar";
 import Shell from "@/components/atelier/Shell";
 import "./fonts.css";
 import "./globals.css";
 import "./floating-sidebar.css";
 import "./themes.css";
+import "./sidebar.css";
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -51,7 +53,9 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
+        <script
+          dangerouslySetInnerHTML={{ __html: THEME_INIT + SIDEBAR_INIT }}
+        />
       </head>
       <body>
         <Shell>{children}</Shell>
