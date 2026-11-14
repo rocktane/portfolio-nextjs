@@ -16,12 +16,16 @@ test("home cards retain navigation and reveal decorative brand colors with keybo
       await expect(card).toBeVisible();
       await expect(card.locator("svg")).toHaveAttribute("aria-hidden", "true");
       await page.mouse.move(0, 0);
+      const brand = card.locator(".home-stack-logo path").first();
+      await expect(brand).toHaveCSS("fill", "rgba(0, 0, 0, 0)");
+      const symbol = card.locator(".home-card-symbol").first();
+      const idleStroke = await symbol.count() ? await symbol.evaluate((element) => getComputedStyle(element).stroke) : null;
       await card.focus();
       await page.keyboard.press("Tab");
       await page.keyboard.press("Shift+Tab");
       await expect(card).toBeFocused();
-      const brand = card.locator(".home-stack-logo path").first();
       await expect(brand).not.toHaveCSS("fill", "rgba(0, 0, 0, 0)");
+      if (idleStroke) await expect(symbol).not.toHaveCSS("stroke", idleStroke);
       await card.hover();
       await expect(brand).not.toHaveCSS("fill", "rgba(0, 0, 0, 0)");
       await card.click();
