@@ -29,7 +29,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://embed.typeform.com https://*.typeform.com; style-src 'self' 'unsafe-inline' https://fonts.bunny.net https://embed.typeform.com https://*.typeform.com; font-src 'self' data: https://fonts.bunny.net https://*.typeform.com; img-src 'self' data: blob: https://*.basemaps.cartocdn.com https://*.typeform.com https://images.typeform.com; connect-src 'self' https://fonts.bunny.net https://*.typeform.com wss://*.typeform.com; frame-src https://*.typeform.com; base-uri 'self'; form-action 'self' https://*.typeform.com; frame-ancestors 'none';"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; connect-src 'self' https://api.open-meteo.com https://vitals.vercel-insights.com; frame-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';"
         }
       ]
     }
