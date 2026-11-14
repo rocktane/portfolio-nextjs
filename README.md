@@ -27,6 +27,8 @@ Les tests navigateur construisent l’export statique puis le servent sur le por
 
 Le serveur `scripts/serve-export.mjs` est réservé aux vérifications locales et n’écoute que sur loopback. L’export de production se trouve dans `out/`. Vercel publie la branche principale ; la branche `dev` publie une prévisualisation Vercel de cette interface. La branche de travail est `feat/atelier-dashboard`.
 
+Prévisualisation de `dev` : https://portfolio-nextjs-git-dev-yohans-projects-9535d618.vercel.app. Prévisualisation publique Caddy : https://maquettes-portfolio.23o.dev.
+
 ## Interface
 
 - Vraies routes `/`, `/labo`, `/archives`, `/parcours`, `/contact`, `/projets/[id]` ; les 14 projets existants sont conservés.
