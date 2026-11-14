@@ -177,6 +177,9 @@ function FloatingTool({ tool }: { tool: (typeof tools)[number] }) {
     const observer = new ResizeObserver(measure);
     if (marker.current?.parentElement)
       observer.observe(marker.current.parentElement);
+    // Expanding the mobile sidebar moves the hero without resizing its markers.
+    const sidebar = document.querySelector(".atelier-sidebar");
+    if (sidebar) observer.observe(sidebar);
     window.addEventListener("resize", measure);
     window.addEventListener("blur", cancel);
     window.addEventListener("keydown", escape);
