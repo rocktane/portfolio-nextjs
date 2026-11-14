@@ -6,6 +6,7 @@ import "./fonts.css";
 import "./globals.css";
 import "./floating-sidebar.css";
 import "./themes.css";
+import "./favorites.css";
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
