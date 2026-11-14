@@ -11,6 +11,9 @@
   height: calc(100dvh - 16px);
   border: 1px solid #d1dfd4;
   border-radius: 14px;
+  background: rgb(229 238 231 / 42%);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
 }
 .workspace-shell {
   min-height: calc(100dvh - 8px);

@@ -55,3 +55,7 @@ Essai isolé dans `src/app/floating-sidebar.css`, importé après les styles com
 ## Fond topographique
 
 Le motif original `public/images/topography.svg`, déjà utilisé par la version `v1`, revient en masque CSS fixe sur le fond papier. Teinte forêt #245b46 à 6 % d’opacité, maille de 720 px ; ni nouvelle couleur, ni animation, ni modification des captures. Sidebar menthe et cartes opaques gardent leur contraste. Le décor ne capte aucun clic, n’affecte pas la géométrie et disparaît à l’impression.
+
+## Sidebar translucide et recherche de header
+
+La sidebar flottante devient translucide : menthe #e5eee7 à 42 %, flou de fond de 2 px pour garder un léger tracé des courbes. Même palette, polices et retrait ; aucun changement de géométrie. Trois propositions de header indépendantes de l’application comparent une barre transparente, une barre vitrée et deux îlots, avec un aperçu lisible à taille réelle et le contexte complet. Le header du site attend le choix de Yohan.

@@ -81,3 +81,9 @@ Lint, TypeScript, build et six tests unitaires passent. Les 22 tests navigateur 
 Le motif `public/images/topography.svg` était déjà référencé par le CSS de `v1` ; il est réutilisé sans modification, via un masque forêt à 6 % d’opacité et une maille de 720 px. Pas d’animation, pas de capture recolorée. Le header et les chemins d’accueil gardent un fond opaque. Captures desktop et mobile générées ; rendu desktop inspecté puis opacité réduite après la première passe.
 
 Lint, build et les 22 tests navigateur locaux passent (32,1 s). Vérification HTTPS ciblée : recherche clavier, sidebar sticky et les 98 configurations des fiches projet, trois tests réussis (23,4 s). Index et SVG publiés identiques aux fichiers locaux par SHA-256 ; HTTP 200. Aucune nouvelle revue council.
+
+## Sidebar vitrée et variantes de header
+
+Sidebar menthe à 42 % et backdrop-filter de 2 px, avec préfixe WebKit ; aucune modification de dimensions. Les courbes d’origine restent perceptibles et adoucies, comme confirmé par les captures. Build, TypeScript du build, lint et quatre tests ciblés passent en local (12,6 s) puis en HTTPS (16,6 s) : géométrie multi-pages, nom/crayon, recherche clavier, sidebar sticky. Index publié identique à l’export par SHA-256.
+
+Trois headers sont montrés dans `design-explorations/header-variants.html` : sans bandeau, barre vitrée et deux îlots. Aperçus détaillés et captures en contexte, vérifiés à 728 px et 390 px ; les trois variantes ont été inspectées. Fichier autonome et sans route applicative, aucun remplacement du header publié avant choix de Yohan. Pas de nouvelle revue council.
