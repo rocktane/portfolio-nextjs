@@ -11,7 +11,15 @@ const symbolFamilies: Record<string, string> = {
   "graduation-cap": "violet", "book-open": "violet", laptop: "violet",
   "users-round": "green", "clipboard-check": "blue", presentation: "blue",
   "briefcase-business": "ochre",
+  mail: "ochre", paperclip: "ochre", "calendar-check": "ochre", reply: "ochre",
+  "at-sign": "thermal", video: "thermal", "mouse-pointer-2": "thermal",
+  send: "green", phone: "green", "messages-square": "green", "mail-open": "green",
+  contact: "blue", "message-square-text": "blue", globe: "blue",
+  "message-circle": "violet", link: "violet", inbox: "violet",
 };
+
+// Symbols whose stroke thickens on hover, with the hover width in screen pixels.
+const boldOnHover: Record<string, number> = { "at-sign": 2 };
 
 export default function HomeCardArtwork({ composition }: { composition: HomeCardComposition }) {
   return (
@@ -25,7 +33,7 @@ export default function HomeCardArtwork({ composition }: { composition: HomeCard
             {brand.paths.map((d, index) => <path key={index} d={d} />)}
           </g>;
         }
-        return <g key={icon} className="home-card-symbol" transform={transform} strokeWidth={1.2 / scale} style={{ "--symbol-color": `var(--art-${symbolFamilies[icon] ?? "blue"})` } as CSSProperties}>
+        return <g key={icon} className="home-card-symbol" transform={transform} strokeWidth={1.2 / scale} style={{ "--symbol-color": `var(--art-${symbolFamilies[icon] ?? "blue"})`, "--symbol-hover-width": (boldOnHover[icon] ?? 1.2) / scale } as CSSProperties}>
           {homeCardIcons[icon as keyof typeof homeCardIcons].map(([tag, attributes], index) => createElement(tag, { ...attributes, key: index }))}
         </g>;
       })}
