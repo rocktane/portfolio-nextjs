@@ -40,7 +40,7 @@ CHANGES, Canopée 9,2 et Atelier 8,9. Constats acceptés et corrigés :
 - A2 : les détails Atelier deviennent des vues `#atelier/projets/<id>` et `#atelier/labo/<id>`, avec breadcrumb, retour collection, rechargement et historique natif ; Canopée garde son dialogue.
 - A3 : recherche et catégorie réinitialisées au changement de section.
 - A4 : barre de breadcrumb supprimée sur mobile, navigation conservée dans la barre supérieure.
-- A5 : parcours chronologique 2018–2023, 2023–2024, 2024–2026 ; dates recoupées avec `public/CV-20260409.pdf` (bootcamp 2023, professorat 2024, alternance 2024–2026, diplôme Epitech 2026).
+- A5 : parcours chronologique 2018–2023, 2023–2024, 2024–2026 ; dates recoupées avec `public/CV.pdf` (bootcamp 2023, professorat 2024, alternance 2024–2026, diplôme Epitech 2026).
 - A6/A7 : pas de filtre à une seule plateforme au labo, pas de CTA vers la page Contact déjà ouverte ; avatars redondants retirés.
 - C1 : dialogues Canopée canard/Newsreader et contact limité à 520 px.
 - C2 : les liens internes passent par le routeur même lorsque le hash ne change pas.
