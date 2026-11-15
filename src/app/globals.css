@@ -303,7 +303,7 @@ input:focus-visible {
 .sidebar-bottom {
   display: flex;
   flex-direction: column;
-  gap: 13px;
+  gap: 8px;
   margin-top: auto;
   padding-top: 35px;
 }
