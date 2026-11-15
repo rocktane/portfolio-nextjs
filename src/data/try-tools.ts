@@ -350,7 +350,7 @@ export const tryTools: CatalogApp[] = list.map((app) => {
   return {
     ...app,
     summary: project?.summary,
-    stack: project?.stack ?? host && details[host.id]?.stack,
+    stack: project?.stack ?? (host && details[host.id]?.stack),
     shot: project?.shot,
     year: project?.year ?? (host && details[host.id]?.year),
     platform:
