@@ -40,7 +40,10 @@ export default function CatalogFilters({
     };
     measure();
     const observer = new ResizeObserver(measure);
+    // Buttons can resize without the container (e.g. a late web font swap).
     observer.observe(container);
+    for (const button of container.querySelectorAll("button"))
+      observer.observe(button);
     return () => observer.disconnect();
   }, [value, options.length]);
 
