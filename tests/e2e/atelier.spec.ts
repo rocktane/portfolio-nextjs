@@ -537,14 +537,18 @@ test("try page lists my apps like favorites, with a copyable install command", a
   await page.goto("/a-essayer");
   await expect(page.locator(".favorite-card")).not.toHaveCount(0);
   await expect(
-    page.getByRole("link", { name: "Ouvrir tvcal" }),
-  ).toHaveAttribute("href", "https://tvcal.yohan.one");
+    page.getByRole("button", { name: "Détails de tvcal", exact: true }),
+  ).toBeVisible();
   const battery = page.locator(".favorite-card").filter({
     has: page.getByRole("heading", { name: "BetterBattery", exact: true }),
   });
-  await battery.getByRole("button", { name: /Copier/ }).click();
-  await expect(battery.getByRole("button")).toContainText("Copié");
-  await expect(page.locator(".tool-feedback")).toBeEmpty();
+  await battery.getByRole("button", { name: /Détails/ }).click();
+  const dialog = page.getByRole("dialog");
+  await dialog.getByRole("button", { name: "Copier la commande" }).click();
+  await expect(
+    dialog.getByRole("button", { name: "Commande copiée" }),
+  ).toBeVisible();
+  await expect(dialog.getByRole("status", { includeHidden: true })).toBeEmpty();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
     "brew install --cask rocktane/tap/betterbattery",
   );
@@ -553,10 +557,12 @@ test("try page lists my apps like favorites, with a copyable install command", a
       value: () => Promise.reject(new Error("Denied")),
     }),
   );
-  await battery.getByRole("button").click();
-  await expect(page.locator(".tool-feedback")).toContainText(
+  await dialog.getByRole("button", { name: "Commande copiée" }).click();
+  await expect(dialog.getByRole("status")).toContainText(
     "brew install --cask rocktane/tap/betterbattery",
   );
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
   await page.getByRole("button", { name: /^Raycast/ }).click();
   await expect(page.locator(".favorite-card")).toHaveCount(3);
 });

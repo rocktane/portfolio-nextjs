@@ -32,7 +32,7 @@ const navigation: {
     icon: "flask",
     count: projects.filter((p) => p.section === "labo").length,
   },
-  { href: "/a-essayer", label: "À essayer", icon: "play" },
+  { href: "/a-essayer", label: "À essayer", icon: "gamepad" },
   { href: "/favoris", label: "Favoris", icon: "heart" },
   { href: "/parcours", label: "Parcours", icon: "route" },
   { href: "/archives", label: "Archives", icon: "archive" },

@@ -1,10 +1,11 @@
 "use client";
-import { useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import Image from "next/image";
 import type { CatalogApp } from "@/types";
 import { normalizeSearch } from "@/lib/atelier";
 import CatalogFilters from "./CatalogFilters";
 import Icon from "./Icon";
+import AppModal from "./AppModal";
 
 type Props = {
   title: string;
@@ -19,6 +20,24 @@ export default function AppCatalog({ title, apps, noun, emptyTitle }: Props) {
   const [category, setCategory] = useState("");
   const [copied, setCopied] = useState<string | null>(null);
   const [message, setMessage] = useState("");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  useEffect(() => {
+    const sync = () =>
+      setSelectedId(new URLSearchParams(location.search).get("app"));
+    sync();
+    addEventListener("popstate", sync);
+    return () => removeEventListener("popstate", sync);
+  }, []);
+  function select(id: string | null) {
+    setSelectedId(id);
+    setCopied(null);
+    setMessage("");
+    const url = new URL(location.href);
+    if (id) url.searchParams.set("app", id);
+    else url.searchParams.delete("app");
+    history.replaceState(history.state, "", url);
+  }
+  const selected = apps.find((app) => app.id === selectedId);
   const hosts = new Map(apps.map((app) => [app.id, app]));
   const categories = [...new Set(apps.map((app) => app.category))];
   const normalized = normalizeSearch(query);
@@ -98,35 +117,28 @@ export default function AppCatalog({ title, apps, noun, emptyTitle }: Props) {
               </div>
               <p>{app.description}</p>
             </div>
-            {app.command ? (
-              <button
-                type="button"
-                className="favorite-get"
-                title={app.command}
-                onClick={() => void copy(app, app.command!)}
-              >
-                {copied === app.id ? "Copié" : "Copier"}
-                <span className="sr-only"> la commande {app.name}</span>
-              </button>
-            ) : app.url ? (
-              <a
-                className="favorite-get"
-                href={app.url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Ouvrir
-                <span className="sr-only"> {app.name}</span>
-              </a>
-            ) : (
-              <span className="favorite-get favorite-soon">Bientôt</span>
-            )}
+            <button
+              type="button"
+              className="favorite-get"
+              aria-haspopup="dialog"
+              onClick={() => select(app.id)}
+            >
+              Détails<span className="sr-only"> de {app.name}</span>
+            </button>
           </li>
         ))}
       </ul>
-      <p className="tool-feedback" role="status">
-        {message}
-      </p>
+      {selected && (
+        <AppModal
+          app={selected}
+          apps={apps}
+          copied={copied}
+          message={message}
+          onCopy={copy}
+          onSelect={select}
+          onClose={() => select(null)}
+        />
+      )}
       {!filtered.length && (
         <div className="empty-results">
           <h2>{emptyTitle}</h2>
