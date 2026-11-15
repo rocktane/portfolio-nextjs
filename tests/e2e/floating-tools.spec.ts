@@ -157,3 +157,45 @@ test("release velocity adds inertia; grabbing again stops it; a stationary relea
   expect((await logo.boundingBox())!.x).toBeCloseTo(box.x, 0);
   await expect(page.locator(".floating-tool-name")).toHaveCount(0);
 });
+
+test("CV QR code drags like the logos, stays in the viewport and hides on phones", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  const qr = page.locator("a.cv-qr");
+  await expect(qr).toHaveAttribute("href", "/CV.pdf");
+  const origin = (await qr.boundingBox())!;
+  expect(origin.x + origin.width).toBeGreaterThan(1300);
+  expect(origin.y + origin.height).toBeGreaterThan(780);
+
+  await page.mouse.move(
+    origin.x + origin.width / 2,
+    origin.y + origin.height / 2,
+  );
+  await page.mouse.down();
+  await page.mouse.move(700, 400, { steps: 8 });
+  await expect(qr).toHaveClass(/is-held/);
+  await page.waitForTimeout(100);
+  await page.mouse.up();
+  const dragged = (await qr.boundingBox())!;
+  expect(dragged.x).toBeLessThan(origin.x - 400);
+  expect(page.context().pages()).toHaveLength(1);
+
+  // Escape returns an ongoing drag to where it started.
+  await page.mouse.move(dragged.x + 50, dragged.y + 50);
+  await page.mouse.down();
+  await page.mouse.move(300, 300, { steps: 4 });
+  await page.keyboard.press("Escape");
+  await page.mouse.up();
+  expect((await qr.boundingBox())!.x).toBeCloseTo(dragged.x, 0);
+
+  // Arrow keys move it, always clamped to the viewport.
+  await qr.focus();
+  for (let i = 0; i < 40; i++) await page.keyboard.press("Shift+ArrowDown");
+  const low = (await qr.boundingBox())!;
+  expect(low.y + low.height).toBeLessThanOrEqual(900);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(qr).toBeHidden();
+});

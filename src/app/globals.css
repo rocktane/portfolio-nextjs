@@ -2307,3 +2307,70 @@ body::before {
   --duration: 7s;
   --delay: -4s;
 }
+
+/* QR code flottant vers le CV (cv.23o.dev), même tuile que les outils de l'accueil. */
+.cv-qr {
+  position: fixed;
+  right: 28px;
+  bottom: 44px;
+  z-index: 40;
+  display: block;
+  width: 104px;
+  border-radius: 24%;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.cv-qr.is-held {
+  cursor: grabbing;
+}
+.cv-qr.is-held .cv-qr-bob {
+  animation-play-state: paused;
+}
+.cv-qr-bob {
+  display: block;
+  animation: tool-levitate 7s ease-in-out infinite;
+}
+.cv-qr-tile {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 24%;
+  rotate: -6deg;
+  color: #fff;
+  background: #245b46;
+  border: 1px solid var(--border-strong);
+  box-shadow:
+    0 3px 4px #193e3208,
+    0 18px 30px -12px #193e322e,
+    inset 0 1px 0 #ffffff40;
+}
+.cv-qr-tile svg {
+  width: 80%;
+  height: 80%;
+  fill: currentColor;
+}
+.cv-qr:focus-visible {
+  outline-offset: 6px;
+}
+:root[data-theme="dark"] .cv-qr-tile {
+  color: #0c2018;
+  background: #a4d7b5;
+}
+/* Sur téléphone, le QR ne sert à rien : on est déjà sur l'appareil qui scanne. */
+@media (max-width: 760px), (pointer: coarse) {
+  .cv-qr {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cv-qr-bob {
+    animation: none;
+  }
+}
+@media print {
+  .cv-qr {
+    display: none;
+  }
+}

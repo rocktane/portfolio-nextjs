@@ -3,6 +3,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { THEME_INIT } from "@/lib/theme";
 import { SIDEBAR_INIT } from "@/lib/sidebar";
 import Shell from "@/components/atelier/Shell";
+import CvQrCode from "@/components/atelier/CvQrCode";
 import "./fonts.css";
 import "./globals.css";
 import "./floating-sidebar.css";
@@ -61,6 +62,7 @@ export default function RootLayout({
       </head>
       <body>
         <Shell>{children}</Shell>
+        <CvQrCode />
         {process.env.VERCEL === "1" && <Analytics />}
       </body>
     </html>
