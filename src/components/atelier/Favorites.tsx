@@ -3,6 +3,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { favorites } from "@/data/favorites";
 import { normalizeSearch } from "@/lib/atelier";
+import CatalogFilters from "./CatalogFilters";
 import Icon from "./Icon";
 
 export default function Favorites() {
@@ -23,27 +24,18 @@ export default function Favorites() {
         <h1>Favoris</h1>
       </div>
       <div className="catalog-toolbar">
-        <div
-          className="catalog-filters"
-          role="group"
-          aria-label="Catégories des favoris"
-        >
-          {["", ...categories].map((value) => (
-            <button
-              type="button"
-              key={value}
-              aria-pressed={category === value}
-              onClick={() => setCategory(value)}
-            >
-              {value || "Tous"}
-              <span>
-                {value
-                  ? favorites.filter((f) => f.category === value).length
-                  : favorites.length}
-              </span>
-            </button>
-          ))}
-        </div>
+        <CatalogFilters
+          label="Catégories des favoris"
+          value={category}
+          onChange={setCategory}
+          options={["", ...categories].map((value) => ({
+            value,
+            label: value || "Tous",
+            count: value
+              ? favorites.filter((f) => f.category === value).length
+              : favorites.length,
+          }))}
+        />
         <label className="project-search">
           <Icon name="search" />
           <input

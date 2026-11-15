@@ -562,12 +562,14 @@ input:focus-visible {
   padding-bottom: 20px;
 }
 .catalog-filters {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 5px;
   flex-wrap: wrap;
 }
 .catalog-filters > button {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 7px;
@@ -578,13 +580,50 @@ input:focus-visible {
   border-radius: 6px;
   color: var(--secondary);
   font-size: 13px;
+  transition: color 0.2s ease;
 }
 .catalog-filters > button[aria-pressed="true"] {
   background: var(--selected);
   color: var(--ink);
   font-weight: 700;
 }
-.catalog-filters > button > span {
+/* Once measured, a single sliding background replaces the per-button one. */
+.catalog-filters[data-indicator] > button[aria-pressed="true"] {
+  background: transparent;
+}
+.catalog-filter-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: var(--selected);
+  border-radius: 6px;
+  pointer-events: none;
+}
+.catalog-filter-indicator[data-animated] {
+  transition:
+    transform 0.32s cubic-bezier(0.32, 0.72, 0, 1),
+    width 0.32s cubic-bezier(0.32, 0.72, 0, 1),
+    height 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+}
+/* Reserve the bold width so selecting a filter never shifts its neighbours. */
+.catalog-filter-label,
+.catalog-filter-count {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+.catalog-filter-label::after,
+.catalog-filter-count::after {
+  content: attr(data-text);
+  content: attr(data-text) / "";
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: 700;
+  user-select: none;
+  pointer-events: none;
+}
+.catalog-filter-count {
   font-size: 11px;
 }
 .project-search {
