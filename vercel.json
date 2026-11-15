@@ -36,7 +36,8 @@
   ],
   "git": {
     "deploymentEnabled": {
-      "dev": false
+      "main": true,
+      "**": false
     }
   }
 }
