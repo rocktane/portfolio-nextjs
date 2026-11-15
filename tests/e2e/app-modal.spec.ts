@@ -178,24 +178,25 @@ test("module selection smoothly resizes mdeck and copies its install command", a
       el.getAnimations().map((animation) => animation.finished),
     );
   });
-  await dialog.getByRole("button", { name: "Ping", exact: true }).click();
-  const motion = await dialog.evaluate((el) => {
-    const animation = el
-      .getAnimations()
-      .find((a) =>
-        (a.effect as KeyframeEffect)
-          .getKeyframes()
-          .some((frame) => "height" in frame),
-      );
-    return animation
-      ? {
-          duration: animation.effect!.getTiming().duration,
-          frames: (animation.effect as KeyframeEffect)
-            .getKeyframes()
-            .map((frame) => frame.height),
-        }
-      : null;
+  // Keep evidence after the short animation ends, even on a busy runner.
+  await dialog.evaluate((el) => {
+    const animate = el.animate.bind(el);
+    el.animate = (frames, options) => {
+      const animation = animate(frames, options);
+      const effect = animation.effect as KeyframeEffect;
+      const heights = effect.getKeyframes().map((frame) => frame.height);
+      if (heights.some(Boolean)) {
+        (el as HTMLElement).dataset.heightMotion = JSON.stringify({
+          duration: effect.getTiming().duration,
+          frames: heights,
+        });
+      }
+      return animation;
+    };
   });
+  await dialog.getByRole("button", { name: "Ping", exact: true }).click();
+  await expect(dialog).toHaveAttribute("data-height-motion", /frames/);
+  const motion = JSON.parse((await dialog.getAttribute("data-height-motion"))!);
   expect(motion?.duration).toBe(220);
   expect(motion?.frames[0]).not.toBe(motion?.frames[1]);
   await dialog.getByRole("button", { name: "Copier la commande" }).click();

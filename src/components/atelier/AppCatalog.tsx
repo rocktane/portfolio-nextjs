@@ -52,7 +52,7 @@ export default function AppCatalog({ title, apps, noun, emptyTitle }: Props) {
     try {
       await navigator.clipboard.writeText(command);
       setCopied(app.id);
-      setMessage(`Commande ${app.name} copiée.`);
+      setMessage("");
     } catch {
       setCopied(null);
       setMessage(`Copie indisponible. Commande : ${command}`);
