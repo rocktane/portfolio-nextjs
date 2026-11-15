@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import type { Project } from "@/types";
 import { normalizeSearch, projectPlatform, statusLabels } from "@/lib/atelier";
+import CatalogFilters from "./CatalogFilters";
 import Icon from "./Icon";
 import ProjectImage from "./ProjectImage";
 import ProjectBoard from "./ProjectBoard";
@@ -91,30 +92,22 @@ function CatalogView({
         <>
           <div className="catalog-toolbar">
             {platforms.length > 1 && (
-              <div
-                className="catalog-filters"
-                role="group"
-                aria-label="Filtrer par plateforme"
-              >
-                {["Tous", ...platforms].map((platform) => (
-                  <button
-                    key={platform}
-                    type="button"
-                    aria-pressed={category === platform}
-                    onClick={() =>
-                      update("plateforme", platform === "Tous" ? "" : platform)
-                    }
-                  >
-                    {platform}
-                    <span>
-                      {platform === "Tous"
-                        ? items.length
-                        : items.filter((p) => projectPlatform(p) === platform)
-                            .length}
-                    </span>
-                  </button>
-                ))}
-              </div>
+              <CatalogFilters
+                label="Filtrer par plateforme"
+                value={category}
+                onChange={(platform) =>
+                  update("plateforme", platform === "Tous" ? "" : platform)
+                }
+                options={["Tous", ...platforms].map((platform) => ({
+                  value: platform,
+                  label: platform,
+                  count:
+                    platform === "Tous"
+                      ? items.length
+                      : items.filter((p) => projectPlatform(p) === platform)
+                          .length,
+                }))}
+              />
             )}
             <label className="project-search">
               <Icon name="search" />

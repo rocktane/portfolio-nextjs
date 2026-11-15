@@ -68,4 +68,14 @@ export interface CatalogApp {
   /** Icône locale ; à défaut, une initiale sur la couleur `accent`. */
   icon?: string;
   accent?: string;
+  /** Fiche détaillée, dans la fenêtre ouverte au clic sur la carte. */
+  summary?: string;
+  site?: string;
+  github?: string;
+  /** Archive de la dernière version publiée. */
+  download?: string;
+  platform?: string;
+  stack?: string[];
+  shot?: string;
+  year?: string;
 }

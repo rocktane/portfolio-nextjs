@@ -3,6 +3,7 @@ import { useState, type CSSProperties } from "react";
 import Image from "next/image";
 import type { CatalogApp } from "@/types";
 import { normalizeSearch } from "@/lib/atelier";
+import CatalogFilters from "./CatalogFilters";
 import Icon from "./Icon";
 
 type Props = {
@@ -44,27 +45,18 @@ export default function AppCatalog({ title, apps, noun, emptyTitle }: Props) {
         <h1>{title}</h1>
       </div>
       <div className="catalog-toolbar">
-        <div
-          className="catalog-filters"
-          role="group"
-          aria-label={`Catégories : ${title}`}
-        >
-          {["", ...categories].map((value) => (
-            <button
-              type="button"
-              key={value}
-              aria-pressed={category === value}
-              onClick={() => setCategory(value)}
-            >
-              {value || "Tous"}
-              <span>
-                {value
-                  ? apps.filter((app) => app.category === value).length
-                  : apps.length}
-              </span>
-            </button>
-          ))}
-        </div>
+        <CatalogFilters
+          label={`Catégories : ${title}`}
+          value={category}
+          onChange={setCategory}
+          options={["", ...categories].map((value) => ({
+            value,
+            label: value || "Tous",
+            count: value
+              ? apps.filter((app) => app.category === value).length
+              : apps.length,
+          }))}
+        />
         <label className="project-search">
           <Icon name="search" />
           <input

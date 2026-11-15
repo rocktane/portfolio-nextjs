@@ -1,11 +1,12 @@
 import type { CatalogApp } from "@/types";
+import { projects } from "./projects";
 
 /**
  * Les applications développées par Yohan, présentées comme les favoris.
  * Les entrées marquées « privé » pointent vers un dépôt non public, celles
  * sans `url` n'ont encore aucune destination.
  */
-export const tryTools: CatalogApp[] = [
+const list: CatalogApp[] = [
   // Web
   {
     id: "exo",
@@ -238,3 +239,127 @@ export const tryTools: CatalogApp[] = [
     accent: "#F97316",
   },
 ];
+
+/** Ce que la fenêtre de détail ajoute aux cartes, quand le projet du site ne
+ *  le fournit pas déjà. */
+const details: Record<string, Partial<CatalogApp>> = {
+  betterbattery: {
+    download:
+      "https://github.com/rocktane/betterbattery/releases/latest/download/BetterBattery.zip",
+    platform: "macOS · Apple Silicon",
+  },
+  betterbar: {
+    summary:
+      "Un gestionnaire de barre des menus pour macOS 27. Les icônes se répartissent entre Toujours masqué, Masqué et Visible : un ⌘-glisser sur une icône affiche les séparateurs et range toute son application dans la section choisie.",
+    platform: "macOS 27",
+    stack: ["Swift", "AppKit"],
+    year: "2026",
+  },
+  betterview: {
+    summary:
+      "Une visionneuse RAW faite pour trier des photos Sony A7C le plus vite possible : moins d'une milliseconde d'une photo à l'autre une fois préparée, suppression en une touche vers la corbeille, annulable avec ⌘Z, et historique des suppressions avec aperçu.",
+    platform: "macOS",
+    stack: ["Swift", "SwiftUI"],
+    year: "2026",
+  },
+  mdeck: {
+    summary:
+      "Une seule application de barre des menus, plusieurs petits utilitaires. Chaque utilitaire est un module qu'on active ou non ; un module éteint ne tourne pas du tout : ni observateur, ni raccourci, ni event tap.",
+    download:
+      "https://github.com/rocktane/mdeck/releases/latest/download/mdeck.zip",
+    platform: "macOS 13+ · Intel et Apple Silicon",
+    stack: ["Swift", "AppKit"],
+    year: "2026",
+  },
+  "night-shift-focus": {
+    summary:
+      "Coupe Night Shift et True Tone tant qu'une application de couleur (Lightroom, Photoshop, Figma…) est au premier plan, puis remet exactement ce qui était là en la quittant, y compris si la programmation a basculé entre-temps.",
+  },
+  altty: {
+    summary:
+      "Un sélecteur d'applications (⌥⇥ par défaut, ⌘⇥ possible) qui laisse de côté les applications sans fenêtre ouverte : fini les apps Electron qui tournent encore pour rien. Existe aussi en application autonome.",
+    download:
+      "https://github.com/rocktane/altty/releases/latest/download/Altty.zip",
+  },
+  "app-monitor": {
+    summary:
+      "La consommation CPU et mémoire regroupée par application, avec des jauges dans la barre des menus et un panneau qu'on peut épingler.",
+  },
+  "dock-lock": {
+    summary:
+      "Garde le Dock sur un seul écran, celui du MacBook par défaut, même avec des écrans externes : le pointeur est retenu au bord des autres écrans, et le Dock revient tout seul après un branchement ou une sortie de veille.",
+  },
+  "keep-awake": {
+    summary:
+      "Empêche la mise en veille du système ou de l'écran : sans limite, pour une durée, jusqu'à une heure donnée, ou automatiquement tant que Claude Code ou Codex travaille.",
+  },
+  "clean-links": {
+    summary:
+      "Retire les traqueurs (utm_*, fbclid, tags d'affiliation…) des liens copiés, déroule les redirections et les pages AMP, et développe les liens raccourcis.",
+  },
+  ping: {
+    summary:
+      "Pingue une adresse (1.1.1.1 par défaut) toutes les quelques secondes et affiche un point dans la barre des menus, de la couleur choisie, qui passe au rouge quand elle ne répond plus.",
+  },
+  "humain-vs-jev": {
+    summary:
+      "Un petit jeu web en cinq rounds : à chaque round, une vraie photo et une image générée par IA. Il faut repérer la fausse avant Jev, un modèle qui joue en même temps. Le tout tient dans un seul binaire Go, sans dépendance.",
+    stack: ["Go", "HTML", "CSS", "JavaScript"],
+    year: "2026",
+  },
+  peeko: {
+    summary:
+      "Un serveur MCP qui donne à Claude des captures du simulateur iOS, de l'émulateur Android ou d'un appareil Android branché en USB. Volontairement en lecture seule : il observe, il ne tape, ne glisse et ne saisit jamais rien.",
+    platform: "MCP · iOS · Android",
+    stack: ["TypeScript", "Bun", "MCP"],
+    year: "2026",
+  },
+  altjump: {
+    summary:
+      "Une extension de navigateur qui ajoute des boutons « Visiter » directs sur les fiches d'AlternativeTo, pour aller au site d'un logiciel sans passer par sa page intermédiaire.",
+    platform: "Chrome",
+    stack: ["JavaScript"],
+  },
+  "qrcode-scanner": {
+    summary:
+      "Une extension Raycast qui scanne un QR code avec la caméra du MacBook et en récupère le contenu.",
+    platform: "Raycast · macOS",
+    stack: ["Raycast", "TypeScript"],
+  },
+  mini: {
+    summary:
+      "Un lanceur de commandes longues : on les envoie en arrière-plan, Mini suit leur sortie, leur consommation et prévient à la fin.",
+    platform: "macOS",
+    stack: ["Swift", "AppKit"],
+  },
+  woodle: {
+    summary:
+      "Une application de gestion de box CrossFit : réservations de cours, records personnels et suivi des adhérents.",
+  },
+  betterdraw: {
+    summary:
+      "Dessiner à l'échelle un décor mural, le peindre zone par zone, puis le reporter sur le vrai mur grâce à une grille de carroyage cotée.",
+  },
+};
+
+export const tryTools: CatalogApp[] = list.map((app) => {
+  const project = projects.find((p) => p.id === app.id);
+  const extra = details[app.id] ?? {};
+  const host = app.module ? list.find((a) => a.id === app.module) : undefined;
+  const url = app.url;
+  return {
+    ...app,
+    summary: project?.summary,
+    stack: project?.stack ?? host && details[host.id]?.stack,
+    shot: project?.shot,
+    year: project?.year ?? (host && details[host.id]?.year),
+    platform:
+      project?.platform ??
+      (project?.section === "projets" ? "Web" : undefined) ??
+      (host && details[host.id]?.platform) ??
+      app.category,
+    site: url && !url.includes("github.com") ? url : undefined,
+    github: url?.includes("github.com") ? url : undefined,
+    ...extra,
+  };
+});
