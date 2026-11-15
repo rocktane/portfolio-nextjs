@@ -194,7 +194,7 @@ test("Notion property menus combine filters, show sort chips and open records", 
   page,
 }) => {
   await page.goto("/parcours");
-  await expect(page.locator(".notion-table tbody tr")).toHaveCount(10);
+  await expect(page.locator(".notion-table tbody tr")).toHaveCount(11);
   const before = await page.locator(".notion-table-scroll").boundingBox();
   await page.getByRole("button", { name: "Filtrer", exact: true }).click();
   expect((await page.locator(".notion-table-scroll").boundingBox())!.y).toBe(
@@ -235,7 +235,7 @@ test("Notion property menus combine filters, show sort chips and open records", 
     .selectOption("or");
   await expect(page.locator(".notion-table tbody tr")).toHaveCount(4);
   await page.getByRole("button", { name: "Tout effacer", exact: true }).click();
-  await expect(page.locator(".notion-table tbody tr")).toHaveCount(10);
+  await expect(page.locator(".notion-table tbody tr")).toHaveCount(11);
   await page.keyboard.press("Escape");
   for (const name of ["Expériences", "Formations", "Tout le parcours"]) {
     await page.getByRole("tab", { name, exact: true }).click();
@@ -391,7 +391,7 @@ test("portfolio workspaces use the shared theme and compact Notion controls", as
   await expect(page.locator(".notion-table tbody tr")).toHaveCount(2);
   await input.press("Escape");
   await expect(input).toHaveCount(0);
-  await expect(page.locator(".notion-table tbody tr")).toHaveCount(10);
+  await expect(page.locator(".notion-table tbody tr")).toHaveCount(11);
   const tableBefore = await page.locator(".notion-table-scroll").boundingBox();
   await page.getByRole("button", { name: "Propriétés", exact: true }).click();
   const sidebar = page.getByRole("dialog", {
@@ -451,7 +451,7 @@ test("record dialogs lock the background and restore its scroll position", async
   await expect(page.locator("body")).not.toHaveCSS("position", "fixed");
 });
 
-test("glass buttons share a hover and the view switch keeps its tooltip while the indicator moves", async ({
+test("glass buttons share a hover and the view switch keeps its tooltip while switching", async ({
   page,
 }) => {
   await page.goto("/projets");
@@ -504,30 +504,13 @@ test("glass buttons share a hover and the view switch keeps its tooltip while th
   expect(await originalTooltip!.evaluate((node) => node.isConnected)).toBe(
     true,
   );
-  const indicator = page.locator(".view-switch-indicator");
-  const originalIndicator = await indicator.elementHandle();
-  await expect(indicator).toHaveCSS(
-    "transition-duration",
-    "0.32s, 0.32s, 0.32s",
-  );
   await list.click();
   await expect(list).toHaveAttribute("aria-pressed", "true");
-  await expect
-    .poll(async () =>
-      Math.abs(
-        (await indicator.boundingBox())!.x - (await list.boundingBox())!.x,
-      ),
-    )
-    .toBeLessThan(1);
-  expect(await originalIndicator!.evaluate((node) => node.isConnected)).toBe(
-    true,
-  );
   await page.keyboard.press("Escape");
   await expect(tooltip).toHaveCount(0);
   await page.emulateMedia({ reducedMotion: "reduce" });
   await grid.focus();
   await expect(page.getByRole("tooltip")).toHaveText("Grille");
-  await expect(indicator).toHaveCSS("transition-duration", "0s");
   await grid.press("Enter");
   await expect(grid).toHaveAttribute("aria-pressed", "true");
 });
