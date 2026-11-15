@@ -544,6 +544,7 @@ test("try page lists my apps like favorites, with a copyable install command", a
   });
   await battery.getByRole("button", { name: /Copier/ }).click();
   await expect(battery.getByRole("button")).toContainText("Copié");
+  await expect(page.locator(".tool-feedback")).toBeEmpty();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
     "brew install --cask rocktane/tap/betterbattery",
   );
