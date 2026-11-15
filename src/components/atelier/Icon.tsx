@@ -95,6 +95,7 @@ const paths = {
     </>
   ),
   arrow: <path d="M5 19 19 5M7 5h12v12" />,
+  download: <path d="M12 3v12m-5-5 5 5 5-5M4 20h16" />,
   back: <path d="M20 12H4m6-6-6 6 6 6" />,
   archive: (
     <>
