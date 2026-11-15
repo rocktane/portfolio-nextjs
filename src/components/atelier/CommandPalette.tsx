@@ -30,7 +30,7 @@ const entries = [
   })),
   {
     label: "Ouvrir le CV",
-    href: "/CV-20260409.pdf",
+    href: "/CV.pdf",
     detail: "PDF",
     terms: "cv curriculum vitae recruteur",
     external: true,

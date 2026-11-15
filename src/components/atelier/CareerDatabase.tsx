@@ -204,7 +204,7 @@ export default function CareerDatabase() {
         <div className="page-heading notion-title-row">
           <h1>Parcours</h1>
           <a
-            href="/CV-20260409.pdf"
+            href="/CV.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="notion-cv"

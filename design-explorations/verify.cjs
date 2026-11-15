@@ -66,7 +66,7 @@ const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright-core');
  await page.goto(url+'#atelier/contact');await page.reload();await page.getByRole('heading',{name:'Faisons équipe.'}).waitFor();assert(await page.getByRole('heading',{name:'Faisons équipe.'}).isVisible());
  const keyboard=await browser.newPage();await keyboard.goto(url+'#canopee');await keyboard.keyboard.press('Tab');assert(await keyboard.locator('.skip').evaluate(el=>el===document.activeElement),'Canopée skip must be first Tab target');await keyboard.close();
  for(const invalid of ['atelier/projets/zzz','atelier/labo/brower']){await page.goto(url+'#'+invalid);await page.waitForURL('**#'+invalid.split('/').slice(0,2).join('/'));await page.locator('#results').waitFor()}
- if(process.env.PORTFOLIO_URL){const cv=await page.request.get(new URL('/CV-20260409.pdf',url).href);assert.equal(cv.status(),200);assert((await cv.body()).subarray(0,5).equals(Buffer.from('%PDF-')))}
+ if(process.env.PORTFOLIO_URL){const cv=await page.request.get(new URL('/CV.pdf',url).href);assert.equal(cv.status(),200);assert((await cv.body()).subarray(0,5).equals(Buffer.from('%PDF-')))}
  assert.deepEqual(errors,[]);
  console.log('PASS: 36 route/viewport combinations, original images, dock, search, filters, empty state, list, shareable project detail/reload/Back, Canopée dialog/Escape, same-hash links, skip link, isolated section search, labo, contact/login, career, reload, scroll restoration, first Tab, invalid URLs.');
  await browser.close();
