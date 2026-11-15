@@ -2,6 +2,7 @@
 
 import { useLayoutEffect, useRef, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
+import { subscribeSidebar } from "@/lib/sidebar";
 import { useFloatingDrag, type FloatPosition } from "@/lib/use-floating-drag";
 
 const tools = [
@@ -69,6 +70,13 @@ function FloatingTool({ tool }: { tool: (typeof tools)[number] }) {
     function escape(event: globalThis.KeyboardEvent) {
       if (event.key === "Escape") cancel();
     }
+    // Folding the sidebar reflows the hero but must not drag the logos: they
+    // stay exactly where the visitor sees them, detached from their marker.
+    function detach() {
+      if (!matchMedia("(min-width: 761px)").matches) return;
+      const current = read();
+      if (current) place({ ...current, moved: true });
+    }
     measure();
     const observer = new ResizeObserver(measure);
     if (marker.current?.parentElement)
@@ -76,11 +84,13 @@ function FloatingTool({ tool }: { tool: (typeof tools)[number] }) {
     // Expanding the mobile sidebar moves the hero without resizing its markers.
     const sidebar = document.querySelector(".atelier-sidebar");
     if (sidebar) observer.observe(sidebar);
+    const unwatchSidebar = subscribeSidebar(detach);
     window.addEventListener("resize", measure);
     window.addEventListener("blur", cancel);
     window.addEventListener("keydown", escape);
     return () => {
       cancel();
+      unwatchSidebar();
       observer.disconnect();
       window.removeEventListener("resize", measure);
       window.removeEventListener("blur", cancel);

@@ -47,6 +47,34 @@ test("drag across the page, cancel, clamp, resume floating and reset on reload",
     .toBeCloseTo(origin.x, 0);
 });
 
+test("folding and unfolding the sidebar leaves the logos in place", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const reducedMotion of ["no-preference", "reduce"] as const) {
+    await page.emulateMedia({ reducedMotion });
+    await page.goto("/");
+    const logo = page.locator("a.floating-tool-claude");
+    const toggle = page.locator("#sidebar-toggle");
+    const before = (await logo.boundingBox())!;
+    for (const collapsed of [true, false]) {
+      await toggle.click();
+      await page.waitForTimeout(600);
+      expect(await page.locator("html").getAttribute("data-sidebar")).toBe(
+        collapsed ? "collapsed" : null,
+      );
+      const after = (await logo.boundingBox())!;
+      expect(after.x).toBeCloseTo(before.x, 0);
+      expect(after.y).toBeCloseTo(before.y, 0);
+    }
+    // A reload re-anchors the constellation on the marker layout.
+    await page.reload();
+    await expect
+      .poll(async () => (await logo.boundingBox())!.x)
+      .toBeCloseTo(before.x, 0);
+  }
+});
+
 test("monochrome themes, no hover scale, reduced motion and keyboard movement", async ({
   page,
 }) => {
