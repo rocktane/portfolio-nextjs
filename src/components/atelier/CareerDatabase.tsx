@@ -205,11 +205,10 @@ export default function CareerDatabase() {
           <h1>Parcours</h1>
           <a
             href="/CV-20260409.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
+            download="CV-Yohan-Gouiran.pdf"
             className="notion-cv"
           >
-            Ouvrir le CV <Icon name="arrow" />
+            <Icon name="download" /> Télécharger le CV
           </a>
         </div>
       </header>

@@ -510,20 +510,30 @@
   letter-spacing: -1.5px;
 }
 .notion-cv {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--n-muted);
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 9px;
+  background: var(--action);
+  color: var(--on-action);
+  font-size: 13px;
+  font-weight: 600;
   white-space: nowrap;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 12%);
+  transition: background 150ms ease;
 }
 .notion-cv:hover {
-  color: var(--n-ink);
-  text-decoration: underline;
+  background: var(--action-hover);
+}
+.notion-cv:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--ring);
 }
 .notion-cv svg {
-  width: 13px;
-  height: 13px;
+  width: 15px;
+  height: 15px;
 }
 .notion-page-heading p {
   color: var(--n-muted);
