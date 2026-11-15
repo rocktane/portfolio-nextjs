@@ -9,6 +9,7 @@
 .atelier-sidebar {
   top: 8px;
   height: calc(100dvh - 16px);
+  padding-bottom: 8px;
   border: 1px solid var(--border);
   border-radius: 14px;
   background: color-mix(in srgb, var(--surface) 55%, transparent);
