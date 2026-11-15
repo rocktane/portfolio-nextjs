@@ -22,6 +22,22 @@
   height: 56px;
   object-fit: contain;
 }
+/* Même gabarit que les icônes macOS des favoris : 104 px de forme dans un
+   carré de 128, soit 46 px dans 56, et un rayon de 22,5 %. */
+.favorite-monogram {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin: 5px;
+  border-radius: 10px;
+  background: var(--app-accent, var(--forest));
+  color: #fff;
+  text-transform: uppercase;
+  font:
+    600 22px "Space Grotesk",
+    sans-serif;
+}
 .favorite-info {
   display: grid;
   gap: 3px;
@@ -40,6 +56,40 @@
   font-size: 13px;
   line-height: 1.35;
 }
+/* Une entrée qui est un module d'une autre application (mdeck) : le badge
+   suit le nom, et passe dessous quand la carte est trop étroite. */
+.favorite-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 8px;
+  min-width: 0;
+}
+.favorite-title h2 {
+  max-width: 100%;
+}
+.app-module-badge {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 8px 1px 4px;
+  border-radius: 999px;
+  background: var(--selected);
+  color: var(--secondary);
+  font-size: 11px;
+  line-height: 20px;
+  cursor: default;
+  user-select: none;
+}
+.app-module-badge img {
+  width: 18px;
+  height: 18px;
+}
+.app-module-badge strong {
+  color: var(--ink);
+  font-weight: 600;
+}
 .favorite-get {
   min-width: 72px;
   padding: 6px 14px;
@@ -53,7 +103,16 @@
     background-color 0.2s,
     color 0.2s;
 }
-.favorite-get:hover {
+button.favorite-get {
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+.favorite-soon {
+  color: var(--secondary);
+  font-weight: 500;
+}
+.favorite-get:not(.favorite-soon):hover {
   background: var(--action);
   color: var(--on-action);
 }

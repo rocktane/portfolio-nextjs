@@ -1,11 +1,7 @@
-export type Favorite = {
-  id: string;
-  name: string;
-  category: string;
-  description: string;
-  url: string;
-};
-export const favorites: Favorite[] = [
+import type { CatalogApp } from "@/types";
+
+type Favorite = CatalogApp & { url: string };
+const list: Favorite[] = [
   {
     id: "t3code",
     name: "T3 Code",
@@ -189,3 +185,8 @@ export const favorites: Favorite[] = [
     url: "https://zed.dev",
   },
 ];
+
+export const favorites: CatalogApp[] = list.map((favorite) => ({
+  ...favorite,
+  icon: `/images/favorites/${favorite.id}.png`,
+}));

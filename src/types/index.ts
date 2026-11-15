@@ -9,17 +9,12 @@ export type LinkKind = "site" | "code" | "brew";
 
 /** Motif graphique utilisé pour les projets sans capture d'écran. */
 export type PosterMotif =
-  | "amp"
-  | "tama"
-  | "battery"
-  | "cashou"
-  | "nlp"
-  | "kube"
-  | "raycast";
+  "amp" | "tama" | "battery" | "cashou" | "nlp" | "kube" | "raycast";
 
 /** Trame de fond de l'affiche : une par projet, pour que deux plans du
  *  carrousel ne se ressemblent jamais. */
-export type PosterPattern = "grid" | "dots" | "diagonals" | "rings" | "scanlines";
+export type PosterPattern =
+  "grid" | "dots" | "diagonals" | "rings" | "scanlines";
 
 export interface Project {
   id: string;
@@ -56,4 +51,21 @@ export interface Project {
 export interface CreditLine {
   role: string;
   value: string;
+}
+
+/** Une application des pages Favoris et À essayer. */
+export interface CatalogApp {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  /** Destination du bouton « Ouvrir ». */
+  url?: string;
+  /** Commande d'installation, copiée au clic à la place d'un lien. */
+  command?: string;
+  /** Identifiant de l'application hôte quand l'entrée en est un module. */
+  module?: string;
+  /** Icône locale ; à défaut, une initiale sur la couleur `accent`. */
+  icon?: string;
+  accent?: string;
 }
