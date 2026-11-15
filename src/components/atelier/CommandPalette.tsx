@@ -10,7 +10,6 @@ const pages = [
   ["À essayer", "/a-essayer"],
   ["Favoris", "/favoris"],
   ["Le labo", "/labo"],
-  ["Favoris", "/favoris"],
   ["Parcours", "/parcours"],
   ["Archives", "/archives"],
   ["Contact", "/contact"],
