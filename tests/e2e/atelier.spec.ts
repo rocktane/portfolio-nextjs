@@ -548,7 +548,7 @@ test("try page lists my apps like favorites, with a copyable install command", a
   await expect(
     dialog.getByRole("button", { name: "Commande copiée" }),
   ).toBeVisible();
-  await expect(dialog.getByRole("status")).toBeEmpty();
+  await expect(dialog.getByRole("status", { includeHidden: true })).toBeEmpty();
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
     "brew install --cask rocktane/tap/betterbattery",
   );
