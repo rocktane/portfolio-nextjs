@@ -135,3 +135,323 @@ button.favorite-get {
     transition: none;
   }
 }
+
+/* A quiet detail sheet, independent from the catalog's layout. */
+.app-modal {
+  box-sizing: border-box;
+  position: fixed;
+  inset: 0;
+  width: min(688px, calc(100% - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 48px);
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--card);
+  color: var(--ink);
+  font-family: Manrope, system-ui, sans-serif;
+  box-shadow: 0 24px 80px #061b1833;
+  animation: app-modal-in 180ms ease-out both;
+}
+.app-modal::backdrop {
+  background: #061b1866;
+  animation: app-backdrop-in 180ms ease-out both;
+}
+.app-modal[data-closing] {
+  animation: app-modal-out 180ms ease-in both;
+}
+.app-modal[data-closing]::backdrop {
+  animation: app-backdrop-out 180ms ease-in both;
+}
+.app-detail-inner {
+  padding: 32px;
+}
+.app-detail-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--button-surface);
+  color: var(--secondary);
+  font:
+    24px/1 Manrope,
+    sans-serif;
+  cursor: pointer;
+}
+.app-detail-close:hover {
+  background: var(--selected);
+  color: var(--ink);
+}
+.app-detail-hero {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-right: 24px;
+}
+.app-detail-hero-icon {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+.app-detail-hero-icon.favorite-monogram {
+  width: 52px;
+  height: 52px;
+  margin: 6px;
+  border-radius: 12px;
+  font-family: inherit;
+}
+.app-detail-hero-text {
+  min-width: 0;
+}
+.app-detail-hero h2 {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.7px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.app-detail-hero p {
+  margin-top: 5px;
+  color: var(--secondary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.app-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  margin-top: 24px;
+}
+.app-detail-button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--button-surface);
+  color: var(--ink);
+  font:
+    600 13px/1.4 Manrope,
+    sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+}
+.app-detail-button:hover {
+  background: var(--selected);
+}
+.app-detail-button-primary {
+  border-color: transparent;
+  background: var(--action);
+  color: var(--on-action);
+}
+.app-detail-button-primary:hover {
+  background: var(--action-hover);
+}
+.app-detail-button[aria-disabled] {
+  cursor: default;
+  color: var(--secondary);
+}
+.app-detail-feedback:empty {
+  display: none;
+}
+.app-detail-feedback {
+  margin-top: 12px;
+  color: var(--secondary);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.app-detail-body {
+  margin-top: 24px;
+}
+.app-detail-summary {
+  font-size: 14px;
+  line-height: 1.75;
+}
+.app-detail-command {
+  display: block;
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--input);
+  border: 1px solid var(--line);
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.app-detail-group {
+  display: grid;
+  gap: 10px;
+  margin: 24px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+}
+.app-detail-group > div {
+  display: grid;
+  grid-template-columns: 108px minmax(0, 1fr);
+  gap: 16px;
+  align-items: baseline;
+}
+.app-detail-group dt {
+  color: var(--secondary);
+}
+.app-detail-group dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.app-detail-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--forest);
+  font: inherit;
+  cursor: pointer;
+}
+.app-detail-inline-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+.app-detail-media {
+  margin: 24px 0 0;
+}
+.app-detail-shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+.app-detail-family {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 16px 0 24px;
+  padding: 0 0 20px;
+  border-bottom: 1px solid var(--line);
+}
+.app-detail-family button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  min-height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--secondary);
+  font:
+    500 12px/1.4 Manrope,
+    sans-serif;
+  cursor: pointer;
+}
+.app-detail-family button:hover {
+  background: var(--button-surface);
+}
+.app-detail-family button[aria-current] {
+  background: var(--selected);
+  color: var(--ink);
+}
+.app-detail-family-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+.app-modal :focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 3px;
+}
+@keyframes app-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes app-modal-out {
+  to {
+    opacity: 0;
+    transform: translateY(4px) scale(0.99);
+  }
+}
+@keyframes app-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes app-backdrop-out {
+  to {
+    opacity: 0;
+  }
+}
+@media (max-width: 760px) {
+  .app-modal {
+    width: calc(100% - 24px);
+    max-height: calc(100dvh - 24px);
+    border-radius: 20px;
+  }
+  .app-detail-inner {
+    padding: 24px;
+  }
+  .app-detail-hero {
+    gap: 12px;
+    padding-right: 20px;
+  }
+  .app-detail-hero h2 {
+    font-size: 21px;
+  }
+  .app-detail-hero-icon {
+    width: 52px;
+    height: 52px;
+  }
+  .app-detail-hero-icon.favorite-monogram {
+    width: 42px;
+    height: 42px;
+    margin: 5px;
+  }
+  .app-detail-group > div {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-modal,
+  .app-modal::backdrop {
+    animation: none;
+  }
+}
+.app-detail-module-title {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 650;
+  letter-spacing: -0.2px;
+}
+.app-detail-group a {
+  color: var(--forest);
+  text-decoration: underline;
+  text-decoration-color: var(--underline);
+  text-underline-offset: 3px;
+}

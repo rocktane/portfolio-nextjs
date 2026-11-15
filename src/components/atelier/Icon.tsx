@@ -60,6 +60,13 @@ const paths = {
       <path d="M12 17v4M8 21h8" />
     </>
   ),
+  gamepad: (
+    <>
+      {/* Lucide gamepad (ISC), see public/licenses/lucide.txt. */}
+      <rect x="2" y="6" width="20" height="12" rx="2" />
+      <path d="M6 12h4m-2-2v4M15 13h.01M18 11h.01" />
+    </>
+  ),
   play: <path d="m8 4 12 8-12 8Z" />,
   home: <path d="m3 10 9-7 9 7v11h-6v-7H9v7H3Z" />,
   grid: (

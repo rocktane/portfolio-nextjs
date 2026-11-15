@@ -5,9 +5,14 @@ test("favorites has all 26 apps, local icons, search and official Zen URL", asyn
 }) => {
   await page.goto("/favoris");
   await expect(page.locator(".favorite-card")).toHaveCount(26);
+  await page
+    .getByRole("button", { name: "Détails de Zen", exact: true })
+    .click();
   await expect(
-    page.locator('.favorite-get[href="https://zen-browser.app"]'),
-  ).toHaveCount(1);
+    page.getByRole("dialog").getByRole("link", { name: "Ouvrir le site" }),
+  ).toHaveAttribute("href", "https://zen-browser.app");
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).toHaveCount(0);
   for (const image of await page.locator("img.favorite-icon").all()) {
     await image.scrollIntoViewIfNeeded();
     await expect

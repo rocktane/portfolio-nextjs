@@ -10,6 +10,7 @@ const list: CatalogApp[] = [
   // Web
   {
     id: "exo",
+    icon: "/images/apps/exo.svg",
     name: "Exo",
     category: "Web",
     description: "Mini-jeux quotidiens pour développeurs",
@@ -18,6 +19,7 @@ const list: CatalogApp[] = [
   },
   {
     id: "brower",
+    icon: "/images/apps/brower.png",
     name: "Brower",
     category: "Web",
     description: "Composer son installation Homebrew",
@@ -43,6 +45,7 @@ const list: CatalogApp[] = [
   },
   {
     id: "humain-vs-jev",
+    icon: "/images/apps/humain-vs-jev.svg",
     name: "Humain vs Jev",
     category: "Web",
     description: "Repérer l’image générée par IA avant Jev",
@@ -51,18 +54,12 @@ const list: CatalogApp[] = [
   },
   {
     id: "betterdraw",
-    name: "BetterDraw",
+    name: "Frsque",
+    url: "https://frsque.diy",
+    icon: "/images/apps/frsque.png",
     category: "Web",
     description: "Reporter un décor mural à l’échelle",
     accent: "#DB2777",
-  },
-  {
-    id: "woodle",
-    name: "Woodle",
-    category: "Web",
-    description: "Réservations et records pour box CrossFit",
-    url: "https://github.com/rocktane/woodle", // privé
-    accent: "#EA580C",
   },
 
   // macOS
@@ -176,6 +173,7 @@ const list: CatalogApp[] = [
   },
   {
     id: "amp",
+    icon: "/images/apps/amp.png",
     name: "Amp",
     category: "macOS",
     description: "Contrôleur Sonos natif",
@@ -195,6 +193,7 @@ const list: CatalogApp[] = [
   // Raycast
   {
     id: "removebg",
+    icon: "/images/apps/removebg.svg",
     name: "RemoveBG",
     category: "Raycast",
     description: "Détourer une image dans le Finder",
@@ -203,6 +202,7 @@ const list: CatalogApp[] = [
   },
   {
     id: "exif-dates",
+    icon: "/images/apps/exif-dates.png",
     name: "EXIF Dates",
     category: "Raycast",
     description: "Restaurer les dates EXIF après Lightroom",
@@ -211,6 +211,7 @@ const list: CatalogApp[] = [
   },
   {
     id: "qrcode-scanner",
+    icon: "/images/apps/qrcode-scanner.png",
     name: "QR Code Scanner",
     category: "Raycast",
     description: "Scanner un QR code avec la caméra du Mac",
@@ -224,7 +225,8 @@ const list: CatalogApp[] = [
     name: "AltJump",
     category: "Navigateur",
     description: "Liens directs sur AlternativeTo",
-    url: "https://github.com/rocktane/AltJump",
+    url: "https://chromewebstore.google.com/detail/altjump/imigccmncifliibpcbenpfhjgkcdcbld",
+    github: "https://github.com/rocktane/AltJump",
     icon: "/images/apps/altjump.png",
     accent: "#2563EB",
   },
@@ -244,6 +246,7 @@ const list: CatalogApp[] = [
  *  le fournit pas déjà. */
 const details: Record<string, Partial<CatalogApp>> = {
   betterbattery: {
+    github: "https://github.com/rocktane/betterbattery",
     download:
       "https://github.com/rocktane/betterbattery/releases/latest/download/BetterBattery.zip",
     platform: "macOS · Apple Silicon",
@@ -263,6 +266,7 @@ const details: Record<string, Partial<CatalogApp>> = {
     year: "2026",
   },
   mdeck: {
+    github: "https://github.com/rocktane/mdeck",
     summary:
       "Une seule application de barre des menus, plusieurs petits utilitaires. Chaque utilitaire est un module qu'on active ou non ; un module éteint ne tourne pas du tout : ni observateur, ni raccourci, ni event tap.",
     download:
@@ -332,10 +336,6 @@ const details: Record<string, Partial<CatalogApp>> = {
     platform: "macOS",
     stack: ["Swift", "AppKit"],
   },
-  woodle: {
-    summary:
-      "Une application de gestion de box CrossFit : réservations de cours, records personnels et suivi des adhérents.",
-  },
   betterdraw: {
     summary:
       "Dessiner à l'échelle un décor mural, le peindre zone par zone, puis le reporter sur le vrai mur grâce à une grille de carroyage cotée.",
@@ -346,9 +346,14 @@ export const tryTools: CatalogApp[] = list.map((app) => {
   const project = projects.find((p) => p.id === app.id);
   const extra = details[app.id] ?? {};
   const host = app.module ? list.find((a) => a.id === app.module) : undefined;
-  const url = app.url;
+  const url = app.url ?? project?.href;
   return {
     ...app,
+    icon:
+      app.module === "mdeck"
+        ? `/images/apps/mdeck-modules/${app.id}.png`
+        : app.icon,
+    command: app.command ?? host?.command,
     summary: project?.summary,
     stack: project?.stack ?? (host && details[host.id]?.stack),
     shot: project?.shot,
@@ -359,7 +364,7 @@ export const tryTools: CatalogApp[] = list.map((app) => {
       (host && details[host.id]?.platform) ??
       app.category,
     site: url && !url.includes("github.com") ? url : undefined,
-    github: url?.includes("github.com") ? url : undefined,
+    github: app.github ?? (url?.includes("github.com") ? url : undefined),
     ...extra,
   };
 });

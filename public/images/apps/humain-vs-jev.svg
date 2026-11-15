@@ -1,0 +1,7 @@
+<!-- Wordmark from humainvsjev.23o.dev: .brand-icon, original colors and rotation. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <g transform="rotate(-7 64 64)">
+    <path fill="#2449ec" d="M10 24h108v80H10z"/>
+    <text x="28" y="84" fill="white" font-family="Avenir Next,Avenir,sans-serif" font-size="54" font-weight="750" letter-spacing="-1.6">H<tspan fill="#ffc0a0">J</tspan></text>
+  </g>
+</svg>
