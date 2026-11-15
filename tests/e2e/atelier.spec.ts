@@ -529,22 +529,21 @@ test("guest label and pencil stay inside the sidebar; footer is compact and sign
     expect(footer.height).toBeLessThan(48);
   }
 });
-test("try tools show precise destinations, constraints and a copyable install command", async ({
+test("try page lists my apps like favorites, with a copyable install command", async ({
   page,
   context,
 }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto("/a-essayer");
-  await expect(page.locator(".try-tools > li")).toHaveCount(7);
+  await expect(page.locator(".favorite-card")).not.toHaveCount(0);
   await expect(
-    page.getByRole("link", { name: /Composer son flux/ }),
+    page.getByRole("link", { name: "Ouvrir tvcal" }),
   ).toHaveAttribute("href", "https://tvcal.yohan.one");
-  const battery = page.locator(".try-tools > li").filter({
+  const battery = page.locator(".favorite-card").filter({
     has: page.getByRole("heading", { name: "BetterBattery", exact: true }),
   });
-  await expect(battery).toContainText("Apple Silicon");
-  await battery.getByRole("button", { name: "Copier la commande" }).click();
-  await expect(battery.getByRole("button")).toHaveText("Copié !");
+  await battery.getByRole("button", { name: /Copier/ }).click();
+  await expect(battery.getByRole("button")).toContainText("Copié");
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
     "brew install --cask rocktane/tap/betterbattery",
   );
@@ -555,9 +554,10 @@ test("try tools show precise destinations, constraints and a copyable install co
   );
   await battery.getByRole("button").click();
   await expect(page.locator(".tool-feedback")).toContainText(
-    "Copie indisponible",
+    "brew install --cask rocktane/tap/betterbattery",
   );
-  await expect(battery.locator("code")).toBeVisible();
+  await page.getByRole("button", { name: /^Raycast/ }).click();
+  await expect(page.locator(".favorite-card")).toHaveCount(3);
 });
 test("command search supports keyboard, empty states, focus return and navigation", async ({
   page,

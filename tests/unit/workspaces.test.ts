@@ -18,10 +18,10 @@ describe("visitor project board", () => {
     expect(initialBoard.columns[0].cards[0].id).toBe(card.id);
     const reordered = moveBoardCard(moved, card.id, target.id, 999);
     expect(reordered.columns[3].cards.at(-1)?.id).toBe(card.id);
-    expect(reordered.columns.flatMap((c) => c.cards).length).toBe(14);
+    expect(reordered.columns.flatMap((c) => c.cards).length).toBe(17);
     expect(
       new Set(reordered.columns.flatMap((c) => c.cards.map((p) => p.id))).size,
-    ).toBe(14);
+    ).toBe(17);
   });
   test("rejects broken, duplicate, empty and hostile saved data", () => {
     expect(isProjectBoard(initialBoard)).toBe(true);

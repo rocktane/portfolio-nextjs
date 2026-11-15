@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
-import TryTools from "@/components/atelier/TryTools";
+import AppCatalog from "@/components/atelier/AppCatalog";
+import { tryTools } from "@/data/try-tools";
 export const metadata: Metadata = {
   title: "À essayer",
+  description: "Les applications développées par Yohan Gouiran, à essayer.",
   alternates: { canonical: "/a-essayer" },
 };
 export default function TryPage() {
   return (
-    <>
-      <div className="page-heading">
-        <h1>À essayer</h1>
-      </div>
-      <TryTools />
-    </>
+    <AppCatalog
+      title="À essayer"
+      apps={tryTools}
+      noun="outil"
+      emptyTitle="Aucune application trouvée."
+    />
   );
 }

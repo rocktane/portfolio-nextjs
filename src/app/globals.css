@@ -258,7 +258,8 @@ input:focus-visible {
 }
 .sidebar-nav[data-indicator-ready] .sidebar-active-indicator {
   visibility: visible;
-  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+  transition:
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
     width 320ms cubic-bezier(0.22, 1, 0.36, 1),
     height 320ms cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -1645,7 +1646,11 @@ input:focus-visible {
   initial-value: 57%;
 }
 .home-path > .home-project-background {
-  mask-image: linear-gradient(90deg, transparent 38%, black var(--project-fade-end, 57%));
+  mask-image: linear-gradient(
+    90deg,
+    transparent 38%,
+    black var(--project-fade-end, 57%)
+  );
   transition: --project-fade-end 220ms;
 }
 .home-path:is(:hover, :focus-visible) > .home-project-background {
@@ -1658,7 +1663,11 @@ input:focus-visible {
   --art-blue: light-dark(#2f6fb0, #7fb8ee);
   --art-violet: light-dark(#76609c, #bca4dd);
   mask-image:
-    radial-gradient(ellipse 200px 72px at 32px 100%, transparent 70%, black 100%),
+    radial-gradient(
+      ellipse 200px 72px at 32px 100%,
+      transparent 70%,
+      black 100%
+    ),
     linear-gradient(90deg, transparent 8%, black 48%);
   mask-composite: intersect;
 }
@@ -1669,7 +1678,10 @@ input:focus-visible {
 .home-stack-logo {
   fill: transparent;
   opacity: 0.42;
-  transition: fill 220ms, stroke 220ms, opacity 220ms;
+  transition:
+    fill 220ms,
+    stroke 220ms,
+    opacity 220ms;
 }
 .home-path:is(:hover, :focus-visible) .home-stack-logo {
   fill: var(--logo-color);
@@ -1678,7 +1690,10 @@ input:focus-visible {
 }
 .home-card-symbol {
   opacity: 0.42;
-  transition: opacity 220ms, stroke 220ms, stroke-width 220ms;
+  transition:
+    opacity 220ms,
+    stroke 220ms,
+    stroke-width 220ms;
 }
 .home-path:is(:hover, :focus-visible) .home-card-symbol {
   opacity: 0.8;
@@ -1725,7 +1740,11 @@ input:focus-visible {
   }
   .home-path > .home-card-artwork {
     mask-image:
-      radial-gradient(ellipse 200px 72px at 22px 50%, transparent 70%, black 100%),
+      radial-gradient(
+        ellipse 200px 72px at 22px 50%,
+        transparent 70%,
+        black 100%
+      ),
       linear-gradient(90deg, transparent 8%, black 48%);
   }
   .home-path > svg:not(.home-card-background) {
@@ -1888,51 +1907,6 @@ body:has(.command-dialog[open]) {
 .command-empty {
   margin-top: 14px;
 }
-.try-tools {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  max-width: 1060px;
-}
-.try-tools > li {
-  display: flex;
-  gap: 24px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 24px 0;
-  border-top: 1px solid var(--line);
-}
-.try-tool-info {
-  min-width: 0;
-}
-.try-tool-info h2 {
-  font:
-    500 23px "Space Grotesk",
-    sans-serif;
-  letter-spacing: -0.6px;
-}
-.try-tool-info p {
-  margin-top: 5px;
-  color: var(--secondary);
-  font-size: 14px;
-}
-.tool-constraint {
-  display: inline-block;
-  margin-top: 9px;
-  color: var(--secondary);
-  font-size: 11px;
-}
-.install-command {
-  display: block;
-  margin-top: 10px;
-  font-size: 12px;
-  overflow-wrap: anywhere;
-  user-select: all;
-}
-.try-tools .outline-button {
-  flex-shrink: 0;
-  font-size: 12px;
-}
 .tool-feedback {
   margin-top: 15px;
   color: var(--secondary);
@@ -1966,11 +1940,6 @@ body:has(.command-dialog[open]) {
   .header-contact {
     grid-row: 2;
     grid-column: 2;
-  }
-  .try-tools > li {
-    gap: 16px;
-    align-items: flex-start;
-    flex-direction: column;
   }
 }
 @media (max-width: 540px) {
