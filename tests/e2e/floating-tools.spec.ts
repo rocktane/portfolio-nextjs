@@ -198,4 +198,9 @@ test("CV QR code drags like the logos, stays in the viewport and hides on phones
 
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(qr).toBeHidden();
+
+  // Only the home page carries it.
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/projets");
+  await expect(page.locator("a.cv-qr")).toHaveCount(0);
 });

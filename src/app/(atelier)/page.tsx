@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CvQrCode from "@/components/atelier/CvQrCode";
 import FloatingTools from "@/components/atelier/FloatingTools";
 import HomeProjectBackground from "@/components/atelier/HomeProjectBackground";
 import HomeCardArtwork from "@/components/atelier/HomeCardArtwork";
@@ -16,6 +17,7 @@ export default function HomePage() {
           <RotatingWords words={SPECIALTIES} />
         </h1>
         <FloatingTools />
+        <CvQrCode />
       </div>
       <nav className="home-paths" aria-label="Explorer le portfolio">
         <Link href="/projets" className="home-path home-path-primary">
