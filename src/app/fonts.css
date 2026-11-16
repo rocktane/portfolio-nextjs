@@ -40,3 +40,11 @@
   font-display: swap;
   src: url("/fonts/atelier/space-grotesk-600.ttf") format("truetype");
 }
+
+@font-face {
+  font-family: "Caveat";
+  src: url("/fonts/atelier/Caveat-Variable.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}

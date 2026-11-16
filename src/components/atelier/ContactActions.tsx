@@ -8,7 +8,7 @@ export default function ContactActions() {
     try {
       await navigator.clipboard.writeText("dev@yohangouiran.com");
       setCopied(true);
-      setMessage("Adresse copiée.");
+      setMessage("");
     } catch {
       setCopied(false);
       setMessage(
