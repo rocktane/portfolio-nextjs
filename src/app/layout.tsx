@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { THEME_INIT } from "@/lib/theme";
 import { SIDEBAR_INIT } from "@/lib/sidebar";
@@ -10,6 +11,7 @@ import "./themes.css";
 import "./sidebar.css";
 import "./favorites.css";
 import "./workspaces.css";
+import "./mobile-navigation.css";
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -61,6 +63,16 @@ export default function RootLayout({
       </head>
       <body>
         <Shell>{children}</Shell>
+        <Script
+          src="https://stats.yohan.one/script.js"
+          strategy="afterInteractive"
+          data-website-id="59e91634-149b-4a47-9ea5-c27b221f16c0"
+          data-domains="yohangouiran.com,www.yohangouiran.com"
+          data-exclude-search="true"
+          data-exclude-hash="true"
+          data-do-not-track="true"
+          data-fetch-credentials="omit"
+        />
         {process.env.VERCEL === "1" && <Analytics />}
       </body>
     </html>

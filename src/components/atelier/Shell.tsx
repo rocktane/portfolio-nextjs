@@ -1,7 +1,13 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { projects } from "@/data/projects";
 import { collectionNames, collectionPaths } from "@/lib/atelier";
 import { resetCollectionQuery } from "@/lib/collection-navigation";
@@ -42,10 +48,39 @@ export default function Shell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const navRef = useRef<HTMLElement>(null);
   const indicatorRef = useRef<HTMLSpanElement>(null);
-  const { hidden: sidebarHidden } = useSidebar();
+  const { hidden: sidebarHidden, desktop } = useSidebar();
   const [openPath, setOpenPath] = useState<string | null>(null);
   const menuOpen = openPath === pathname;
   const menuButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!menuOpen || desktop) return;
+    const scrollY = window.scrollY;
+    const body = document.body;
+    const previous = {
+      overflow: body.style.overflow,
+      position: body.style.position,
+      top: body.style.top,
+      width: body.style.width,
+    };
+    Object.assign(body.style, {
+      overflow: "hidden",
+      position: "fixed",
+      top: `-${scrollY}px`,
+      width: "100%",
+    });
+    const escape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !document.querySelector("dialog[open]")) {
+        setOpenPath(null);
+        menuButton.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", escape);
+    return () => {
+      Object.assign(body.style, previous);
+      window.scrollTo(0, scrollY);
+      window.removeEventListener("keydown", escape);
+    };
+  }, [menuOpen, desktop]);
   const project = pathname.startsWith("/projets/")
     ? projects.find((p) => p.id === pathname.split("/")[2])
     : null;
@@ -106,7 +141,7 @@ export default function Shell({ children }: { children: ReactNode }) {
             className="mobile-menu-toggle"
             type="button"
             aria-expanded={menuOpen}
-            aria-controls="portfolio-navigation"
+            aria-controls="sidebar-panel"
             onClick={() => setOpenPath(menuOpen ? null : pathname)}
           >
             {menuOpen ? "Fermer" : "Menu"}
@@ -118,7 +153,7 @@ export default function Shell({ children }: { children: ReactNode }) {
           <div
             id="sidebar-panel"
             className="sidebar-panel"
-            inert={sidebarHidden}
+            inert={sidebarHidden || (!desktop && !menuOpen)}
           >
             <GuestIdentity />
             <nav
@@ -160,6 +195,13 @@ export default function Shell({ children }: { children: ReactNode }) {
             </div>
           </div>
         </aside>
+        <button
+          className="mobile-menu-backdrop"
+          aria-label="Fermer le menu"
+          tabIndex={-1}
+          hidden={!menuOpen || desktop}
+          onClick={() => setOpenPath(null)}
+        />
         <div className="workspace-shell">
           <header className="workspace-header">
             <nav className="breadcrumbs" aria-label="Fil d’Ariane">
@@ -199,10 +241,15 @@ export default function Shell({ children }: { children: ReactNode }) {
               </Link>
             </div>
           </header>
-          <main id="main-content" tabIndex={-1} className="workspace-main">
+          <main
+            id="main-content"
+            tabIndex={-1}
+            className="workspace-main"
+            inert={menuOpen && !desktop}
+          >
             {children}
           </main>
-          <footer className="workspace-footer">
+          <footer className="workspace-footer" inert={menuOpen && !desktop}>
             <span>© 2026 Yohan Gouiran</span>
           </footer>
         </div>

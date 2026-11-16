@@ -51,23 +51,38 @@ export default function CvQrDrag({ children }: { children: ReactNode }) {
     : undefined;
 
   return (
-    <a
-      ref={link}
-      className={`cv-qr${held ? " is-held" : ""}`}
-      href="/CV.pdf"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Get his CV! Ouvrir le CV de Yohan (PDF, nouvel onglet)"
-      aria-describedby="cv-qr-help"
-      title="Get his CV!"
-      style={style}
-      {...handlers}
-    >
-      <span id="cv-qr-help" className="sr-only">
-        Déplacez le QR code avec la souris ou les flèches du clavier. Échap
-        annule le déplacement en cours.
+    <>
+      <span
+        className={`cv-qr-note${position?.moved ? " is-dismissed" : ""}`}
+        aria-hidden="true"
+      >
+        <span>Mon CV</span>
+        <svg viewBox="0 0 204 120" fill="none" focusable="false">
+          <path
+            vectorEffect="non-scaling-stroke"
+            d="M8 18 C42 2 121 5 139 27 C154 47 129 57 112 47 C94 36 116 25 132 37 C148 50 136 70 119 83"
+          />
+          <path vectorEffect="non-scaling-stroke" d="m118 65 1 18 18-2" />
+        </svg>
       </span>
-      {children}
-    </a>
+      <a
+        ref={link}
+        className={`cv-qr${held ? " is-held" : ""}`}
+        href="/CV.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Get his CV! Ouvrir le CV de Yohan (PDF, nouvel onglet)"
+        aria-describedby="cv-qr-help"
+        title="Get his CV!"
+        style={style}
+        {...handlers}
+      >
+        <span id="cv-qr-help" className="sr-only">
+          Déplacez le QR code avec la souris ou les flèches du clavier. Échap
+          annule le déplacement en cours.
+        </span>
+        {children}
+      </a>
+    </>
   );
 }

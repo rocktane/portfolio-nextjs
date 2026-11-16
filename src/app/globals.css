@@ -2382,3 +2382,54 @@ body::before {
     display: none;
   }
 }
+
+.cv-qr-note {
+  position: fixed;
+  right: 105px;
+  bottom: 135px;
+  z-index: 39;
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  color: var(--forest);
+  pointer-events: none;
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease;
+}
+.cv-qr-note > span {
+  font-family: "Caveat", "Bradley Hand", cursive;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.1;
+  white-space: nowrap;
+  rotate: -1.5deg;
+}
+.cv-qr-note svg {
+  width: 100px;
+  height: 80px;
+  margin-top: 14px;
+  transform: rotate(-35deg);
+  overflow: visible;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cv-qr-note.is-dismissed {
+  opacity: 0;
+  transform: translateY(4px);
+}
+@media (max-width: 760px), (pointer: coarse), print {
+  .cv-qr-note {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cv-qr-note {
+    transition: none;
+  }
+}
+.contact-feedback:empty {
+  display: none;
+}

@@ -7,6 +7,7 @@ async function openMobileMenu(page: Page) {
     (await menu.getAttribute("aria-expanded")) === "false"
   ) {
     await menu.click();
+    await expect(page.locator(".sidebar-panel")).toHaveCSS("transform", "none");
   }
 }
 const current = {
@@ -499,9 +500,7 @@ test("guest label and pencil stay inside the sidebar; footer is compact and sign
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
     await openMobileMenu(page);
-    await expect(
-      page.getByRole("link", { name: "Se connecter", exact: true }),
-    ).toHaveCount(1);
+    await expect(page.locator(".header-contact")).toHaveCount(1);
     for (const name of ["Boris", "Boris Ameldojfsojfndsojfnsdojnfs"]) {
       await page.getByRole("button", { name: /Renommer l’invité/ }).click();
       await page
