@@ -85,8 +85,9 @@ const list: CatalogApp[] = [
     id: "betterview",
     name: "BetterView",
     category: "macOS",
-    description: "Trier ses photos RAW à toute vitesse",
-    url: "https://github.com/rocktane/BetterView",
+    description: "Trier et comparer ses photos RAW à toute vitesse",
+    url: "https://betterview.photos",
+    github: "https://github.com/rocktane/BetterView",
     icon: "/images/apps/betterview.png",
     accent: "#1E293B",
   },
@@ -260,9 +261,10 @@ const details: Record<string, Partial<CatalogApp>> = {
   },
   betterview: {
     summary:
-      "Une visionneuse RAW faite pour trier des photos Sony A7C le plus vite possible : moins d'une milliseconde d'une photo à l'autre une fois préparée, suppression en une touche vers la corbeille, annulable avec ⌘Z, et historique des suppressions avec aperçu.",
-    platform: "macOS",
-    stack: ["Swift", "SwiftUI"],
+      "Une visionneuse RAW sans catalogue : on ouvre un dossier et on trie ses photos. La fenêtre épouse chaque image, une pellicule flottante repère les rafales et la comparaison affiche jusqu'à quatre photos avec un zoom à 100 % synchronisé, ou sur leur point autofocus Sony. Suppression en une touche vers la corbeille, annulable avec ⌘Z, historique avec aperçu et envoi de la sélection ou du dossier vers Lightroom. Mises à jour intégrées avec Sparkle.",
+    download: "https://github.com/rocktane/BetterView/releases/latest",
+    platform: "macOS 14+ · Intel et Apple Silicon",
+    stack: ["Swift", "SwiftUI", "AppKit", "Sparkle"],
     year: "2026",
   },
   mdeck: {
