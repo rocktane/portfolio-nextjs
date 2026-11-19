@@ -12,6 +12,7 @@ import "./sidebar.css";
 import "./favorites.css";
 import "./workspaces.css";
 import "./mobile-navigation.css";
+import "./stats.css";
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,

@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/contact",
     "/favoris",
     "/archives",
+    "/statistiques",
     ...projects.map((p) => `/projets/${p.id}`),
   ].map((path) => ({
     url: `https://yohangouiran.com${path}`,

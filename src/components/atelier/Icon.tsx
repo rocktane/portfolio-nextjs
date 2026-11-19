@@ -95,6 +95,7 @@ const paths = {
     </>
   ),
   code: <path d="m7 7-5 5 5 5m10-10 5 5-5 5M14 4l-4 16" />,
+  chart: <path d="M4 4v16h16M7 15l4-5 3 3 5-7" />,
   search: (
     <>
       <circle cx="10" cy="10" r="6" />

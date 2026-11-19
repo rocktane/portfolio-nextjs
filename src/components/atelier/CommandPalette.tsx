@@ -12,6 +12,7 @@ const pages = [
   ["Le labo", "/labo"],
   ["Parcours", "/parcours"],
   ["Archives", "/archives"],
+  ["Statistiques", "/statistiques"],
   ["Contact", "/contact"],
 ];
 const entries = [
