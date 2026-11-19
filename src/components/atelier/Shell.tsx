@@ -42,6 +42,7 @@ const navigation: {
   { href: "/favoris", label: "Favoris", icon: "heart" },
   { href: "/parcours", label: "Parcours", icon: "route" },
   { href: "/archives", label: "Archives", icon: "archive" },
+  { href: "/statistiques", label: "Statistiques", icon: "chart" },
   { href: "/contact", label: "Contact", icon: "mail" },
 ];
 export default function Shell({ children }: { children: ReactNode }) {
