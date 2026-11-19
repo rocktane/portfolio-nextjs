@@ -4,11 +4,19 @@
   --series-1: #eb6834;
   --series-2: #1baf7a;
   --series-3: #eda100;
-  max-width: 980px;
-  padding: 22px 24px 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 460px;
+  padding: 24px 26px 22px;
   border: 1px solid var(--border);
   border-radius: 14px;
   background: var(--card);
+}
+/* La carte occupe toute la hauteur restante de la page. */
+.workspace-main:has(> .stats-panel) {
+  display: flex;
+  flex-direction: column;
 }
 :root[data-theme="dark"] .stats-panel {
   --series-0: #3987e5;
@@ -23,29 +31,49 @@
 .stats-toolbar {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 18px;
-}
-.stats-toolbar h2 {
-  font: 500 15px/1.3 Manrope, sans-serif;
-  color: var(--secondary);
+  margin-bottom: 22px;
 }
 .stats-total {
-  margin-top: 4px;
   color: var(--secondary);
-  font-size: 15px;
+  font: 500 24px/1.2 "Space Grotesk", sans-serif;
+  letter-spacing: -0.5px;
 }
 .stats-total strong {
-  margin-right: 4px;
+  margin-right: 6px;
   color: var(--ink);
-  font: 500 34px/1.1 "Space Grotesk", sans-serif;
-  letter-spacing: -1px;
+  font: 500 60px/1 "Space Grotesk", sans-serif;
+  letter-spacing: -2.5px;
   font-variant-numeric: tabular-nums;
 }
+/* Skeleton du premier chargement : blocs scintillants et courbes qui se dessinent. */
+.stats-skeleton {
+  display: inline-block;
+  border-radius: 8px;
+  background: linear-gradient(
+      100deg,
+      transparent 30%,
+      color-mix(in srgb, var(--ink) 10%, transparent) 50%,
+      transparent 70%
+    )
+    0 0 / 250% 100% var(--placeholder);
+  animation: stats-shimmer 1.6s linear infinite;
+  vertical-align: middle;
+}
+.stats-skeleton-total { width: min(420px, 70vw); height: 60px; }
+.stats-skeleton-value { width: 34px; height: 24px; border-radius: 6px; }
+@keyframes stats-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: -150% 0; }
+}
+/* Les courbes de chargement apparaissent en fondu, la légende réelle aussi. */
+.stats-chart[aria-busy="true"] .stats-series { animation: stats-fade-in 0.6s ease-out; }
+.stats-legend li { animation: stats-fade-in 0.4s ease-out; }
+@keyframes stats-fade-in { from { opacity: 0; } }
 .stats-placeholder {
-  font: 500 34px/1.1 "Space Grotesk", sans-serif;
+  font: 500 60px/1 "Space Grotesk", sans-serif;
   color: var(--border-strong);
 }
 .stats-range {
@@ -75,18 +103,42 @@
   color: var(--ink);
 }
 .stats-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 22px;
-  margin: 0 0 14px;
-  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 8px 12px;
+  margin: 18px 0 0;
+  padding: 18px 0 0;
+  border-top: 1px solid var(--line);
   list-style: none;
-  font-size: 13px;
 }
 .stats-legend li {
+  position: relative;
   display: flex;
   align-items: baseline;
-  gap: 7px;
+  gap: 12px;
+  width: fit-content;
+  padding: 10px 14px 18px;
+  border-radius: 9px;
+}
+.stats-legend li:hover,
+.stats-legend li:focus-within {
+  background: var(--hover);
+}
+/* Trait à la couleur de la courbe, sous le nom et jusqu'au chiffre. */
+.stats-legend-line {
+  position: absolute;
+  right: 14px;
+  bottom: 8px;
+  left: 14px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--series);
+}
+.stats-legend-name {
+  min-width: 0;
+  color: var(--secondary);
+  font-size: 14px;
+  font-weight: 600;
 }
 .stats-swatch {
   flex: none;
@@ -94,20 +146,68 @@
   height: 10px;
   border-radius: 3px;
   background: var(--series);
-  align-self: center;
 }
-.stats-legend-name { color: var(--ink); font-weight: 600; }
-.stats-legend-domain { color: var(--subtle-ink); }
 .stats-legend-value {
   color: var(--ink);
-  font-weight: 600;
+  font: 500 26px/1 "Space Grotesk", sans-serif;
+  letter-spacing: -0.8px;
   font-variant-numeric: tabular-nums;
+}
+/* Carte au survol : reste ouverte quand le pointeur y entre, le lien est cliquable. */
+.stats-legend-card {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 100%;
+  margin-bottom: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--card);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 14%);
+  font-size: 13px;
+  white-space: nowrap;
+  opacity: 0;
+  translate: 0 4px;
+  pointer-events: none;
+  transition: opacity 0.15s, translate 0.15s;
+}
+/* Pont invisible entre la carte et l'élément, pour ne pas la perdre en y montant. */
+.stats-legend-card::after {
+  content: "";
+  position: absolute;
+  inset: 100% 0 -8px;
+}
+.stats-legend li:hover .stats-legend-card,
+.stats-legend li:focus-within .stats-legend-card {
+  opacity: 1;
+  translate: 0 0;
+  pointer-events: auto;
+}
+.stats-legend-card strong { color: var(--ink); }
+.stats-legend-card a {
+  color: var(--secondary);
+  text-decoration: underline;
+  text-decoration-color: var(--border-strong);
+  text-underline-offset: 3px;
+}
+.stats-legend-card a:hover {
+  color: var(--ink);
+  text-decoration-color: currentColor;
 }
 .stats-chart {
   position: relative;
+  flex: 1;
   width: 100%;
+  min-height: 280px;
 }
 .stats-chart > svg {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
@@ -128,14 +228,13 @@
   font-size: 14px;
 }
 .stats-grid line { stroke: var(--line); stroke-width: 1; }
-.stats-grid text,
-.stats-end-label {
+.stats-grid g g { transition: opacity 0.2s; }
+.stats-grid text {
   fill: var(--subtle-ink);
   font: 500 11px Manrope, sans-serif;
   font-variant-numeric: tabular-nums;
 }
-.stats-end-label { fill: var(--ink); font-weight: 600; font-size: 12px; }
-.stats-series polyline {
+.stats-series path {
   fill: none;
   stroke: var(--series);
   stroke-width: 2;
@@ -184,21 +283,32 @@
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
-.stats-note,
-.stats-source {
+.stats-note {
   margin-top: 12px;
   color: var(--subtle-ink);
   font-size: 12px;
   line-height: 1.5;
 }
 @media (max-width: 640px) {
-  .stats-panel { padding: 16px 14px; }
+  .stats-panel { min-height: 0; padding: 16px 14px; }
+  .stats-total { font-size: 18px; }
+  .stats-total strong { font-size: 44px; }
+  .stats-skeleton-total { height: 44px; }
+  .stats-legend { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stats-legend-value { font-size: 22px; }
+  .stats-legend li { gap: 8px; max-width: 100%; padding: 8px 8px 16px; }
+  .stats-legend-line { right: 8px; left: 8px; bottom: 6px; }
+  .stats-legend-name { font-size: 13px; }
   .stats-range-wrap { width: 100%; }
   .stats-range button { flex: 1; }
   .stats-tooltip { left: 0; }
-  .stats-legend-domain { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stats-grid g g, .stats-legend-card { transition: none; }
+  .stats-skeleton { animation: none; }
+  .stats-series, .stats-legend li { animation: none; }
 }
 @media (forced-colors: active) {
-  .stats-series polyline { stroke: CanvasText; }
-  .stats-swatch, .stats-dot { forced-color-adjust: none; }
+  .stats-series path { stroke: CanvasText; }
+  .stats-swatch, .stats-dot, .stats-legend-line { forced-color-adjust: none; }
 }

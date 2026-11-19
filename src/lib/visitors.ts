@@ -23,7 +23,14 @@ export type VisitorsResponse = {
   unavailable?: string[];
 };
 // Couleur fixée par site (jamais par rang) : palette catégorielle validée.
-export const SITE_ORDER = ["portfolio", "betterview", "akolyt", "frsque"];
+// Sites suivis, connus d'avance : leur nom s'affiche dès le chargement.
+export const KNOWN_SITES = [
+  { id: "portfolio", name: "Portfolio" },
+  { id: "betterview", name: "BetterView" },
+  { id: "akolyt", name: "akolyt" },
+  { id: "frsque", name: "frsque" },
+];
+export const SITE_ORDER = KNOWN_SITES.map((site) => site.id);
 export function siteSlot(id: string, index: number): number {
   const slot = SITE_ORDER.indexOf(id);
   return (slot === -1 ? index : slot) % 4;
@@ -72,25 +79,6 @@ export function niceTicks(max: number): number[] {
   for (let t = 0; t <= top; t += roundStep) ticks.push(t);
   return ticks;
 }
-// Écarte verticalement des étiquettes (y triés) d'au moins `gap` px,
-// en restant dans [min, max].
-export function spreadLabels(
-  ys: number[],
-  gap: number,
-  min: number,
-  max: number,
-): number[] {
-  const order = ys.map((y, i) => ({ y, i })).sort((a, b) => a.y - b.y);
-  for (let k = 1; k < order.length; k++)
-    order[k].y = Math.max(order[k].y, order[k - 1].y + gap);
-  const overflow = order.length ? order[order.length - 1].y - max : 0;
-  if (overflow > 0) for (const o of order) o.y -= overflow;
-  for (let k = 0; k < order.length; k++)
-    order[k].y = Math.max(order[k].y, k === 0 ? min : order[k - 1].y + gap);
-  const out = new Array<number>(ys.length);
-  for (const o of order) out[o.i] = o.y;
-  return out;
-}
 const dayFormat = new Intl.DateTimeFormat("fr-FR", {
   day: "numeric",
   month: "short",
@@ -105,3 +93,64 @@ export function formatPoint(point: ChartPoint, unit: ChartData["unit"]) {
     : `${formatDay(point.start)} – ${formatDay(point.end)}`;
 }
 export const formatNumber = new Intl.NumberFormat("fr-FR").format;
+// Tangentes d'une cubique monotone (Fritsch-Butland, comme d3.curveMonotoneX) :
+// la courbe passe par chaque point sans dépasser ses voisins, donc jamais sous zéro.
+function monotoneTangents(xs: number[], ys: number[]): number[] {
+  const n = xs.length;
+  const slopes: number[] = [];
+  for (let i = 0; i < n - 1; i++) {
+    const dx = xs[i + 1] - xs[i];
+    slopes.push(dx ? (ys[i + 1] - ys[i]) / dx : 0);
+  }
+  return xs.map((_, i) => {
+    if (i === 0) return slopes[0] ?? 0;
+    if (i === n - 1) return slopes[n - 2];
+    const a = slopes[i - 1];
+    const b = slopes[i];
+    return a * b <= 0 ? 0 : (2 * a * b) / (a + b);
+  });
+}
+// Tracé SVG lissé passant par les points.
+export function smoothPath(points: [number, number][]): string {
+  const n = points.length;
+  if (n === 0) return "";
+  if (n < 3)
+    return points.map(([x, y], i) => `${i ? "L" : "M"}${x},${y}`).join("");
+  const tangents = monotoneTangents(
+    points.map((p) => p[0]),
+    points.map((p) => p[1]),
+  );
+  let d = `M${points[0][0]},${points[0][1]}`;
+  for (let i = 0; i < n - 1; i++) {
+    const [x0, y0] = points[i];
+    const [x1, y1] = points[i + 1];
+    const h = (x1 - x0) / 3;
+    d += `C${x0 + h},${y0 + h * tangents[i]},${x1 - h},${y1 - h * tangents[i + 1]},${x1},${y1}`;
+  }
+  return d;
+}
+// Valeur de la même courbe lissée à une position t ∈ [0, 1] le long de l'axe x :
+// permet de comparer des séries de longueurs différentes pendant une transition.
+export function curveAt(values: number[]): (t: number) => number {
+  const n = values.length;
+  if (n === 0) return () => 0;
+  if (n === 1) return () => values[0];
+  const xs = values.map((_, i) => i);
+  const m = n < 3 ? [] : monotoneTangents(xs, values);
+  return (t) => {
+    const u = Math.max(0, Math.min(1, t)) * (n - 1);
+    const i = Math.min(n - 2, Math.floor(u));
+    const s = u - i;
+    const [y0, y1] = [values[i], values[i + 1]];
+    if (n < 3) return y0 + (y1 - y0) * s;
+    const s2 = s * s;
+    const s3 = s2 * s;
+    return (
+      (2 * s3 - 3 * s2 + 1) * y0 +
+      (s3 - 2 * s2 + s) * m[i] +
+      (-2 * s3 + 3 * s2) * y1 +
+      (s3 - s2) * m[i + 1]
+    );
+  };
+}
+export const easeOutCubic = (p: number) => 1 - (1 - p) ** 3;
