@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { niceTicks, spreadLabels, toChartData } from "@/lib/visitors";
+import { curveAt, niceTicks, smoothPath, toChartData } from "@/lib/visitors";
 
 const dates = (n: number) =>
   Array.from({ length: n }, (_, i) =>
@@ -51,11 +51,24 @@ test("niceTicks covers the maximum with round steps", () => {
   expect(niceTicks(1234).at(-1)).toBeGreaterThanOrEqual(1234);
 });
 
-test("spreadLabels separates close labels within bounds", () => {
-  const out = spreadLabels([100, 100, 100, 50], 16, 10, 120);
-  const sorted = [...out].sort((a, b) => a - b);
-  for (let i = 1; i < sorted.length; i++)
-    expect(sorted[i] - sorted[i - 1]).toBeGreaterThanOrEqual(16);
-  expect(Math.max(...out)).toBeLessThanOrEqual(120);
-  expect(Math.min(...out)).toBeGreaterThanOrEqual(10);
+test("smoothPath passes through every point without overshooting", () => {
+  expect(smoothPath([])).toBe("");
+  expect(smoothPath([[0, 5], [10, 7]])).toBe("M0,5L10,7");
+  const d = smoothPath([[0, 100], [10, 100], [20, 20], [30, 100]]);
+  expect(d.startsWith("M0,100C")).toBe(true);
+  expect(d.endsWith(",30,100")).toBe(true);
+  const ys = d.split(/[MC]/).filter(Boolean).flatMap((seg) =>
+    seg.split(",").map(Number).filter((_, i) => i % 2 === 1),
+  );
+  // Plat puis creux : aucun point de contrôle au-delà de [20, 100].
+  for (const y of ys) expect(y >= 20 && y <= 100).toBe(true);
+});
+
+test("curveAt follows the smoothed series along normalized x", () => {
+  const values = [0, 4, 4, 10, 2];
+  const f = curveAt(values);
+  values.forEach((v, i) => expect(f(i / 4)).toBeCloseTo(v));
+  expect(f(0.375)).toBeCloseTo(4); // palier plat : pas de bosse
+  expect(curveAt([])(0.5)).toBe(0);
+  expect(curveAt([3, 5])(0.5)).toBe(4);
 });
